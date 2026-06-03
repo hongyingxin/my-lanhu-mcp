@@ -1,0 +1,3446 @@
+{
+  "ok": true,
+  "status": 200,
+  "data": {
+      "style": {
+          "backgroundColor": "rgba(146,174,54,1.000000)",
+          "zIndex": 1,
+          "position": "relative",
+          "left": 0,
+          "top": 0,
+          "width": 750,
+          "height": 3199,
+          "overflow": "hidden"
+      },
+      "rowDims": {
+          "left": 0,
+          "top": 0,
+          "width": 750,
+          "height": 3199
+      },
+      "eleName": "col__3333_56586",
+      "id": "col__3333_56586",
+      "layerId": 3,
+      "type": "lanhupage",
+      "data": {
+          "value": ""
+      },
+      "uiType": "",
+      "uiTypeProb": {},
+      "designType": "mobile",
+      "isddsAdaptive": "",
+      "alignJustify": {},
+      "componentName": "lanhupage",
+      "props": {
+          "className": "page",
+          "style": {
+              "backgroundColor": "rgba(146,174,54,1.000000)",
+              "position": "relative",
+              "width": 750,
+              "height": 3199,
+              "overflow": "hidden",
+              "display": "flex",
+              "flexDirection": "column"
+          }
+      },
+      "children": [
+          {
+              "style": {
+                  "zIndex": 1,
+                  "position": "static",
+                  "left": 0,
+                  "top": 928,
+                  "width": 750,
+                  "height": 305,
+                  "marginTop": 928,
+                  "display": "flex",
+                  "flexDirection": "column"
+              },
+              "rowDims": {
+                  "left": 0,
+                  "top": 928,
+                  "width": 750,
+                  "height": 305
+              },
+              "eleName": "col___39378",
+              "id": "col___39378",
+              "layerId": "col_0_928_750_305_16786",
+              "type": "lanhublock",
+              "data": {
+                  "value": ""
+              },
+              "uiType": "",
+              "uiTypeProb": {},
+              "loopType": false,
+              "alignJustify": {},
+              "componentName": "lanhublock",
+              "children": [
+                  {
+                      "style": {
+                          "zIndex": "auto",
+                          "position": "static",
+                          "left": 15,
+                          "top": 1119,
+                          "width": 721,
+                          "height": 110,
+                          "marginTop": 191,
+                          "marginLeft": 15
+                      },
+                      "rowDims": {
+                          "left": 15,
+                          "top": 1119,
+                          "width": 721,
+                          "height": 110
+                      },
+                      "eleName": "row___51014",
+                      "id": "row___51014",
+                      "layerId": "row_15_1119_721_110_224138",
+                      "type": "lanhublock",
+                      "data": {
+                          "value": ""
+                      },
+                      "uiType": "",
+                      "uiTypeProb": {},
+                      "loopType": false,
+                      "alignJustify": {
+                          "justifyContent": "space-between"
+                      },
+                      "componentName": "lanhublock",
+                      "children": [
+                          {
+                              "style": {
+                                  "zIndex": 20,
+                                  "position": "static",
+                                  "left": 15,
+                                  "top": 1119,
+                                  "width": 360,
+                                  "height": 110,
+                                  "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psnze9d8nkbkf12evei8zlh3mluhcdaus7200439e0-5dec-4112-a315-5a6b7897090b) 100% no-repeat",
+                                  "backgroundSize": "100% 100%",
+                                  "marginTop": 0,
+                                  "marginLeft": 0,
+                                  "display": "flex",
+                                  "flexDirection": "column"
+                              },
+                              "rowDims": {
+                                  "left": 15,
+                                  "top": 1119,
+                                  "width": 360,
+                                  "height": 110
+                              },
+                              "eleName": "Block_tab_93281",
+                              "id": "Block_tab_93281",
+                              "layerId": 311,
+                              "type": "lanhublock",
+                              "data": {
+                                  "value": ""
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "alignJustify": {},
+                              "componentName": "lanhublock",
+                              "children": [
+                                  {
+                                      "style": {
+                                          "zIndex": 21,
+                                          "position": "static",
+                                          "left": 131,
+                                          "top": 1156,
+                                          "width": 126,
+                                          "height": 31,
+                                          "overflowWrap": "break-word",
+                                          "color": "rgba(150,58,7,1)",
+                                          "fontSize": 32,
+                                          "fontFamily": "SourceHanSansSC-Bold",
+                                          "fontWeight": "700",
+                                          "textAlign": "center",
+                                          "whiteSpace": "nowrap",
+                                          "lineHeight": 32,
+                                          "marginTop": 37,
+                                          "marginLeft": 116
+                                      },
+                                      "rowDims": {
+                                          "left": 131,
+                                          "top": 1156,
+                                          "width": 126,
+                                          "height": 31
+                                      },
+                                      "eleName": "Text__9999_69937",
+                                      "id": "Text__9999_69937",
+                                      "layerId": 107,
+                                      "type": "lanhutext",
+                                      "data": {
+                                          "value": "惊喜奖励"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhutext",
+                                      "children": [],
+                                      "props": {
+                                          "className": "text_1",
+                                          "text": "惊喜奖励",
+                                          "lines": 1,
+                                          "style": {
+                                              "width": 126,
+                                              "height": 31,
+                                              "overflowWrap": "break-word",
+                                              "color": "rgba(150,58,7,1)",
+                                              "fontSize": 32,
+                                              "fontFamily": "SourceHanSansSC-Bold",
+                                              "fontWeight": "700",
+                                              "textAlign": "center",
+                                              "whiteSpace": "nowrap",
+                                              "lineHeight": 32,
+                                              "margin": "37px 0 0 116px"
+                                          }
+                                      }
+                                  }
+                              ],
+                              "props": {
+                                  "className": "text-wrapper_1",
+                                  "style": {
+                                      "height": 110,
+                                      "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psnze9d8nkbkf12evei8zlh3mluhcdaus7200439e0-5dec-4112-a315-5a6b7897090b) 100% no-repeat",
+                                      "backgroundSize": "100% 100%",
+                                      "display": "flex",
+                                      "flexDirection": "column",
+                                      "width": 360
+                                  }
+                              }
+                          },
+                          {
+                              "style": {
+                                  "zIndex": 22,
+                                  "position": "static",
+                                  "left": 376,
+                                  "top": 1119,
+                                  "width": 360,
+                                  "height": 110,
+                                  "background": "url(https://lanhu-oss-proxy.lanhuapp.com/pszn2vwpv782j6a0pijqm6528r8irzsn7fle318730d-0247-4022-84bb-27efc1088916) 100% no-repeat",
+                                  "backgroundSize": "100% 100%",
+                                  "marginTop": 0,
+                                  "marginRight": 0,
+                                  "display": "flex",
+                                  "flexDirection": "column"
+                              },
+                              "rowDims": {
+                                  "left": 376,
+                                  "top": 1119,
+                                  "width": 360,
+                                  "height": 110
+                              },
+                              "eleName": "Block_tab77_64565",
+                              "id": "Block_tab77_64565",
+                              "layerId": 314,
+                              "type": "lanhublock",
+                              "data": {
+                                  "value": ""
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "alignJustify": {},
+                              "componentName": "lanhublock",
+                              "children": [
+                                  {
+                                      "style": {
+                                          "zIndex": 23,
+                                          "position": "static",
+                                          "left": 493,
+                                          "top": 1156,
+                                          "width": 126,
+                                          "height": 31,
+                                          "overflowWrap": "break-word",
+                                          "color": "rgba(95,83,45,1)",
+                                          "fontSize": 32,
+                                          "fontFamily": "SourceHanSansSC-Bold",
+                                          "fontWeight": "700",
+                                          "textAlign": "center",
+                                          "whiteSpace": "nowrap",
+                                          "lineHeight": 32,
+                                          "marginTop": 37,
+                                          "marginLeft": 117
+                                      },
+                                      "rowDims": {
+                                          "left": 493,
+                                          "top": 1156,
+                                          "width": 126,
+                                          "height": 31
+                                      },
+                                      "eleName": "Text__3333_30407",
+                                      "id": "Text__3333_30407",
+                                      "layerId": 114,
+                                      "type": "lanhutext",
+                                      "data": {
+                                          "value": "活动榜单"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhutext",
+                                      "children": [],
+                                      "props": {
+                                          "className": "text_2",
+                                          "text": "活动榜单",
+                                          "lines": 1,
+                                          "style": {
+                                              "width": 126,
+                                              "height": 31,
+                                              "overflowWrap": "break-word",
+                                              "color": "rgba(95,83,45,1)",
+                                              "fontSize": 32,
+                                              "fontFamily": "SourceHanSansSC-Bold",
+                                              "fontWeight": "700",
+                                              "textAlign": "center",
+                                              "whiteSpace": "nowrap",
+                                              "lineHeight": 32,
+                                              "margin": "37px 0 0 117px"
+                                          }
+                                      }
+                                  }
+                              ],
+                              "props": {
+                                  "className": "text-wrapper_2",
+                                  "style": {
+                                      "height": 110,
+                                      "background": "url(https://lanhu-oss-proxy.lanhuapp.com/pszn2vwpv782j6a0pijqm6528r8irzsn7fle318730d-0247-4022-84bb-27efc1088916) 100% no-repeat",
+                                      "backgroundSize": "100% 100%",
+                                      "display": "flex",
+                                      "flexDirection": "column",
+                                      "width": 360
+                                  }
+                              }
+                          }
+                      ],
+                      "props": {
+                          "className": "group_1",
+                          "style": {
+                              "width": 721,
+                              "height": 110,
+                              "flexDirection": "row",
+                              "display": "flex",
+                              "justifyContent": "space-between",
+                              "margin": "191px 0 0 15px"
+                          }
+                      }
+                  }
+              ],
+              "props": {
+                  "className": "box_1",
+                  "style": {
+                      "width": 750,
+                      "height": 305,
+                      "marginTop": 928,
+                      "display": "flex",
+                      "flexDirection": "column"
+                  }
+              }
+          },
+          {
+              "style": {
+                  "zIndex": 25,
+                  "position": "static",
+                  "left": 0,
+                  "top": 1232,
+                  "width": 750,
+                  "height": 966,
+                  "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psyi5mzlmjubeij531a488tazls6xekbw7a6dbd3153-6ba6-49cb-b255-9004e0ed10ad) 100% no-repeat",
+                  "backgroundSize": "100% 100%",
+                  "marginTop": -1
+              },
+              "rowDims": {
+                  "left": 0,
+                  "top": 1232,
+                  "width": 750,
+                  "height": 966
+              },
+              "eleName": "col__111_47016",
+              "id": "col__111_47016",
+              "layerId": 318,
+              "type": "lanhublock",
+              "data": {
+                  "value": ""
+              },
+              "uiType": "",
+              "uiTypeProb": {},
+              "alignJustify": {},
+              "componentName": "lanhublock",
+              "children": [
+                  {
+                      "style": {
+                          "zIndex": 26,
+                          "position": "static",
+                          "left": 295,
+                          "top": 1265,
+                          "width": 159,
+                          "height": 31,
+                          "overflowWrap": "break-word",
+                          "color": "rgba(54,114,38,1)",
+                          "fontSize": 32,
+                          "fontFamily": "SourceHanSansSC-Bold",
+                          "fontWeight": "700",
+                          "textAlign": "center",
+                          "whiteSpace": "nowrap",
+                          "lineHeight": 32,
+                          "marginLeft": 295,
+                          "marginTop": 33
+                      },
+                      "rowDims": {
+                          "left": 295,
+                          "top": 1265,
+                          "width": 159,
+                          "height": 31
+                      },
+                      "eleName": "Text__44444_17454",
+                      "id": "Text__44444_17454",
+                      "layerId": 123,
+                      "type": "lanhutext",
+                      "data": {
+                          "value": "祝贺劳动节"
+                      },
+                      "uiType": "",
+                      "uiTypeProb": {},
+                      "componentName": "lanhutext",
+                      "children": [],
+                      "props": {
+                          "className": "text_3",
+                          "text": "祝贺劳动节",
+                          "lines": 1,
+                          "style": {
+                              "width": 159,
+                              "height": 31,
+                              "overflowWrap": "break-word",
+                              "color": "rgba(54,114,38,1)",
+                              "fontSize": 32,
+                              "fontFamily": "SourceHanSansSC-Bold",
+                              "fontWeight": "700",
+                              "textAlign": "center",
+                              "whiteSpace": "nowrap",
+                              "lineHeight": 32,
+                              "margin": "33px 0 0 295px"
+                          }
+                      }
+                  },
+                  {
+                      "style": {
+                          "zIndex": 27,
+                          "position": "static",
+                          "left": 74,
+                          "top": 1343,
+                          "width": 602,
+                          "height": 104,
+                          "overflowWrap": "break-word",
+                          "color": "rgba(255,255,255,1)",
+                          "fontSize": 28,
+                          "fontFamily": "SourceHanSansSC-Regular",
+                          "fontWeight": "normal",
+                          "textAlign": "center",
+                          "lineHeight": 40,
+                          "marginLeft": 74,
+                          "marginTop": 47
+                      },
+                      "rowDims": {
+                          "left": 74,
+                          "top": 1343,
+                          "width": 602,
+                          "height": 104
+                      },
+                      "eleName": "Text_HappyMayDayzame0000000000000000000000_55528",
+                      "id": "Text_HappyMayDayzame0000000000000000000000_55528",
+                      "layerId": 124,
+                      "type": "lanhutext",
+                      "data": {
+                          "value": "Happy&nbsp;May&nbsp;Day!<br/>zame为你准备了以下惊喜，每天都可以领取一份随机奖励"
+                      },
+                      "uiType": "",
+                      "uiTypeProb": {},
+                      "componentName": "lanhutext",
+                      "children": [],
+                      "props": {
+                          "className": "paragraph_1",
+                          "text": "Happy&nbsp;May&nbsp;Day!<br/>zame为你准备了以下惊喜，每天都可以领取一份随机奖励",
+                          "lines": 1,
+                          "style": {
+                              "width": 602,
+                              "height": 104,
+                              "overflowWrap": "break-word",
+                              "color": "rgba(255,255,255,1)",
+                              "fontSize": 28,
+                              "fontFamily": "SourceHanSansSC-Regular",
+                              "fontWeight": "normal",
+                              "textAlign": "center",
+                              "lineHeight": 40,
+                              "margin": "47px 0 0 74px"
+                          }
+                      }
+                  },
+                  {
+                      "style": {
+                          "zIndex": "auto",
+                          "position": "static",
+                          "left": 186,
+                          "top": 1473,
+                          "width": 378,
+                          "height": 48,
+                          "marginLeft": 186,
+                          "marginTop": 26
+                      },
+                      "rowDims": {
+                          "left": 186,
+                          "top": 1473,
+                          "width": 378,
+                          "height": 48
+                      },
+                      "eleName": "row___91488",
+                      "id": "row___91488",
+                      "layerId": "row_186_1473_378_48_647671",
+                      "type": "lanhublock",
+                      "data": {
+                          "value": ""
+                      },
+                      "uiType": "",
+                      "uiTypeProb": {},
+                      "loopType": false,
+                      "alignJustify": {},
+                      "componentName": "lanhublock",
+                      "children": [
+                          {
+                              "style": {
+                                  "zIndex": 31,
+                                  "position": "static",
+                                  "left": 186,
+                                  "top": 1486,
+                                  "width": 135,
+                                  "height": 20,
+                                  "overflowWrap": "break-word",
+                                  "color": "rgba(159,212,151,1)",
+                                  "fontSize": 26,
+                                  "fontFamily": "ArialMT",
+                                  "fontWeight": "normal",
+                                  "textAlign": "center",
+                                  "whiteSpace": "nowrap",
+                                  "lineHeight": 52.4722,
+                                  "marginTop": 13,
+                                  "marginLeft": 0
+                              },
+                              "rowDims": {
+                                  "left": 186,
+                                  "top": 1486,
+                                  "width": 135,
+                                  "height": 20
+                              },
+                              "eleName": "Text_Countdown_18617",
+                              "id": "Text_Countdown_18617",
+                              "layerId": 129,
+                              "type": "lanhutext",
+                              "data": {
+                                  "value": "Countdown:"
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "componentName": "lanhutext",
+                              "children": [],
+                              "props": {
+                                  "className": "text_4",
+                                  "text": "Countdown:",
+                                  "lines": 1,
+                                  "style": {
+                                      "width": 135,
+                                      "height": 20,
+                                      "overflowWrap": "break-word",
+                                      "color": "rgba(159,212,151,1)",
+                                      "fontSize": 26,
+                                      "fontFamily": "ArialMT",
+                                      "fontWeight": "normal",
+                                      "textAlign": "center",
+                                      "whiteSpace": "nowrap",
+                                      "lineHeight": 52.4722,
+                                      "marginTop": 13
+                                  }
+                              }
+                          },
+                          {
+                              "style": {
+                                  "zIndex": 32,
+                                  "position": "static",
+                                  "left": 332,
+                                  "top": 1473,
+                                  "width": 48,
+                                  "height": 48,
+                                  "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psdcblxw5ejm7iu39j31ol3to18l0szaa5a9fd247-f0ec-4e67-807a-0f47651d9454) 100% no-repeat",
+                                  "backgroundSize": "100% 100%",
+                                  "marginLeft": 11,
+                                  "display": "flex",
+                                  "flexDirection": "column"
+                              },
+                              "rowDims": {
+                                  "left": 332,
+                                  "top": 1473,
+                                  "width": 48,
+                                  "height": 48
+                              },
+                              "eleName": "Block__66120166_26148",
+                              "id": "Block__66120166_26148",
+                              "layerId": 321,
+                              "type": "lanhublock",
+                              "data": {
+                                  "value": ""
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "alignJustify": {},
+                              "componentName": "lanhublock",
+                              "children": [
+                                  {
+                                      "style": {
+                                          "zIndex": 33,
+                                          "position": "static",
+                                          "left": 342,
+                                          "top": 1487,
+                                          "width": 29,
+                                          "height": 20,
+                                          "overflowWrap": "break-word",
+                                          "color": "rgba(255,239,130,1)",
+                                          "fontSize": 26,
+                                          "fontFamily": "SourceHanSansSC-Regular",
+                                          "fontWeight": "normal",
+                                          "textAlign": "center",
+                                          "whiteSpace": "nowrap",
+                                          "lineHeight": 26,
+                                          "marginTop": 14,
+                                          "marginLeft": 10
+                                      },
+                                      "rowDims": {
+                                          "left": 342,
+                                          "top": 1487,
+                                          "width": 29,
+                                          "height": 20
+                                      },
+                                      "eleName": "Text__24_62288",
+                                      "id": "Text__24_62288",
+                                      "layerId": 133,
+                                      "type": "lanhutext",
+                                      "data": {
+                                          "value": "24"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhutext",
+                                      "children": [],
+                                      "props": {
+                                          "className": "text_5",
+                                          "text": "24",
+                                          "lines": 1,
+                                          "style": {
+                                              "width": 29,
+                                              "height": 20,
+                                              "overflowWrap": "break-word",
+                                              "color": "rgba(255,239,130,1)",
+                                              "fontSize": 26,
+                                              "fontFamily": "SourceHanSansSC-Regular",
+                                              "fontWeight": "normal",
+                                              "textAlign": "center",
+                                              "whiteSpace": "nowrap",
+                                              "lineHeight": 26,
+                                              "margin": "14px 0 0 10px"
+                                          }
+                                      }
+                                  }
+                              ],
+                              "props": {
+                                  "className": "text-wrapper_3",
+                                  "style": {
+                                      "height": 48,
+                                      "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psdcblxw5ejm7iu39j31ol3to18l0szaa5a9fd247-f0ec-4e67-807a-0f47651d9454) 100% no-repeat",
+                                      "backgroundSize": "100% 100%",
+                                      "marginLeft": 11,
+                                      "display": "flex",
+                                      "flexDirection": "column",
+                                      "width": 48
+                                  }
+                              }
+                          },
+                          {
+                              "style": {
+                                  "zIndex": 29,
+                                  "position": "static",
+                                  "left": 389,
+                                  "top": 1489,
+                                  "width": 46,
+                                  "height": 15,
+                                  "overflowWrap": "break-word",
+                                  "color": "rgba(159,212,151,1)",
+                                  "fontSize": 20,
+                                  "fontFamily": "PingFangSC-Regular",
+                                  "fontWeight": "normal",
+                                  "textAlign": "center",
+                                  "whiteSpace": "nowrap",
+                                  "lineHeight": 20,
+                                  "marginTop": 16,
+                                  "marginLeft": 9
+                              },
+                              "rowDims": {
+                                  "left": 389,
+                                  "top": 1489,
+                                  "width": 46,
+                                  "height": 15
+                              },
+                              "eleName": "Text_Hour_66612",
+                              "id": "Text_Hour_66612",
+                              "layerId": 127,
+                              "type": "lanhutext",
+                              "data": {
+                                  "value": "Hour"
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "componentName": "lanhutext",
+                              "children": [],
+                              "props": {
+                                  "className": "text_6",
+                                  "text": "Hour",
+                                  "lines": 1,
+                                  "style": {
+                                      "width": 46,
+                                      "height": 15,
+                                      "overflowWrap": "break-word",
+                                      "color": "rgba(159,212,151,1)",
+                                      "fontSize": 20,
+                                      "fontFamily": "PingFangSC-Regular",
+                                      "fontWeight": "normal",
+                                      "textAlign": "center",
+                                      "whiteSpace": "nowrap",
+                                      "lineHeight": 20,
+                                      "margin": "16px 0 0 9px"
+                                  }
+                              }
+                          },
+                          {
+                              "style": {
+                                  "zIndex": 34,
+                                  "position": "static",
+                                  "left": 442,
+                                  "top": 1473,
+                                  "width": 48,
+                                  "height": 48,
+                                  "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psab5xcmowwvor1kdvuaw1f0kunsfej56gka2768535-429f-480c-98d9-06d6b6fb2ae9) -3px -4px no-repeat",
+                                  "backgroundSize": "55px 55px",
+                                  "marginLeft": 7,
+                                  "display": "flex",
+                                  "flexDirection": "column"
+                              },
+                              "rowDims": {
+                                  "left": 442,
+                                  "top": 1473,
+                                  "width": 48,
+                                  "height": 48
+                              },
+                              "eleName": "Block__331201332_13900",
+                              "id": "Block__331201332_13900",
+                              "layerId": 134,
+                              "type": "lanhublock",
+                              "data": {
+                                  "value": ""
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "alignJustify": {},
+                              "componentName": "lanhublock",
+                              "children": [
+                                  {
+                                      "style": {
+                                          "zIndex": 35,
+                                          "position": "static",
+                                          "left": 453,
+                                          "top": 1487,
+                                          "width": 27,
+                                          "height": 20,
+                                          "overflowWrap": "break-word",
+                                          "color": "rgba(255,239,130,1)",
+                                          "fontSize": 26,
+                                          "fontFamily": "SourceHanSansSC-Regular",
+                                          "fontWeight": "normal",
+                                          "textAlign": "center",
+                                          "whiteSpace": "nowrap",
+                                          "lineHeight": 26,
+                                          "marginTop": 14,
+                                          "marginLeft": 11
+                                      },
+                                      "rowDims": {
+                                          "left": 453,
+                                          "top": 1487,
+                                          "width": 27,
+                                          "height": 20
+                                      },
+                                      "eleName": "Text__60_42296",
+                                      "id": "Text__60_42296",
+                                      "layerId": 135,
+                                      "type": "lanhutext",
+                                      "data": {
+                                          "value": "60"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhutext",
+                                      "children": [],
+                                      "props": {
+                                          "className": "text_7",
+                                          "text": "60",
+                                          "lines": 1,
+                                          "style": {
+                                              "width": 27,
+                                              "height": 20,
+                                              "overflowWrap": "break-word",
+                                              "color": "rgba(255,239,130,1)",
+                                              "fontSize": 26,
+                                              "fontFamily": "SourceHanSansSC-Regular",
+                                              "fontWeight": "normal",
+                                              "textAlign": "center",
+                                              "whiteSpace": "nowrap",
+                                              "lineHeight": 26,
+                                              "margin": "14px 0 0 11px"
+                                          }
+                                      }
+                                  }
+                              ],
+                              "props": {
+                                  "className": "text-wrapper_4",
+                                  "style": {
+                                      "height": 48,
+                                      "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psab5xcmowwvor1kdvuaw1f0kunsfej56gka2768535-429f-480c-98d9-06d6b6fb2ae9) -3px -4px no-repeat",
+                                      "backgroundSize": "55px 55px",
+                                      "marginLeft": 7,
+                                      "display": "flex",
+                                      "flexDirection": "column",
+                                      "width": 48
+                                  }
+                              }
+                          },
+                          {
+                              "style": {
+                                  "zIndex": 30,
+                                  "position": "static",
+                                  "left": 499,
+                                  "top": 1489,
+                                  "width": 65,
+                                  "height": 15,
+                                  "overflowWrap": "break-word",
+                                  "color": "rgba(159,212,151,1)",
+                                  "fontSize": 20,
+                                  "fontFamily": "PingFangSC-Regular",
+                                  "fontWeight": "normal",
+                                  "textAlign": "center",
+                                  "whiteSpace": "nowrap",
+                                  "lineHeight": 20,
+                                  "marginTop": 16,
+                                  "marginLeft": 9,
+                                  "marginRight": 0
+                              },
+                              "rowDims": {
+                                  "left": 499,
+                                  "top": 1489,
+                                  "width": 65,
+                                  "height": 15
+                              },
+                              "eleName": "Text_Minute_17171",
+                              "id": "Text_Minute_17171",
+                              "layerId": 128,
+                              "type": "lanhutext",
+                              "data": {
+                                  "value": "Minute"
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "componentName": "lanhutext",
+                              "children": [],
+                              "props": {
+                                  "className": "text_8",
+                                  "text": "Minute",
+                                  "lines": 1,
+                                  "style": {
+                                      "width": 65,
+                                      "height": 15,
+                                      "overflowWrap": "break-word",
+                                      "color": "rgba(159,212,151,1)",
+                                      "fontSize": 20,
+                                      "fontFamily": "PingFangSC-Regular",
+                                      "fontWeight": "normal",
+                                      "textAlign": "center",
+                                      "whiteSpace": "nowrap",
+                                      "lineHeight": 20,
+                                      "margin": "16px 0 0 9px"
+                                  }
+                              }
+                          }
+                      ],
+                      "props": {
+                          "className": "section_1",
+                          "style": {
+                              "width": 378,
+                              "height": 48,
+                              "flexDirection": "row",
+                              "display": "flex",
+                              "margin": "26px 0 0 186px"
+                          }
+                      }
+                  },
+                  {
+                      "style": {
+                          "zIndex": 36,
+                          "position": "static",
+                          "left": 74,
+                          "top": 1541,
+                          "width": 600,
+                          "height": 282,
+                          "background": "url(https://lanhu-oss-proxy.lanhuapp.com/pswaawspyjeih1egquxo8dd6uq230lx8j6598c3a7-ce90-463d-bd87-6efb35f7799d) 100% no-repeat",
+                          "backgroundSize": "100% 100%",
+                          "marginLeft": 74,
+                          "marginTop": 20,
+                          "display": "flex",
+                          "flexDirection": "column"
+                      },
+                      "rowDims": {
+                          "left": 74,
+                          "top": 1541,
+                          "width": 600,
+                          "height": 282
+                      },
+                      "eleName": "Block__777_50476",
+                      "id": "Block__777_50476",
+                      "layerId": 325,
+                      "type": "lanhublock",
+                      "data": {
+                          "value": ""
+                      },
+                      "uiType": "",
+                      "uiTypeProb": {},
+                      "alignJustify": {},
+                      "componentName": "lanhublock",
+                      "children": [
+                          {
+                              "style": {
+                                  "zIndex": 37,
+                                  "position": "static",
+                                  "left": 226,
+                                  "top": 1756,
+                                  "width": 300,
+                                  "height": 72,
+                                  "background": "url(https://lanhu-oss-proxy.lanhuapp.com/ps31whxvxw4cj63bz60x9yfag1ydh10p76p6888a33b-51e5-4814-a327-653650f8ed6a) 100% no-repeat",
+                                  "backgroundSize": "100% 100%",
+                                  "marginTop": 215,
+                                  "marginLeft": 152,
+                                  "display": "flex",
+                                  "flexDirection": "column"
+                              },
+                              "rowDims": {
+                                  "left": 226,
+                                  "top": 1756,
+                                  "width": 300,
+                                  "height": 72
+                              },
+                              "eleName": "Block_button_63919",
+                              "id": "Block_button_63919",
+                              "layerId": 328,
+                              "type": "lanhublock",
+                              "data": {
+                                  "value": ""
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "alignJustify": {},
+                              "componentName": "lanhublock",
+                              "children": [
+                                  {
+                                      "style": {
+                                          "zIndex": 38,
+                                          "position": "static",
+                                          "left": 345,
+                                          "top": 1777,
+                                          "width": 60,
+                                          "height": 29,
+                                          "overflowWrap": "break-word",
+                                          "color": "rgba(19,87,9,1)",
+                                          "fontSize": 30,
+                                          "fontFamily": "SourceHanSansSC-Regular",
+                                          "fontWeight": "normal",
+                                          "textAlign": "center",
+                                          "whiteSpace": "nowrap",
+                                          "lineHeight": 30,
+                                          "marginTop": 21,
+                                          "marginLeft": 119
+                                      },
+                                      "rowDims": {
+                                          "left": 345,
+                                          "top": 1777,
+                                          "width": 60,
+                                          "height": 29
+                                      },
+                                      "eleName": "Text__33_62132",
+                                      "id": "Text__33_62132",
+                                      "layerId": 144,
+                                      "type": "lanhutext",
+                                      "data": {
+                                          "value": "领取"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhutext",
+                                      "children": [],
+                                      "props": {
+                                          "className": "text_9",
+                                          "text": "领取",
+                                          "lines": 1,
+                                          "style": {
+                                              "width": 60,
+                                              "height": 29,
+                                              "overflowWrap": "break-word",
+                                              "color": "rgba(19,87,9,1)",
+                                              "fontSize": 30,
+                                              "fontFamily": "SourceHanSansSC-Regular",
+                                              "fontWeight": "normal",
+                                              "textAlign": "center",
+                                              "whiteSpace": "nowrap",
+                                              "lineHeight": 30,
+                                              "margin": "21px 0 0 119px"
+                                          }
+                                      }
+                                  }
+                              ],
+                              "props": {
+                                  "className": "text-wrapper_5",
+                                  "style": {
+                                      "height": 72,
+                                      "background": "url(https://lanhu-oss-proxy.lanhuapp.com/ps31whxvxw4cj63bz60x9yfag1ydh10p76p6888a33b-51e5-4814-a327-653650f8ed6a) 100% no-repeat",
+                                      "backgroundSize": "100% 100%",
+                                      "display": "flex",
+                                      "flexDirection": "column",
+                                      "width": 300,
+                                      "margin": "215px 0 0 152px"
+                                  }
+                              }
+                          }
+                      ],
+                      "props": {
+                          "className": "section_2",
+                          "style": {
+                              "height": 282,
+                              "background": "url(https://lanhu-oss-proxy.lanhuapp.com/pswaawspyjeih1egquxo8dd6uq230lx8j6598c3a7-ce90-463d-bd87-6efb35f7799d) 100% no-repeat",
+                              "backgroundSize": "100% 100%",
+                              "display": "flex",
+                              "flexDirection": "column",
+                              "width": 600,
+                              "margin": "20px 0 0 74px"
+                          }
+                      }
+                  },
+                  {
+                      "style": {
+                          "backgroundColor": "rgba(40,73,105,0.200000)",
+                          "borderRadius": "10px 10px 10px 10px",
+                          "zIndex": 42,
+                          "position": "static",
+                          "left": 32,
+                          "top": 1856,
+                          "width": 686,
+                          "height": 296,
+                          "marginLeft": 32,
+                          "marginTop": 33,
+                          "marginBottom": 46
+                      },
+                      "rowDims": {
+                          "left": 32,
+                          "top": 1856,
+                          "width": 686,
+                          "height": 296
+                      },
+                      "eleName": "Block__883_69822",
+                      "id": "Block__883_69822",
+                      "layerId": 183,
+                      "type": "lanhublock",
+                      "data": {
+                          "value": ""
+                      },
+                      "uiType": "",
+                      "uiTypeProb": {},
+                      "alignJustify": {},
+                      "componentName": "lanhublock",
+                      "children": [
+                          {
+                              "style": {
+                                  "zIndex": "auto",
+                                  "position": "static",
+                                  "left": 312,
+                                  "top": 1878,
+                                  "width": 126,
+                                  "height": 31,
+                                  "marginLeft": 280,
+                                  "marginTop": 22,
+                                  "display": "flex",
+                                  "flexDirection": "column"
+                              },
+                              "rowDims": {
+                                  "left": 312,
+                                  "top": 1878,
+                                  "width": 126,
+                                  "height": 31
+                              },
+                              "eleName": "row___66334",
+                              "id": "row___66334",
+                              "layerId": "row_312_1878_126_31_530945",
+                              "type": "lanhublock",
+                              "data": {
+                                  "value": ""
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "loopType": false,
+                              "alignJustify": {},
+                              "componentName": "lanhublock",
+                              "children": [
+                                  {
+                                      "style": {
+                                          "zIndex": 43,
+                                          "position": "static",
+                                          "left": 312,
+                                          "top": 1878,
+                                          "width": 126,
+                                          "height": 31,
+                                          "overflowWrap": "break-word",
+                                          "color": "rgba(255,250,175,1)",
+                                          "fontSize": 32,
+                                          "fontFamily": "SourceHanSansSC-Bold",
+                                          "fontWeight": "700",
+                                          "textAlign": "center",
+                                          "whiteSpace": "nowrap",
+                                          "lineHeight": 32,
+                                          "marginTop": 0,
+                                          "marginLeft": 0
+                                      },
+                                      "rowDims": {
+                                          "left": 312,
+                                          "top": 1878,
+                                          "width": 126,
+                                          "height": 31
+                                      },
+                                      "eleName": "Text__9999_12918",
+                                      "id": "Text__9999_12918",
+                                      "layerId": 182,
+                                      "type": "lanhutext",
+                                      "data": {
+                                          "value": "奖励一览"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhutext",
+                                      "children": [],
+                                      "props": {
+                                          "className": "text_10",
+                                          "text": "奖励一览",
+                                          "lines": 1,
+                                          "style": {
+                                              "width": 126,
+                                              "height": 31,
+                                              "overflowWrap": "break-word",
+                                              "color": "rgba(255,250,175,1)",
+                                              "fontSize": 32,
+                                              "fontFamily": "SourceHanSansSC-Bold",
+                                              "fontWeight": "700",
+                                              "textAlign": "center",
+                                              "whiteSpace": "nowrap",
+                                              "lineHeight": 32
+                                          }
+                                      }
+                                  }
+                              ],
+                              "props": {
+                                  "className": "text-wrapper_6",
+                                  "style": {
+                                      "width": 126,
+                                      "height": 31,
+                                      "display": "flex",
+                                      "flexDirection": "row",
+                                      "margin": "22px 0 0 280px"
+                                  }
+                              }
+                          },
+                          {
+                              "style": {
+                                  "zIndex": "auto",
+                                  "position": "static",
+                                  "left": 41,
+                                  "top": 1936,
+                                  "width": 668,
+                                  "height": 188,
+                                  "marginLeft": 9,
+                                  "marginTop": 27,
+                                  "marginBottom": 28
+                              },
+                              "rowDims": {
+                                  "left": 41,
+                                  "top": 1936,
+                                  "width": 668,
+                                  "height": 188
+                              },
+                              "eleName": "row___9838",
+                              "id": "row___9838",
+                              "layerId": "row_41_1936_668_188_804902",
+                              "type": "lanhublock",
+                              "data": {
+                                  "value": ""
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "loopType": false,
+                              "alignJustify": {
+                                  "justifyContent": "space-between"
+                              },
+                              "componentName": "lanhublock",
+                              "children": [
+                                  {
+                                      "style": {
+                                          "zIndex": "auto",
+                                          "position": "static",
+                                          "left": 41,
+                                          "top": 1936,
+                                          "width": 154,
+                                          "height": 188,
+                                          "marginTop": 0,
+                                          "marginLeft": 0
+                                      },
+                                      "rowDims": {
+                                          "left": 41,
+                                          "top": 1936,
+                                          "width": 154,
+                                          "height": 188
+                                      },
+                                      "eleName": "col___829",
+                                      "id": "col___829",
+                                      "layerId": "col_41_1936_154_188_882232",
+                                      "type": "lanhublock",
+                                      "data": {
+                                          "value": ""
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "loopType": false,
+                                      "alignJustify": {
+                                          "justifyContent": "space-between"
+                                      },
+                                      "componentName": "lanhublock",
+                                      "children": [
+                                          {
+                                              "style": {
+                                                  "zIndex": 46,
+                                                  "position": "relative",
+                                                  "left": 41,
+                                                  "top": 1936,
+                                                  "width": 154,
+                                                  "height": 154,
+                                                  "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psqc203km26h9kmh1kf3lzo70h1sip3hc12d5aa41-7f5a-4389-ad9a-16a86fd720ad) 100% no-repeat",
+                                                  "backgroundSize": "100% 100%",
+                                                  "marginTop": 0,
+                                                  "marginLeft": 0
+                                              },
+                                              "rowDims": {
+                                                  "left": 41,
+                                                  "top": 1936,
+                                                  "width": 154,
+                                                  "height": 154
+                                              },
+                                              "eleName": "col_gift_48729",
+                                              "id": "col_gift_48729",
+                                              "layerId": 159,
+                                              "type": "lanhublock",
+                                              "data": {
+                                                  "value": ""
+                                              },
+                                              "uiType": "",
+                                              "uiTypeProb": {},
+                                              "alignJustify": {
+                                                  "justifyContent": "flex-end"
+                                              },
+                                              "componentName": "lanhublock",
+                                              "children": [
+                                                  {
+                                                      "style": {
+                                                          "zIndex": 47,
+                                                          "position": "static",
+                                                          "left": 48,
+                                                          "top": 1950,
+                                                          "width": 140,
+                                                          "height": 125,
+                                                          "marginLeft": 7,
+                                                          "marginTop": 14
+                                                      },
+                                                      "rowDims": {
+                                                          "left": 48,
+                                                          "top": 1950,
+                                                          "width": 140,
+                                                          "height": 125
+                                                      },
+                                                      "eleName": "Image_ActiveStar2_42340",
+                                                      "id": "Image_ActiveStar2_42340",
+                                                      "layerId": 160,
+                                                      "type": "lanhuimage",
+                                                      "data": {
+                                                          "value": "https://lanhu-oss-proxy.lanhuapp.com/psvemu4g3o0kesz4r4g8csaqdav2moqi9ci4dff3640-3711-406e-95f0-b45194258650"
+                                                      },
+                                                      "uiType": "",
+                                                      "uiTypeProb": {},
+                                                      "componentName": "lanhuimage",
+                                                      "children": [],
+                                                      "props": {
+                                                          "className": "image_1",
+                                                          "src": "https://lanhu-oss-proxy.lanhuapp.com/psvemu4g3o0kesz4r4g8csaqdav2moqi9ci4dff3640-3711-406e-95f0-b45194258650",
+                                                          "style": {
+                                                              "width": 140,
+                                                              "height": 125,
+                                                              "margin": "14px 0 0 7px"
+                                                          }
+                                                      }
+                                                  },
+                                                  {
+                                                      "style": {
+                                                          "zIndex": 50,
+                                                          "position": "static",
+                                                          "left": 41,
+                                                          "top": 2046,
+                                                          "width": 39,
+                                                          "height": 44,
+                                                          "marginTop": -29,
+                                                          "marginBottom": 0
+                                                      },
+                                                      "rowDims": {
+                                                          "left": 41,
+                                                          "top": 2046,
+                                                          "width": 39,
+                                                          "height": 44
+                                                      },
+                                                      "eleName": "Image__11_78444",
+                                                      "id": "Image__11_78444",
+                                                      "layerId": 163,
+                                                      "type": "lanhuimage",
+                                                      "data": {
+                                                          "value": "https://lanhu-oss-proxy.lanhuapp.com/psiys9ypy814hvgg5y0ulxusfwxy49kf95he8e2b4f1-40e9-47b8-b6c3-abb61c3dd04f"
+                                                      },
+                                                      "uiType": "",
+                                                      "uiTypeProb": {},
+                                                      "componentName": "lanhuimage",
+                                                      "children": [],
+                                                      "props": {
+                                                          "className": "label_1",
+                                                          "src": "https://lanhu-oss-proxy.lanhuapp.com/psiys9ypy814hvgg5y0ulxusfwxy49kf95he8e2b4f1-40e9-47b8-b6c3-abb61c3dd04f",
+                                                          "style": {
+                                                              "width": 39,
+                                                              "height": 44,
+                                                              "marginTop": -29
+                                                          }
+                                                      }
+                                                  },
+                                                  {
+                                                      "style": {
+                                                          "backgroundImage": "linear-gradient(90deg, rgba(255,181,52,1.000000) 0, rgba(255,181,52,1.000000) 0, rgba(255,233,143,1.000000) 100.000000%, rgba(255,233,143,1.000000) 100.000000%)",
+                                                          "borderRadius": "13px 13px 13px 13px",
+                                                          "zIndex": 48,
+                                                          "position": "absolute",
+                                                          "left": 108,
+                                                          "top": 0,
+                                                          "width": 46,
+                                                          "height": 26,
+                                                          "display": "flex",
+                                                          "flexDirection": "column"
+                                                      },
+                                                      "rowDims": {
+                                                          "left": 149,
+                                                          "top": 1936,
+                                                          "width": 46,
+                                                          "height": 26
+                                                      },
+                                                      "eleName": "Block__11112_49489",
+                                                      "id": "Block__11112_49489",
+                                                      "layerId": 161,
+                                                      "type": "lanhublock",
+                                                      "data": {
+                                                          "value": ""
+                                                      },
+                                                      "uiType": "",
+                                                      "uiTypeProb": {},
+                                                      "alignJustify": {},
+                                                      "componentName": "lanhublock",
+                                                      "children": [
+                                                          {
+                                                              "style": {
+                                                                  "zIndex": 49,
+                                                                  "position": "static",
+                                                                  "left": 161,
+                                                                  "top": 1940,
+                                                                  "width": 22,
+                                                                  "height": 17,
+                                                                  "overflowWrap": "break-word",
+                                                                  "color": "rgba(164,76,19,1)",
+                                                                  "fontSize": 22,
+                                                                  "fontFamily": "ArialMT",
+                                                                  "fontWeight": "normal",
+                                                                  "textAlign": "center",
+                                                                  "whiteSpace": "nowrap",
+                                                                  "lineHeight": 22,
+                                                                  "marginTop": 4,
+                                                                  "marginLeft": 12
+                                                              },
+                                                              "rowDims": {
+                                                                  "left": 161,
+                                                                  "top": 1940,
+                                                                  "width": 22,
+                                                                  "height": 17
+                                                              },
+                                                              "eleName": "Text__1d_99682",
+                                                              "id": "Text__1d_99682",
+                                                              "layerId": 162,
+                                                              "type": "lanhutext",
+                                                              "data": {
+                                                                  "value": "1d"
+                                                              },
+                                                              "uiType": "",
+                                                              "uiTypeProb": {},
+                                                              "componentName": "lanhutext",
+                                                              "children": [],
+                                                              "props": {
+                                                                  "className": "text_11",
+                                                                  "text": "1d",
+                                                                  "lines": 1,
+                                                                  "style": {
+                                                                      "width": 22,
+                                                                      "height": 17,
+                                                                      "overflowWrap": "break-word",
+                                                                      "color": "rgba(164,76,19,1)",
+                                                                      "fontSize": 22,
+                                                                      "fontFamily": "ArialMT",
+                                                                      "fontWeight": "normal",
+                                                                      "textAlign": "center",
+                                                                      "whiteSpace": "nowrap",
+                                                                      "lineHeight": 22,
+                                                                      "margin": "4px 0 0 12px"
+                                                                  }
+                                                              }
+                                                          }
+                                                      ],
+                                                      "props": {
+                                                          "className": "text-wrapper_7",
+                                                          "style": {
+                                                              "backgroundImage": "linear-gradient(90deg, rgba(255,181,52,1.000000) 0, rgba(255,181,52,1.000000) 0, rgba(255,233,143,1.000000) 100.000000%, rgba(255,233,143,1.000000) 100.000000%)",
+                                                              "borderRadius": "13px",
+                                                              "height": 26,
+                                                              "display": "flex",
+                                                              "flexDirection": "column",
+                                                              "width": 46,
+                                                              "position": "absolute",
+                                                              "left": 108,
+                                                              "top": 0
+                                                          }
+                                                      }
+                                                  }
+                                              ],
+                                              "props": {
+                                                  "className": "block_1",
+                                                  "style": {
+                                                      "position": "relative",
+                                                      "width": 154,
+                                                      "height": 154,
+                                                      "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psqc203km26h9kmh1kf3lzo70h1sip3hc12d5aa41-7f5a-4389-ad9a-16a86fd720ad) 100% no-repeat",
+                                                      "backgroundSize": "100% 100%",
+                                                      "display": "flex",
+                                                      "flexDirection": "column",
+                                                      "justifyContent": "flex-end"
+                                                  }
+                                              }
+                                          },
+                                          {
+                                              "style": {
+                                                  "zIndex": 51,
+                                                  "position": "static",
+                                                  "left": 81,
+                                                  "top": 2098,
+                                                  "width": 73,
+                                                  "height": 26,
+                                                  "overflowWrap": "break-word",
+                                                  "color": "rgba(255,255,255,1)",
+                                                  "fontSize": 28,
+                                                  "fontFamily": "SourceHanSansSC-Regular",
+                                                  "fontWeight": "normal",
+                                                  "textAlign": "center",
+                                                  "whiteSpace": "nowrap",
+                                                  "lineHeight": 28,
+                                                  "marginLeft": 40,
+                                                  "marginTop": 8,
+                                                  "marginBottom": 0
+                                              },
+                                              "rowDims": {
+                                                  "left": 81,
+                                                  "top": 2098,
+                                                  "width": 73,
+                                                  "height": 26
+                                              },
+                                              "eleName": "Text__66A_21589",
+                                              "id": "Text__66A_21589",
+                                              "layerId": 164,
+                                              "type": "lanhutext",
+                                              "data": {
+                                                  "value": "礼物A"
+                                              },
+                                              "uiType": "",
+                                              "uiTypeProb": {},
+                                              "componentName": "lanhutext",
+                                              "children": [],
+                                              "props": {
+                                                  "className": "text_12",
+                                                  "text": "礼物A",
+                                                  "lines": 1,
+                                                  "style": {
+                                                      "width": 73,
+                                                      "height": 26,
+                                                      "overflowWrap": "break-word",
+                                                      "color": "rgba(255,255,255,1)",
+                                                      "fontSize": 28,
+                                                      "fontFamily": "SourceHanSansSC-Regular",
+                                                      "fontWeight": "normal",
+                                                      "textAlign": "center",
+                                                      "whiteSpace": "nowrap",
+                                                      "lineHeight": 28,
+                                                      "margin": "8px 0 0 40px"
+                                                  }
+                                              }
+                                          }
+                                      ],
+                                      "props": {
+                                          "className": "group_3",
+                                          "style": {
+                                              "width": 154,
+                                              "height": 188,
+                                              "display": "flex",
+                                              "flexDirection": "column",
+                                              "justifyContent": "space-between"
+                                          }
+                                      }
+                                  },
+                                  {
+                                      "style": {
+                                          "zIndex": "auto",
+                                          "position": "static",
+                                          "left": 212,
+                                          "top": 1936,
+                                          "width": 497,
+                                          "height": 188,
+                                          "marginTop": 0,
+                                          "marginRight": 0
+                                      },
+                                      "rowDims": {
+                                          "left": 212,
+                                          "top": 1936,
+                                          "width": 497,
+                                          "height": 188
+                                      },
+                                      "eleName": "row___86685",
+                                      "id": "row___86685",
+                                      "layerId": "row_212_1936_497_188_257473",
+                                      "type": "lanhublock",
+                                      "data": {
+                                          "value": ""
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "loopType": true,
+                                      "needWidth": true,
+                                      "needHeight": true,
+                                      "loopData": [
+                                          {
+                                              "lanhuimage0": "https://lanhu-oss-proxy.lanhuapp.com/ps3xs0kwpp7rf6ktwmvam3rnxiai8rejn7n56499d27-aece-4246-b1e0-1d253692a8d7"
+                                          },
+                                          {
+                                              "lanhuimage0": "https://lanhu-oss-proxy.lanhuapp.com/pseblu7f0xkyqehk3d041e9booiz4cgxr5db004dab1-daa9-4712-861b-f25dadfee439"
+                                          },
+                                          {
+                                              "lanhuimage0": "https://lanhu-oss-proxy.lanhuapp.com/psx90o57x0pwlokwovpa0d3dewwh1bn0znif8422106-11a8-4904-8f23-08b1df43757a"
+                                          }
+                                      ],
+                                      "alignJustify": {},
+                                      "componentName": "lanhublock",
+                                      "children": [
+                                          {
+                                              "style": {
+                                                  "zIndex": 52,
+                                                  "position": "static",
+                                                  "left": 212,
+                                                  "top": 1936,
+                                                  "width": 154,
+                                                  "height": 188,
+                                                  "marginRight": 18,
+                                                  "marginLeft": 0
+                                              },
+                                              "rowDims": {
+                                                  "left": 212,
+                                                  "top": 1936,
+                                                  "width": 154,
+                                                  "height": 188
+                                              },
+                                              "eleName": "Image__9299_85788",
+                                              "id": "Image__9299_85788",
+                                              "layerId": 246,
+                                              "type": "lanhuimage",
+                                              "data": {
+                                                  "value": "this.item.lanhuimage0"
+                                              },
+                                              "uiType": "",
+                                              "uiTypeProb": {},
+                                              "loop": [
+                                                  {
+                                                      "lanhuimage0": "https://lanhu-oss-proxy.lanhuapp.com/ps3xs0kwpp7rf6ktwmvam3rnxiai8rejn7n56499d27-aece-4246-b1e0-1d253692a8d7"
+                                                  },
+                                                  {
+                                                      "lanhuimage0": "https://lanhu-oss-proxy.lanhuapp.com/pseblu7f0xkyqehk3d041e9booiz4cgxr5db004dab1-daa9-4712-861b-f25dadfee439"
+                                                  },
+                                                  {
+                                                      "lanhuimage0": "https://lanhu-oss-proxy.lanhuapp.com/psx90o57x0pwlokwovpa0d3dewwh1bn0znif8422106-11a8-4904-8f23-08b1df43757a"
+                                                  }
+                                              ],
+                                              "componentName": "lanhuimage",
+                                              "children": [],
+                                              "props": {
+                                                  "className": "image_2",
+                                                  "src": "this.item.lanhuimage0",
+                                                  "style": {
+                                                      "width": 154,
+                                                      "height": 188,
+                                                      "marginRight": 18
+                                                  }
+                                              }
+                                          }
+                                      ],
+                                      "props": {
+                                          "className": "image-wrapper_1",
+                                          "style": {
+                                              "width": 497,
+                                              "height": 188,
+                                              "flexDirection": "row",
+                                              "display": "flex"
+                                          }
+                                      }
+                                  }
+                              ],
+                              "props": {
+                                  "className": "group_2",
+                                  "style": {
+                                      "width": 668,
+                                      "height": 188,
+                                      "flexDirection": "row",
+                                      "display": "flex",
+                                      "justifyContent": "space-between",
+                                      "margin": "27px 0 28px 9px"
+                                  }
+                              }
+                          }
+                      ],
+                      "props": {
+                          "className": "section_3",
+                          "style": {
+                              "backgroundColor": "rgba(40,73,105,0.200000)",
+                              "borderRadius": "10px",
+                              "height": 296,
+                              "width": 686,
+                              "display": "flex",
+                              "flexDirection": "column",
+                              "margin": "33px 0 46px 32px"
+                          }
+                      }
+                  }
+              ],
+              "props": {
+                  "className": "box_2",
+                  "style": {
+                      "width": 750,
+                      "height": 966,
+                      "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psyi5mzlmjubeij531a488tazls6xekbw7a6dbd3153-6ba6-49cb-b255-9004e0ed10ad) 100% no-repeat",
+                      "backgroundSize": "100% 100%",
+                      "marginTop": -1,
+                      "display": "flex",
+                      "flexDirection": "column"
+                  }
+              }
+          },
+          {
+              "style": {
+                  "zIndex": 56,
+                  "position": "static",
+                  "left": 0,
+                  "top": 2219,
+                  "width": 750,
+                  "height": 828,
+                  "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psog0fmceza7rz7x2zih3cst00czkjj9onbab30880-5420-4ae1-ac4b-92e7d3e576a8) 100% no-repeat",
+                  "backgroundSize": "100% 100%",
+                  "marginTop": 21
+              },
+              "rowDims": {
+                  "left": 0,
+                  "top": 2219,
+                  "width": 750,
+                  "height": 828
+              },
+              "eleName": "col__0002_51609",
+              "id": "col__0002_51609",
+              "layerId": 332,
+              "type": "lanhublock",
+              "data": {
+                  "value": ""
+              },
+              "uiType": "",
+              "uiTypeProb": {},
+              "alignJustify": {},
+              "componentName": "lanhublock",
+              "children": [
+                  {
+                      "style": {
+                          "zIndex": 57,
+                          "position": "static",
+                          "left": 312,
+                          "top": 2252,
+                          "width": 125,
+                          "height": 31,
+                          "overflowWrap": "break-word",
+                          "color": "rgba(54,114,38,1)",
+                          "fontSize": 32,
+                          "fontFamily": "SourceHanSansSC-Bold",
+                          "fontWeight": "700",
+                          "textAlign": "center",
+                          "whiteSpace": "nowrap",
+                          "lineHeight": 32,
+                          "marginLeft": 312,
+                          "marginTop": 33
+                      },
+                      "rowDims": {
+                          "left": 312,
+                          "top": 2252,
+                          "width": 125,
+                          "height": 31
+                      },
+                      "eleName": "Text__9999_55823",
+                      "id": "Text__9999_55823",
+                      "layerId": 192,
+                      "type": "lanhutext",
+                      "data": {
+                          "value": "活动背景"
+                      },
+                      "uiType": "",
+                      "uiTypeProb": {},
+                      "componentName": "lanhutext",
+                      "children": [],
+                      "props": {
+                          "className": "text_13",
+                          "text": "活动背景",
+                          "lines": 1,
+                          "style": {
+                              "width": 125,
+                              "height": 31,
+                              "overflowWrap": "break-word",
+                              "color": "rgba(54,114,38,1)",
+                              "fontSize": 32,
+                              "fontFamily": "SourceHanSansSC-Bold",
+                              "fontWeight": "700",
+                              "textAlign": "center",
+                              "whiteSpace": "nowrap",
+                              "lineHeight": 32,
+                              "margin": "33px 0 0 312px"
+                          }
+                      }
+                  },
+                  {
+                      "style": {
+                          "zIndex": "auto",
+                          "position": "static",
+                          "left": 172,
+                          "top": 2331,
+                          "width": 384,
+                          "height": 125,
+                          "marginLeft": 172,
+                          "marginTop": 48
+                      },
+                      "rowDims": {
+                          "left": 172,
+                          "top": 2331,
+                          "width": 384,
+                          "height": 125
+                      },
+                      "eleName": "col_rect_TextGroup5552_1_5707",
+                      "id": "col_rect_TextGroup5552_1_5707",
+                      "layerId": "rect_172_2331_384_125_184802",
+                      "type": "lanhublock",
+                      "data": {
+                          "value": ""
+                      },
+                      "uiType": "TextGroup",
+                      "uiTypeProb": {},
+                      "alignJustify": {
+                          "justifyContent": "space-between"
+                      },
+                      "componentName": "lanhublock",
+                      "children": [
+                          {
+                              "style": {
+                                  "zIndex": 58,
+                                  "position": "static",
+                                  "left": 172,
+                                  "top": 2331,
+                                  "width": 384,
+                                  "height": 67,
+                                  "overflowWrap": "break-word",
+                                  "fontSize": 28,
+                                  "fontFamily": "SourceHanSansSC-Regular",
+                                  "fontWeight": "normal",
+                                  "textAlign": "center",
+                                  "lineHeight": 40,
+                                  "marginTop": 0,
+                                  "marginLeft": 0
+                              },
+                              "rowDims": {
+                                  "left": 172,
+                                  "top": 2331,
+                                  "width": 384,
+                                  "height": 67
+                              },
+                              "eleName": "blockText__999999999997777799999999919_53140",
+                              "id": "blockText__999999999997777799999999919_53140",
+                              "layerId": 200,
+                              "type": "lanhublock",
+                              "data": {
+                                  "value": "每日送出活动礼物价值满77777<br/>将获得活动房间背景1天"
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "componentName": "lanhublock",
+                              "children": [
+                                  {
+                                      "style": {
+                                          "zIndex": "auto",
+                                          "position": "static",
+                                          "left": 172,
+                                          "top": 2331,
+                                          "width": 384,
+                                          "height": 67,
+                                          "overflowWrap": "break-word",
+                                          "display": "inline-block",
+                                          "color": "rgba(255, 255, 255, 1)",
+                                          "fontSize": 28,
+                                          "fontFamily": "SourceHanSansSC-Regular",
+                                          "fontWeight": "normal",
+                                          "textAlign": "left",
+                                          "lineHeight": 40
+                                      },
+                                      "rowDims": {
+                                          "left": 172,
+                                          "top": 2331,
+                                          "width": 384,
+                                          "height": 67
+                                      },
+                                      "eleName": "TextInside_55626",
+                                      "id": "TextInside_55626",
+                                      "layerId": "200-1",
+                                      "type": "lanhutext",
+                                      "data": {
+                                          "value": "每日送出活动礼物价值满"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhutext",
+                                      "children": [],
+                                      "props": {
+                                          "className": "text_14",
+                                          "text": "每日送出活动礼物价值满",
+                                          "lines": 1,
+                                          "style": {
+                                              "width": 384,
+                                              "height": 67,
+                                              "overflowWrap": "break-word",
+                                              "color": "rgba(255, 255, 255, 1)",
+                                              "fontSize": 28,
+                                              "fontFamily": "SourceHanSansSC-Regular",
+                                              "fontWeight": "normal",
+                                              "textAlign": "left",
+                                              "lineHeight": 40
+                                          }
+                                      }
+                                  },
+                                  {
+                                      "style": {
+                                          "zIndex": "auto",
+                                          "position": "static",
+                                          "left": 172,
+                                          "top": 2331,
+                                          "width": 384,
+                                          "height": 67,
+                                          "overflowWrap": "break-word",
+                                          "display": "inline-block",
+                                          "color": "rgba(255, 240, 78, 1)",
+                                          "fontSize": 28,
+                                          "fontFamily": "SourceHanSansSC-Regular",
+                                          "fontWeight": "normal",
+                                          "textAlign": "left",
+                                          "lineHeight": 40
+                                      },
+                                      "rowDims": {
+                                          "left": 172,
+                                          "top": 2331,
+                                          "width": 384,
+                                          "height": 67
+                                      },
+                                      "eleName": "TextInside_39917",
+                                      "id": "TextInside_39917",
+                                      "layerId": "200-2",
+                                      "type": "lanhutext",
+                                      "data": {
+                                          "value": "77777<br/>"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhutext",
+                                      "children": [],
+                                      "props": {
+                                          "className": "paragraph_2",
+                                          "text": "77777<br/>",
+                                          "lines": 1,
+                                          "style": {
+                                              "width": 384,
+                                              "height": 67,
+                                              "overflowWrap": "break-word",
+                                              "color": "rgba(255, 240, 78, 1)",
+                                              "fontSize": 28,
+                                              "fontFamily": "SourceHanSansSC-Regular",
+                                              "fontWeight": "normal",
+                                              "textAlign": "left",
+                                              "lineHeight": 40
+                                          }
+                                      }
+                                  },
+                                  {
+                                      "style": {
+                                          "zIndex": "auto",
+                                          "position": "static",
+                                          "left": 172,
+                                          "top": 2331,
+                                          "width": 384,
+                                          "height": 67,
+                                          "overflowWrap": "break-word",
+                                          "display": "inline-block",
+                                          "color": "rgba(255, 255, 255, 1)",
+                                          "fontSize": 28,
+                                          "fontFamily": "SourceHanSansSC-Regular",
+                                          "fontWeight": "normal",
+                                          "textAlign": "left",
+                                          "lineHeight": 40
+                                      },
+                                      "rowDims": {
+                                          "left": 172,
+                                          "top": 2331,
+                                          "width": 384,
+                                          "height": 67
+                                      },
+                                      "eleName": "TextInside_56351",
+                                      "id": "TextInside_56351",
+                                      "layerId": "200-3",
+                                      "type": "lanhutext",
+                                      "data": {
+                                          "value": "将获得活动房间背景1天"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhutext",
+                                      "children": [],
+                                      "props": {
+                                          "className": "text_15",
+                                          "text": "将获得活动房间背景1天",
+                                          "lines": 1,
+                                          "style": {
+                                              "width": 384,
+                                              "height": 67,
+                                              "overflowWrap": "break-word",
+                                              "color": "rgba(255, 255, 255, 1)",
+                                              "fontSize": 28,
+                                              "fontFamily": "SourceHanSansSC-Regular",
+                                              "fontWeight": "normal",
+                                              "textAlign": "left",
+                                              "lineHeight": 40
+                                          }
+                                      }
+                                  }
+                              ],
+                              "props": {
+                                  "className": "text-wrapper_8",
+                                  "style": {
+                                      "width": 384,
+                                      "height": 67,
+                                      "overflowWrap": "break-word",
+                                      "fontSize": 0,
+                                      "fontFamily": "SourceHanSansSC-Regular",
+                                      "fontWeight": "normal",
+                                      "textAlign": "center",
+                                      "lineHeight": 40
+                                  }
+                              }
+                          },
+                          {
+                              "style": {
+                                  "zIndex": 59,
+                                  "position": "static",
+                                  "left": 316,
+                                  "top": 2424,
+                                  "width": 119,
+                                  "height": 32,
+                                  "overflowWrap": "break-word",
+                                  "fontSize": 32,
+                                  "fontFamily": "SourceHanSansSC-Medium",
+                                  "fontWeight": "500",
+                                  "textAlign": "center",
+                                  "whiteSpace": "nowrap",
+                                  "lineHeight": 40,
+                                  "marginLeft": 144,
+                                  "marginTop": 26,
+                                  "marginBottom": 0
+                              },
+                              "rowDims": {
+                                  "left": 316,
+                                  "top": 2424,
+                                  "width": 119,
+                                  "height": 32
+                              },
+                              "eleName": "blockText_x77777_95467",
+                              "id": "blockText_x77777_95467",
+                              "layerId": 201,
+                              "type": "lanhublock",
+                              "data": {
+                                  "value": "x/77777"
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "componentName": "lanhublock",
+                              "children": [
+                                  {
+                                      "style": {
+                                          "zIndex": "auto",
+                                          "position": "static",
+                                          "left": 316,
+                                          "top": 2424,
+                                          "width": 119,
+                                          "height": 32,
+                                          "overflowWrap": "break-word",
+                                          "display": "inline-block",
+                                          "color": "rgba(255, 255, 255, 1)",
+                                          "fontSize": 32,
+                                          "fontFamily": "SourceHanSansSC-Medium",
+                                          "fontWeight": "500",
+                                          "textAlign": "left",
+                                          "whiteSpace": "nowrap",
+                                          "lineHeight": 40
+                                      },
+                                      "rowDims": {
+                                          "left": 316,
+                                          "top": 2424,
+                                          "width": 119,
+                                          "height": 32
+                                      },
+                                      "eleName": "TextInside_64654",
+                                      "id": "TextInside_64654",
+                                      "layerId": "201-1",
+                                      "type": "lanhutext",
+                                      "data": {
+                                          "value": "x/"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhutext",
+                                      "children": [],
+                                      "props": {
+                                          "className": "text_16",
+                                          "text": "x/",
+                                          "lines": 1,
+                                          "style": {
+                                              "width": 119,
+                                              "height": 32,
+                                              "overflowWrap": "break-word",
+                                              "color": "rgba(255, 255, 255, 1)",
+                                              "fontSize": 32,
+                                              "fontFamily": "SourceHanSansSC-Medium",
+                                              "fontWeight": "500",
+                                              "textAlign": "left",
+                                              "whiteSpace": "nowrap",
+                                              "lineHeight": 40
+                                          }
+                                      }
+                                  },
+                                  {
+                                      "style": {
+                                          "zIndex": "auto",
+                                          "position": "static",
+                                          "left": 316,
+                                          "top": 2424,
+                                          "width": 119,
+                                          "height": 32,
+                                          "overflowWrap": "break-word",
+                                          "display": "inline-block",
+                                          "color": "rgba(255, 240, 78, 1)",
+                                          "fontSize": 32,
+                                          "fontFamily": "SourceHanSansSC-Medium",
+                                          "fontWeight": "500",
+                                          "textAlign": "left",
+                                          "whiteSpace": "nowrap",
+                                          "lineHeight": 40
+                                      },
+                                      "rowDims": {
+                                          "left": 316,
+                                          "top": 2424,
+                                          "width": 119,
+                                          "height": 32
+                                      },
+                                      "eleName": "TextInside_38201",
+                                      "id": "TextInside_38201",
+                                      "layerId": "201-2",
+                                      "type": "lanhutext",
+                                      "data": {
+                                          "value": "77777"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhutext",
+                                      "children": [],
+                                      "props": {
+                                          "className": "text_17",
+                                          "text": "77777",
+                                          "lines": 1,
+                                          "style": {
+                                              "width": 119,
+                                              "height": 32,
+                                              "overflowWrap": "break-word",
+                                              "color": "rgba(255, 240, 78, 1)",
+                                              "fontSize": 32,
+                                              "fontFamily": "SourceHanSansSC-Medium",
+                                              "fontWeight": "500",
+                                              "textAlign": "left",
+                                              "whiteSpace": "nowrap",
+                                              "lineHeight": 40
+                                          }
+                                      }
+                                  }
+                              ],
+                              "props": {
+                                  "className": "text-wrapper_9",
+                                  "style": {
+                                      "width": 119,
+                                      "height": 32,
+                                      "overflowWrap": "break-word",
+                                      "fontSize": 0,
+                                      "fontFamily": "SourceHanSansSC-Medium",
+                                      "fontWeight": "500",
+                                      "textAlign": "center",
+                                      "whiteSpace": "nowrap",
+                                      "lineHeight": 40,
+                                      "margin": "26px 0 0 144px"
+                                  }
+                              }
+                          }
+                      ],
+                      "props": {
+                          "className": "text-group_1",
+                          "style": {
+                              "width": 384,
+                              "height": 125,
+                              "display": "flex",
+                              "flexDirection": "column",
+                              "justifyContent": "space-between",
+                              "margin": "48px 0 0 172px"
+                          }
+                      }
+                  },
+                  {
+                      "style": {
+                          "zIndex": "auto",
+                          "position": "static",
+                          "left": 196,
+                          "top": 2465,
+                          "width": 358,
+                          "height": 530,
+                          "marginLeft": 196,
+                          "marginTop": 9,
+                          "marginBottom": 52
+                      },
+                      "rowDims": {
+                          "left": 196,
+                          "top": 2465,
+                          "width": 358,
+                          "height": 530
+                      },
+                      "eleName": "col_rect_ImageText1112_1_48621",
+                      "id": "col_rect_ImageText1112_1_48621",
+                      "layerId": "rect_196_2465_358_530_717212",
+                      "type": "lanhublock",
+                      "data": {
+                          "value": ""
+                      },
+                      "uiType": "ImageText",
+                      "uiTypeProb": {},
+                      "alignJustify": {
+                          "justifyContent": "space-between"
+                      },
+                      "componentName": "lanhublock",
+                      "children": [
+                          {
+                              "style": {
+                                  "zIndex": 61,
+                                  "position": "static",
+                                  "left": 196,
+                                  "top": 2465,
+                                  "width": 358,
+                                  "height": 494,
+                                  "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psfwzb3yo5qzwf59jig17jthjowquqjhddf5d697f8-0876-414f-915d-b0112cf2028f) 100% no-repeat",
+                                  "backgroundSize": "100% 100%",
+                                  "marginTop": 0,
+                                  "marginLeft": 0
+                              },
+                              "rowDims": {
+                                  "left": 196,
+                                  "top": 2465,
+                                  "width": 358,
+                                  "height": 494
+                              },
+                              "eleName": "row__0000_92216",
+                              "id": "row__0000_92216",
+                              "layerId": 335,
+                              "type": "lanhublock",
+                              "data": {
+                                  "value": ""
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "alignJustify": {},
+                              "componentName": "lanhublock",
+                              "children": [
+                                  {
+                                      "style": {
+                                          "zIndex": 62,
+                                          "position": "static",
+                                          "left": 269,
+                                          "top": 2482,
+                                          "width": 212,
+                                          "height": 456,
+                                          "marginTop": 17,
+                                          "marginLeft": 73
+                                      },
+                                      "rowDims": {
+                                          "left": 269,
+                                          "top": 2482,
+                                          "width": 212,
+                                          "height": 456
+                                      },
+                                      "eleName": "Image__335_39212",
+                                      "id": "Image__335_39212",
+                                      "layerId": 338,
+                                      "type": "lanhuimage",
+                                      "data": {
+                                          "value": "https://lanhu-oss-proxy.lanhuapp.com/psd4maniqt5twqcgyglkwc1nfowvnnwaag04509808-84c2-44c4-a2ec-46f2f5d48c8a"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhuimage",
+                                      "children": [],
+                                      "props": {
+                                          "className": "image_3",
+                                          "src": "https://lanhu-oss-proxy.lanhuapp.com/psd4maniqt5twqcgyglkwc1nfowvnnwaag04509808-84c2-44c4-a2ec-46f2f5d48c8a",
+                                          "style": {
+                                              "width": 212,
+                                              "height": 456,
+                                              "margin": "17px 0 0 73px"
+                                          }
+                                      }
+                                  },
+                                  {
+                                      "style": {
+                                          "backgroundImage": "linear-gradient(90deg, rgba(255,181,52,1.000000) 0, rgba(255,181,52,1.000000) 0, rgba(255,233,143,1.000000) 100.000000%, rgba(255,233,143,1.000000) 100.000000%)",
+                                          "borderRadius": "13px 13px 13px 13px",
+                                          "zIndex": 63,
+                                          "position": "static",
+                                          "left": 495,
+                                          "top": 2479,
+                                          "width": 46,
+                                          "height": 26,
+                                          "marginTop": 14,
+                                          "marginLeft": 14,
+                                          "marginRight": 13,
+                                          "display": "flex",
+                                          "flexDirection": "column"
+                                      },
+                                      "rowDims": {
+                                          "left": 495,
+                                          "top": 2479,
+                                          "width": 46,
+                                          "height": 26
+                                      },
+                                      "eleName": "Block__0000200_29681",
+                                      "id": "Block__0000200_29681",
+                                      "layerId": 211,
+                                      "type": "lanhublock",
+                                      "data": {
+                                          "value": ""
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "alignJustify": {},
+                                      "componentName": "lanhublock",
+                                      "children": [
+                                          {
+                                              "style": {
+                                                  "zIndex": 64,
+                                                  "position": "static",
+                                                  "left": 507,
+                                                  "top": 2483,
+                                                  "width": 22,
+                                                  "height": 17,
+                                                  "overflowWrap": "break-word",
+                                                  "color": "rgba(164,76,19,1)",
+                                                  "fontSize": 22,
+                                                  "fontFamily": "ArialMT",
+                                                  "fontWeight": "normal",
+                                                  "textAlign": "center",
+                                                  "whiteSpace": "nowrap",
+                                                  "lineHeight": 22,
+                                                  "marginTop": 4,
+                                                  "marginLeft": 12
+                                              },
+                                              "rowDims": {
+                                                  "left": 507,
+                                                  "top": 2483,
+                                                  "width": 22,
+                                                  "height": 17
+                                              },
+                                              "eleName": "Text__1d00_8645",
+                                              "id": "Text__1d00_8645",
+                                              "layerId": 212,
+                                              "type": "lanhutext",
+                                              "data": {
+                                                  "value": "1d"
+                                              },
+                                              "uiType": "",
+                                              "uiTypeProb": {},
+                                              "componentName": "lanhutext",
+                                              "children": [],
+                                              "props": {
+                                                  "className": "text_18",
+                                                  "text": "1d",
+                                                  "lines": 1,
+                                                  "style": {
+                                                      "width": 22,
+                                                      "height": 17,
+                                                      "overflowWrap": "break-word",
+                                                      "color": "rgba(164,76,19,1)",
+                                                      "fontSize": 22,
+                                                      "fontFamily": "ArialMT",
+                                                      "fontWeight": "normal",
+                                                      "textAlign": "center",
+                                                      "whiteSpace": "nowrap",
+                                                      "lineHeight": 22,
+                                                      "margin": "4px 0 0 12px"
+                                                  }
+                                              }
+                                          }
+                                      ],
+                                      "props": {
+                                          "className": "text-wrapper_10",
+                                          "style": {
+                                              "backgroundImage": "linear-gradient(90deg, rgba(255,181,52,1.000000) 0, rgba(255,181,52,1.000000) 0, rgba(255,233,143,1.000000) 100.000000%, rgba(255,233,143,1.000000) 100.000000%)",
+                                              "borderRadius": "13px",
+                                              "height": 26,
+                                              "display": "flex",
+                                              "flexDirection": "column",
+                                              "width": 46,
+                                              "margin": "14px 13px 0 14px"
+                                          }
+                                      }
+                                  }
+                              ],
+                              "props": {
+                                  "className": "box_4",
+                                  "style": {
+                                      "width": 358,
+                                      "height": 494,
+                                      "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psfwzb3yo5qzwf59jig17jthjowquqjhddf5d697f8-0876-414f-915d-b0112cf2028f) 100% no-repeat",
+                                      "backgroundSize": "100% 100%",
+                                      "flexDirection": "row",
+                                      "display": "flex"
+                                  }
+                              }
+                          },
+                          {
+                              "style": {
+                                  "zIndex": 65,
+                                  "position": "static",
+                                  "left": 304,
+                                  "top": 2972,
+                                  "width": 143,
+                                  "height": 23,
+                                  "overflowWrap": "break-word",
+                                  "color": "rgba(152,198,146,1)",
+                                  "fontSize": 24,
+                                  "fontFamily": "SourceHanSansSC-Regular",
+                                  "fontWeight": "normal",
+                                  "textAlign": "center",
+                                  "whiteSpace": "nowrap",
+                                  "lineHeight": 24,
+                                  "marginLeft": 108,
+                                  "marginTop": 13,
+                                  "marginBottom": 0
+                              },
+                              "rowDims": {
+                                  "left": 304,
+                                  "top": 2972,
+                                  "width": 143,
+                                  "height": 23
+                              },
+                              "eleName": "Text__111111_7325",
+                              "id": "Text__111111_7325",
+                              "layerId": 213,
+                              "type": "lanhutext",
+                              "data": {
+                                  "value": "奖励自动发放"
+                              },
+                              "uiType": "TextGroup",
+                              "uiTypeProb": {},
+                              "componentName": "lanhutext",
+                              "children": [],
+                              "props": {
+                                  "className": "text-group_2",
+                                  "text": "奖励自动发放",
+                                  "lines": 1,
+                                  "style": {
+                                      "width": 143,
+                                      "height": 23,
+                                      "overflowWrap": "break-word",
+                                      "color": "rgba(152,198,146,1)",
+                                      "fontSize": 24,
+                                      "fontFamily": "SourceHanSansSC-Regular",
+                                      "fontWeight": "normal",
+                                      "textAlign": "center",
+                                      "whiteSpace": "nowrap",
+                                      "lineHeight": 24,
+                                      "margin": "13px 0 0 108px"
+                                  }
+                              }
+                          }
+                      ],
+                      "props": {
+                          "className": "image-text_1",
+                          "style": {
+                              "width": 358,
+                              "height": 530,
+                              "display": "flex",
+                              "flexDirection": "column",
+                              "justifyContent": "space-between",
+                              "margin": "9px 0 52px 196px"
+                          }
+                      }
+                  }
+              ],
+              "props": {
+                  "className": "box_3",
+                  "style": {
+                      "width": 750,
+                      "height": 828,
+                      "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psog0fmceza7rz7x2zih3cst00czkjj9onbab30880-5420-4ae1-ac4b-92e7d3e576a8) 100% no-repeat",
+                      "backgroundSize": "100% 100%",
+                      "marginTop": 21,
+                      "display": "flex",
+                      "flexDirection": "column"
+                  }
+              }
+          },
+          {
+              "style": {
+                  "zIndex": 1,
+                  "position": "static",
+                  "left": 0,
+                  "top": 3047,
+                  "width": 750,
+                  "height": 153,
+                  "marginTop": 0,
+                  "marginBottom": 1,
+                  "display": "flex",
+                  "flexDirection": "column"
+              },
+              "rowDims": {
+                  "left": 0,
+                  "top": 3047,
+                  "width": 750,
+                  "height": 153
+              },
+              "eleName": "col___62474",
+              "id": "col___62474",
+              "layerId": "col_0_3047_750_153_110645",
+              "type": "lanhublock",
+              "data": {
+                  "value": ""
+              },
+              "uiType": "",
+              "uiTypeProb": {},
+              "loopType": false,
+              "alignJustify": {},
+              "componentName": "lanhublock",
+              "children": [
+                  {
+                      "style": {
+                          "zIndex": 39,
+                          "position": "static",
+                          "left": 73,
+                          "top": 3088,
+                          "width": 300,
+                          "height": 72,
+                          "background": "url(https://lanhu-oss-proxy.lanhuapp.com/ps5issnw9hgjoxkp348wteg5grxmbhpe1n441e9a92-4156-4125-be66-ef023dcacb02) 100% no-repeat",
+                          "backgroundSize": "100% 100%",
+                          "marginTop": 41,
+                          "marginLeft": 73,
+                          "display": "flex",
+                          "flexDirection": "column"
+                      },
+                      "rowDims": {
+                          "left": 73,
+                          "top": 3088,
+                          "width": 300,
+                          "height": 72
+                      },
+                      "eleName": "Block_button33_31119",
+                      "id": "Block_button33_31119",
+                      "layerId": 341,
+                      "type": "lanhublock",
+                      "data": {
+                          "value": ""
+                      },
+                      "uiType": "",
+                      "uiTypeProb": {},
+                      "alignJustify": {},
+                      "componentName": "lanhublock",
+                      "children": [
+                          {
+                              "style": {
+                                  "zIndex": 40,
+                                  "position": "static",
+                                  "left": 178,
+                                  "top": 3109,
+                                  "width": 89,
+                                  "height": 29,
+                                  "overflowWrap": "break-word",
+                                  "color": "rgba(19,87,9,1)",
+                                  "fontSize": 30,
+                                  "fontFamily": "SourceHanSansSC-Regular",
+                                  "fontWeight": "normal",
+                                  "textAlign": "center",
+                                  "whiteSpace": "nowrap",
+                                  "lineHeight": 30,
+                                  "marginTop": 21,
+                                  "marginLeft": 105
+                              },
+                              "rowDims": {
+                                  "left": 178,
+                                  "top": 3109,
+                                  "width": 89,
+                                  "height": 29
+                              },
+                              "eleName": "Text__111_43421",
+                              "id": "Text__111_43421",
+                              "layerId": 217,
+                              "type": "lanhutext",
+                              "data": {
+                                  "value": "已领取"
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "componentName": "lanhutext",
+                              "children": [],
+                              "props": {
+                                  "className": "text_19",
+                                  "text": "已领取",
+                                  "lines": 1,
+                                  "style": {
+                                      "width": 89,
+                                      "height": 29,
+                                      "overflowWrap": "break-word",
+                                      "color": "rgba(19,87,9,1)",
+                                      "fontSize": 30,
+                                      "fontFamily": "SourceHanSansSC-Regular",
+                                      "fontWeight": "normal",
+                                      "textAlign": "center",
+                                      "whiteSpace": "nowrap",
+                                      "lineHeight": 30,
+                                      "margin": "21px 0 0 105px"
+                                  }
+                              }
+                          }
+                      ],
+                      "props": {
+                          "className": "text-wrapper_11",
+                          "style": {
+                              "height": 72,
+                              "background": "url(https://lanhu-oss-proxy.lanhuapp.com/ps5issnw9hgjoxkp348wteg5grxmbhpe1n441e9a92-4156-4125-be66-ef023dcacb02) 100% no-repeat",
+                              "backgroundSize": "100% 100%",
+                              "display": "flex",
+                              "flexDirection": "column",
+                              "width": 300,
+                              "margin": "41px 0 0 73px"
+                          }
+                      }
+                  }
+              ],
+              "props": {
+                  "className": "box_5",
+                  "style": {
+                      "width": 750,
+                      "height": 153,
+                      "marginBottom": 1,
+                      "display": "flex",
+                      "flexDirection": "column"
+                  }
+              }
+          },
+          {
+              "style": {
+                  "zIndex": 2,
+                  "position": "absolute",
+                  "left": 0,
+                  "top": 0,
+                  "width": 750,
+                  "height": 928,
+                  "background": "url(https://lanhu-oss-proxy.lanhuapp.com/ps1s6jhrxzyqw5atl0pcc87g8xb5oo94dhm463f94d5-d44c-4b24-85e1-e5b05650f125) 100% no-repeat",
+                  "backgroundSize": "100% 100%",
+                  "display": "flex",
+                  "flexDirection": "column"
+              },
+              "rowDims": {
+                  "left": 0,
+                  "top": 0,
+                  "width": 750,
+                  "height": 928
+              },
+              "eleName": "Block__7777_72416",
+              "id": "Block__7777_72416",
+              "layerId": 285,
+              "type": "lanhublock",
+              "data": {
+                  "value": ""
+              },
+              "uiType": "",
+              "uiTypeProb": {},
+              "alignJustify": {},
+              "componentName": "lanhublock",
+              "children": [
+                  {
+                      "style": {
+                          "zIndex": 3,
+                          "position": "static",
+                          "left": 25,
+                          "top": 46,
+                          "width": 700,
+                          "height": 250,
+                          "marginTop": 46,
+                          "marginLeft": 25
+                      },
+                      "rowDims": {
+                          "left": 25,
+                          "top": 46,
+                          "width": 700,
+                          "height": 250
+                      },
+                      "eleName": "Image_title_7319",
+                      "id": "Image_title_7319",
+                      "layerId": 292,
+                      "type": "lanhuimage",
+                      "data": {
+                          "value": "https://lanhu-oss-proxy.lanhuapp.com/ps3sejryhjdmcbol8wnawb05wkaaasbgt1q60079394-6aa3-4741-94df-ff92cd72fcae"
+                      },
+                      "uiType": "",
+                      "uiTypeProb": {},
+                      "componentName": "lanhuimage",
+                      "children": [],
+                      "props": {
+                          "className": "image_4",
+                          "src": "https://lanhu-oss-proxy.lanhuapp.com/ps3sejryhjdmcbol8wnawb05wkaaasbgt1q60079394-6aa3-4741-94df-ff92cd72fcae",
+                          "style": {
+                              "width": 700,
+                              "height": 250,
+                              "margin": "46px 0 0 25px"
+                          }
+                      }
+                  },
+                  {
+                      "style": {
+                          "zIndex": 4,
+                          "position": "absolute",
+                          "left": 661,
+                          "top": 33,
+                          "width": 60,
+                          "height": 60
+                      },
+                      "rowDims": {
+                          "left": 661,
+                          "top": 33,
+                          "width": 60,
+                          "height": 60
+                      },
+                      "eleName": "Image___63208",
+                      "id": "Image___63208",
+                      "layerId": 295,
+                      "type": "lanhuimage",
+                      "data": {
+                          "value": "https://lanhu-oss-proxy.lanhuapp.com/psau3r1ekqdjs7f6klds0uiizfsydtjnokjae7bb50e-94cc-492e-a2a1-d7a188b07388"
+                      },
+                      "uiType": "",
+                      "uiTypeProb": {},
+                      "componentName": "lanhuimage",
+                      "children": [],
+                      "props": {
+                          "className": "image_5",
+                          "src": "https://lanhu-oss-proxy.lanhuapp.com/psau3r1ekqdjs7f6klds0uiizfsydtjnokjae7bb50e-94cc-492e-a2a1-d7a188b07388",
+                          "style": {
+                              "position": "absolute",
+                              "left": 661,
+                              "top": 33,
+                              "width": 60,
+                              "height": 60,
+                              "opacity": 1
+                          }
+                      }
+                  },
+                  {
+                      "style": {
+                          "zIndex": 6,
+                          "position": "absolute",
+                          "left": 0,
+                          "top": 749,
+                          "width": 750,
+                          "height": 346,
+                          "background": "url(https://lanhu-oss-proxy.lanhuapp.com/ps37h82j9502qacbaxnqmlzp42tc971zitp7ace32ce-7185-4eae-841f-0b668d43cfd3) 100% no-repeat",
+                          "backgroundSize": "100% 100%"
+                      },
+                      "rowDims": {
+                          "left": 0,
+                          "top": 749,
+                          "width": 750,
+                          "height": 346
+                      },
+                      "eleName": "Block__3_56526",
+                      "id": "Block__3_56526",
+                      "layerId": 299,
+                      "type": "lanhublock",
+                      "data": {
+                          "value": ""
+                      },
+                      "uiType": "",
+                      "uiTypeProb": {},
+                      "alignJustify": {},
+                      "componentName": "lanhublock",
+                      "children": [
+                          {
+                              "style": {
+                                  "zIndex": "auto",
+                                  "position": "static",
+                                  "left": 312,
+                                  "top": 782,
+                                  "width": 126,
+                                  "height": 31,
+                                  "marginLeft": 312,
+                                  "marginTop": 33,
+                                  "display": "flex",
+                                  "flexDirection": "column"
+                              },
+                              "rowDims": {
+                                  "left": 312,
+                                  "top": 782,
+                                  "width": 126,
+                                  "height": 31
+                              },
+                              "eleName": "row___45630",
+                              "id": "row___45630",
+                              "layerId": "row_312_782_126_31_318868",
+                              "type": "lanhublock",
+                              "data": {
+                                  "value": ""
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "loopType": false,
+                              "alignJustify": {},
+                              "componentName": "lanhublock",
+                              "children": [
+                                  {
+                                      "style": {
+                                          "zIndex": 7,
+                                          "position": "static",
+                                          "left": 312,
+                                          "top": 782,
+                                          "width": 126,
+                                          "height": 31,
+                                          "overflowWrap": "break-word",
+                                          "color": "rgba(54,114,38,1)",
+                                          "fontSize": 32,
+                                          "fontFamily": "SourceHanSansSC-Bold",
+                                          "fontWeight": "700",
+                                          "textAlign": "center",
+                                          "whiteSpace": "nowrap",
+                                          "lineHeight": 32,
+                                          "marginTop": 0,
+                                          "marginLeft": 0
+                                      },
+                                      "rowDims": {
+                                          "left": 312,
+                                          "top": 782,
+                                          "width": 126,
+                                          "height": 31
+                                      },
+                                      "eleName": "Text__9999_90388",
+                                      "id": "Text__9999_90388",
+                                      "layerId": 82,
+                                      "type": "lanhutext",
+                                      "data": {
+                                          "value": "活动礼物"
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "componentName": "lanhutext",
+                                      "children": [],
+                                      "props": {
+                                          "className": "text_20",
+                                          "text": "活动礼物",
+                                          "lines": 1,
+                                          "style": {
+                                              "width": 126,
+                                              "height": 31,
+                                              "overflowWrap": "break-word",
+                                              "color": "rgba(54,114,38,1)",
+                                              "fontSize": 32,
+                                              "fontFamily": "SourceHanSansSC-Bold",
+                                              "fontWeight": "700",
+                                              "textAlign": "center",
+                                              "whiteSpace": "nowrap",
+                                              "lineHeight": 32
+                                          }
+                                      }
+                                  }
+                              ],
+                              "props": {
+                                  "className": "text-wrapper_12",
+                                  "style": {
+                                      "width": 126,
+                                      "height": 31,
+                                      "display": "flex",
+                                      "flexDirection": "row",
+                                      "margin": "33px 0 0 312px",
+                                      "opacity": 1
+                                  }
+                              }
+                          },
+                          {
+                              "style": {
+                                  "zIndex": "auto",
+                                  "position": "static",
+                                  "left": 41,
+                                  "top": 865,
+                                  "width": 668,
+                                  "height": 188,
+                                  "marginLeft": 41,
+                                  "marginTop": 52,
+                                  "marginBottom": 42
+                              },
+                              "rowDims": {
+                                  "left": 41,
+                                  "top": 865,
+                                  "width": 668,
+                                  "height": 188
+                              },
+                              "eleName": "row___14303",
+                              "id": "row___14303",
+                              "layerId": "row_41_865_668_188_428802",
+                              "type": "lanhublock",
+                              "data": {
+                                  "value": ""
+                              },
+                              "uiType": "",
+                              "uiTypeProb": {},
+                              "loopType": false,
+                              "alignJustify": {
+                                  "justifyContent": "space-between"
+                              },
+                              "componentName": "lanhublock",
+                              "children": [
+                                  {
+                                      "style": {
+                                          "zIndex": "auto",
+                                          "position": "static",
+                                          "left": 41,
+                                          "top": 865,
+                                          "width": 154,
+                                          "height": 188,
+                                          "marginTop": 0,
+                                          "marginLeft": 0
+                                      },
+                                      "rowDims": {
+                                          "left": 41,
+                                          "top": 865,
+                                          "width": 154,
+                                          "height": 188
+                                      },
+                                      "eleName": "col___58043",
+                                      "id": "col___58043",
+                                      "layerId": "col_41_865_154_188_530396",
+                                      "type": "lanhublock",
+                                      "data": {
+                                          "value": ""
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "loopType": false,
+                                      "alignJustify": {
+                                          "justifyContent": "space-between"
+                                      },
+                                      "componentName": "lanhublock",
+                                      "children": [
+                                          {
+                                              "style": {
+                                                  "zIndex": 10,
+                                                  "position": "static",
+                                                  "left": 41,
+                                                  "top": 865,
+                                                  "width": 154,
+                                                  "height": 154,
+                                                  "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psa06323kq27rze0mm1x9eaaz9gzh7edew8e2280036-d902-42f2-9733-356cf4fc4422) 100% no-repeat",
+                                                  "backgroundSize": "100% 100%",
+                                                  "marginTop": 0,
+                                                  "marginLeft": 0,
+                                                  "display": "flex",
+                                                  "flexDirection": "column"
+                                              },
+                                              "rowDims": {
+                                                  "left": 41,
+                                                  "top": 865,
+                                                  "width": 154,
+                                                  "height": 154
+                                              },
+                                              "eleName": "Block_gift_61167",
+                                              "id": "Block_gift_61167",
+                                              "layerId": 302,
+                                              "type": "lanhublock",
+                                              "data": {
+                                                  "value": ""
+                                              },
+                                              "uiType": "",
+                                              "uiTypeProb": {},
+                                              "alignJustify": {},
+                                              "componentName": "lanhublock",
+                                              "children": [
+                                                  {
+                                                      "style": {
+                                                          "zIndex": 11,
+                                                          "position": "static",
+                                                          "left": 41,
+                                                          "top": 865,
+                                                          "width": 154,
+                                                          "height": 154,
+                                                          "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psutgimhx9v7pdxpeco60tiqx74vycupxz2fa7d722-449c-4f6f-ac75-9e28b5c52d1a) 100% no-repeat",
+                                                          "backgroundSize": "100% 100%",
+                                                          "marginTop": 0,
+                                                          "marginLeft": 0
+                                                      },
+                                                      "rowDims": {
+                                                          "left": 41,
+                                                          "top": 865,
+                                                          "width": 154,
+                                                          "height": 154
+                                                      },
+                                                      "eleName": "Block_ActiveStar2_78209",
+                                                      "id": "Block_ActiveStar2_78209",
+                                                      "layerId": 305,
+                                                      "type": "lanhublock",
+                                                      "data": {
+                                                          "value": ""
+                                                      },
+                                                      "uiType": "",
+                                                      "uiTypeProb": {},
+                                                      "alignJustify": {
+                                                          "justifyContent": "space-between"
+                                                      },
+                                                      "componentName": "lanhublock",
+                                                      "children": [
+                                                          {
+                                                              "style": {
+                                                                  "zIndex": "auto",
+                                                                  "position": "static",
+                                                                  "left": 115,
+                                                                  "top": 865,
+                                                                  "width": 80,
+                                                                  "height": 26,
+                                                                  "marginLeft": 74,
+                                                                  "marginTop": 0,
+                                                                  "display": "flex",
+                                                                  "flexDirection": "column"
+                                                              },
+                                                              "rowDims": {
+                                                                  "left": 115,
+                                                                  "top": 865,
+                                                                  "width": 80,
+                                                                  "height": 26
+                                                              },
+                                                              "eleName": "row___73023",
+                                                              "id": "row___73023",
+                                                              "layerId": "row_115_865_80_26_998675",
+                                                              "type": "lanhublock",
+                                                              "data": {
+                                                                  "value": ""
+                                                              },
+                                                              "uiType": "",
+                                                              "uiTypeProb": {},
+                                                              "loopType": false,
+                                                              "alignJustify": {},
+                                                              "componentName": "lanhublock",
+                                                              "children": [
+                                                                  {
+                                                                      "style": {
+                                                                          "backgroundImage": "linear-gradient(90deg, rgba(255,181,52,1.000000) 0, rgba(255,181,52,1.000000) 0, rgba(255,233,143,1.000000) 100.000000%, rgba(255,233,143,1.000000) 100.000000%)",
+                                                                          "borderRadius": "13px 13px 13px 13px",
+                                                                          "zIndex": 12,
+                                                                          "position": "static",
+                                                                          "left": 115,
+                                                                          "top": 865,
+                                                                          "width": 80,
+                                                                          "height": 26,
+                                                                          "marginTop": 0,
+                                                                          "marginLeft": 0,
+                                                                          "display": "flex",
+                                                                          "flexDirection": "column"
+                                                                      },
+                                                                      "rowDims": {
+                                                                          "left": 115,
+                                                                          "top": 865,
+                                                                          "width": 80,
+                                                                          "height": 26
+                                                                      },
+                                                                      "eleName": "Block__22222_82085",
+                                                                      "id": "Block__22222_82085",
+                                                                      "layerId": 52,
+                                                                      "type": "lanhublock",
+                                                                      "data": {
+                                                                          "value": ""
+                                                                      },
+                                                                      "uiType": "",
+                                                                      "uiTypeProb": {},
+                                                                      "alignJustify": {},
+                                                                      "componentName": "lanhublock",
+                                                                      "children": [
+                                                                          {
+                                                                              "style": {
+                                                                                  "zIndex": 13,
+                                                                                  "position": "static",
+                                                                                  "left": 124,
+                                                                                  "top": 869,
+                                                                                  "width": 63,
+                                                                                  "height": 17,
+                                                                                  "overflowWrap": "break-word",
+                                                                                  "color": "rgba(164,76,19,1)",
+                                                                                  "fontSize": 22,
+                                                                                  "fontFamily": "ArialMT",
+                                                                                  "fontWeight": "normal",
+                                                                                  "textAlign": "center",
+                                                                                  "whiteSpace": "nowrap",
+                                                                                  "lineHeight": 22,
+                                                                                  "marginTop": 4,
+                                                                                  "marginLeft": 9
+                                                                              },
+                                                                              "rowDims": {
+                                                                                  "left": 124,
+                                                                                  "top": 869,
+                                                                                  "width": 63,
+                                                                                  "height": 17
+                                                                              },
+                                                                              "eleName": "Text__70000_61693",
+                                                                              "id": "Text__70000_61693",
+                                                                              "layerId": 53,
+                                                                              "type": "lanhutext",
+                                                                              "data": {
+                                                                                  "value": "70000"
+                                                                              },
+                                                                              "uiType": "",
+                                                                              "uiTypeProb": {},
+                                                                              "componentName": "lanhutext",
+                                                                              "children": [],
+                                                                              "props": {
+                                                                                  "className": "text_21",
+                                                                                  "text": "70000",
+                                                                                  "lines": 1,
+                                                                                  "style": {
+                                                                                      "width": 63,
+                                                                                      "height": 17,
+                                                                                      "overflowWrap": "break-word",
+                                                                                      "color": "rgba(164,76,19,1)",
+                                                                                      "fontSize": 22,
+                                                                                      "fontFamily": "ArialMT",
+                                                                                      "fontWeight": "normal",
+                                                                                      "textAlign": "center",
+                                                                                      "whiteSpace": "nowrap",
+                                                                                      "lineHeight": 22,
+                                                                                      "margin": "4px 0 0 9px"
+                                                                                  }
+                                                                              }
+                                                                          }
+                                                                      ],
+                                                                      "props": {
+                                                                          "className": "text-wrapper_13",
+                                                                          "style": {
+                                                                              "backgroundImage": "linear-gradient(90deg, rgba(255,181,52,1.000000) 0, rgba(255,181,52,1.000000) 0, rgba(255,233,143,1.000000) 100.000000%, rgba(255,233,143,1.000000) 100.000000%)",
+                                                                              "borderRadius": "13px",
+                                                                              "height": 26,
+                                                                              "display": "flex",
+                                                                              "flexDirection": "column",
+                                                                              "width": 80
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              ],
+                                                              "props": {
+                                                                  "className": "box_10",
+                                                                  "style": {
+                                                                      "width": 80,
+                                                                      "height": 26,
+                                                                      "marginLeft": 74,
+                                                                      "display": "flex",
+                                                                      "flexDirection": "row"
+                                                                  }
+                                                              }
+                                                          },
+                                                          {
+                                                              "style": {
+                                                                  "zIndex": "auto",
+                                                                  "position": "static",
+                                                                  "left": 41,
+                                                                  "top": 975,
+                                                                  "width": 40,
+                                                                  "height": 44,
+                                                                  "marginTop": 84,
+                                                                  "marginBottom": 0,
+                                                                  "marginLeft": 0,
+                                                                  "display": "flex",
+                                                                  "flexDirection": "column"
+                                                              },
+                                                              "rowDims": {
+                                                                  "left": 41,
+                                                                  "top": 975,
+                                                                  "width": 40,
+                                                                  "height": 44
+                                                              },
+                                                              "eleName": "row___41272",
+                                                              "id": "row___41272",
+                                                              "layerId": "row_41_975_40_44_678464",
+                                                              "type": "lanhublock",
+                                                              "data": {
+                                                                  "value": ""
+                                                              },
+                                                              "uiType": "",
+                                                              "uiTypeProb": {},
+                                                              "loopType": false,
+                                                              "alignJustify": {},
+                                                              "componentName": "lanhublock",
+                                                              "children": [
+                                                                  {
+                                                                      "style": {
+                                                                          "zIndex": 14,
+                                                                          "position": "static",
+                                                                          "left": 41,
+                                                                          "top": 975,
+                                                                          "width": 40,
+                                                                          "height": 44,
+                                                                          "marginTop": 0,
+                                                                          "marginLeft": 0
+                                                                      },
+                                                                      "rowDims": {
+                                                                          "left": 41,
+                                                                          "top": 975,
+                                                                          "width": 40,
+                                                                          "height": 44
+                                                                      },
+                                                                      "eleName": "Image__00_62648",
+                                                                      "id": "Image__00_62648",
+                                                                      "layerId": 308,
+                                                                      "type": "lanhuimage",
+                                                                      "data": {
+                                                                          "value": "https://lanhu-oss-proxy.lanhuapp.com/psygzwzntv64zsk9ask8q3997himy605j7f48a4e7-f6aa-4a0c-8910-d1c382f15b7a"
+                                                                      },
+                                                                      "uiType": "",
+                                                                      "uiTypeProb": {},
+                                                                      "componentName": "lanhuimage",
+                                                                      "children": [],
+                                                                      "props": {
+                                                                          "className": "label_2",
+                                                                          "src": "https://lanhu-oss-proxy.lanhuapp.com/psygzwzntv64zsk9ask8q3997himy605j7f48a4e7-f6aa-4a0c-8910-d1c382f15b7a",
+                                                                          "style": {
+                                                                              "width": 40,
+                                                                              "height": 44
+                                                                          }
+                                                                      }
+                                                                  }
+                                                              ],
+                                                              "props": {
+                                                                  "className": "image-wrapper_2",
+                                                                  "style": {
+                                                                      "width": 40,
+                                                                      "height": 44,
+                                                                      "marginTop": 84,
+                                                                      "display": "flex",
+                                                                      "flexDirection": "row"
+                                                                  }
+                                                              }
+                                                          }
+                                                      ],
+                                                      "props": {
+                                                          "className": "group_5",
+                                                          "style": {
+                                                              "height": 154,
+                                                              "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psutgimhx9v7pdxpeco60tiqx74vycupxz2fa7d722-449c-4f6f-ac75-9e28b5c52d1a) 100% no-repeat",
+                                                              "backgroundSize": "100% 100%",
+                                                              "width": 154,
+                                                              "display": "flex",
+                                                              "flexDirection": "column",
+                                                              "justifyContent": "space-between"
+                                                          }
+                                                      }
+                                                  }
+                                              ],
+                                              "props": {
+                                                  "className": "box_9",
+                                                  "style": {
+                                                      "height": 154,
+                                                      "background": "url(https://lanhu-oss-proxy.lanhuapp.com/psa06323kq27rze0mm1x9eaaz9gzh7edew8e2280036-d902-42f2-9733-356cf4fc4422) 100% no-repeat",
+                                                      "backgroundSize": "100% 100%",
+                                                      "display": "flex",
+                                                      "flexDirection": "column",
+                                                      "width": 154
+                                                  }
+                                              }
+                                          },
+                                          {
+                                              "style": {
+                                                  "zIndex": 15,
+                                                  "position": "static",
+                                                  "left": 81,
+                                                  "top": 1027,
+                                                  "width": 73,
+                                                  "height": 26,
+                                                  "overflowWrap": "break-word",
+                                                  "color": "rgba(255,255,255,1)",
+                                                  "fontSize": 28,
+                                                  "fontFamily": "SourceHanSansSC-Regular",
+                                                  "fontWeight": "normal",
+                                                  "textAlign": "center",
+                                                  "whiteSpace": "nowrap",
+                                                  "lineHeight": 28,
+                                                  "marginLeft": 40,
+                                                  "marginTop": 8,
+                                                  "marginBottom": 0
+                                              },
+                                              "rowDims": {
+                                                  "left": 81,
+                                                  "top": 1027,
+                                                  "width": 73,
+                                                  "height": 26
+                                              },
+                                              "eleName": "Text__33A_38643",
+                                              "id": "Text__33A_38643",
+                                              "layerId": 67,
+                                              "type": "lanhutext",
+                                              "data": {
+                                                  "value": "礼物A"
+                                              },
+                                              "uiType": "",
+                                              "uiTypeProb": {},
+                                              "componentName": "lanhutext",
+                                              "children": [],
+                                              "props": {
+                                                  "className": "text_22",
+                                                  "text": "礼物A",
+                                                  "lines": 1,
+                                                  "style": {
+                                                      "width": 73,
+                                                      "height": 26,
+                                                      "overflowWrap": "break-word",
+                                                      "color": "rgba(255,255,255,1)",
+                                                      "fontSize": 28,
+                                                      "fontFamily": "SourceHanSansSC-Regular",
+                                                      "fontWeight": "normal",
+                                                      "textAlign": "center",
+                                                      "whiteSpace": "nowrap",
+                                                      "lineHeight": 28,
+                                                      "margin": "8px 0 0 40px"
+                                                  }
+                                              }
+                                          }
+                                      ],
+                                      "props": {
+                                          "className": "box_8",
+                                          "style": {
+                                              "width": 154,
+                                              "height": 188,
+                                              "display": "flex",
+                                              "flexDirection": "column",
+                                              "justifyContent": "space-between"
+                                          }
+                                      }
+                                  },
+                                  {
+                                      "style": {
+                                          "zIndex": "auto",
+                                          "position": "static",
+                                          "left": 212,
+                                          "top": 865,
+                                          "width": 497,
+                                          "height": 188,
+                                          "marginTop": 0,
+                                          "marginRight": 0
+                                      },
+                                      "rowDims": {
+                                          "left": 212,
+                                          "top": 865,
+                                          "width": 497,
+                                          "height": 188
+                                      },
+                                      "eleName": "row___47",
+                                      "id": "row___47",
+                                      "layerId": "row_212_865_497_188_713536",
+                                      "type": "lanhublock",
+                                      "data": {
+                                          "value": ""
+                                      },
+                                      "uiType": "",
+                                      "uiTypeProb": {},
+                                      "loopType": true,
+                                      "needWidth": true,
+                                      "needHeight": true,
+                                      "loopData": [
+                                          {
+                                              "lanhuimage0": "https://lanhu-oss-proxy.lanhuapp.com/psz8noz52b0niwb5hn0va8fdky6ipt9rhd79638c9-6abd-44ad-a3ce-9fa439fc48ea"
+                                          },
+                                          {
+                                              "lanhuimage0": "https://lanhu-oss-proxy.lanhuapp.com/psc2htqqmh8fumllirc48zq3lfepe98yxl9314621e-47a3-4d95-9f39-1793e09658d7"
+                                          },
+                                          {
+                                              "lanhuimage0": "https://lanhu-oss-proxy.lanhuapp.com/ps7hz5tnzjhro3psft29vhga57spbeabsyaa7481ff-4552-43ab-93d4-8f15591b828a"
+                                          }
+                                      ],
+                                      "alignJustify": {},
+                                      "componentName": "lanhublock",
+                                      "children": [
+                                          {
+                                              "style": {
+                                                  "zIndex": 16,
+                                                  "position": "static",
+                                                  "left": 212,
+                                                  "top": 865,
+                                                  "width": 154,
+                                                  "height": 188,
+                                                  "marginRight": 18,
+                                                  "marginLeft": 0
+                                              },
+                                              "rowDims": {
+                                                  "left": 212,
+                                                  "top": 865,
+                                                  "width": 154,
+                                                  "height": 188
+                                              },
+                                              "eleName": "Image__42447_65512",
+                                              "id": "Image__42447_65512",
+                                              "layerId": 234,
+                                              "type": "lanhuimage",
+                                              "data": {
+                                                  "value": "this.item.lanhuimage0"
+                                              },
+                                              "uiType": "",
+                                              "uiTypeProb": {},
+                                              "loop": [
+                                                  {
+                                                      "lanhuimage0": "https://lanhu-oss-proxy.lanhuapp.com/psz8noz52b0niwb5hn0va8fdky6ipt9rhd79638c9-6abd-44ad-a3ce-9fa439fc48ea"
+                                                  },
+                                                  {
+                                                      "lanhuimage0": "https://lanhu-oss-proxy.lanhuapp.com/psc2htqqmh8fumllirc48zq3lfepe98yxl9314621e-47a3-4d95-9f39-1793e09658d7"
+                                                  },
+                                                  {
+                                                      "lanhuimage0": "https://lanhu-oss-proxy.lanhuapp.com/ps7hz5tnzjhro3psft29vhga57spbeabsyaa7481ff-4552-43ab-93d4-8f15591b828a"
+                                                  }
+                                              ],
+                                              "componentName": "lanhuimage",
+                                              "children": [],
+                                              "props": {
+                                                  "className": "image_6",
+                                                  "src": "this.item.lanhuimage0",
+                                                  "style": {
+                                                      "width": 154,
+                                                      "height": 188,
+                                                      "marginRight": 18,
+                                                      "opacity": 1
+                                                  }
+                                              }
+                                          }
+                                      ],
+                                      "props": {
+                                          "className": "image-wrapper_3",
+                                          "style": {
+                                              "width": 497,
+                                              "height": 188,
+                                              "flexDirection": "row",
+                                              "display": "flex",
+                                              "opacity": 1
+                                          }
+                                      }
+                                  }
+                              ],
+                              "props": {
+                                  "className": "box_7",
+                                  "style": {
+                                      "width": 668,
+                                      "height": 188,
+                                      "flexDirection": "row",
+                                      "display": "flex",
+                                      "justifyContent": "space-between",
+                                      "margin": "52px 0 42px 41px"
+                                  }
+                              }
+                          }
+                      ],
+                      "props": {
+                          "className": "group_4",
+                          "style": {
+                              "height": 346,
+                              "background": "url(https://lanhu-oss-proxy.lanhuapp.com/ps37h82j9502qacbaxnqmlzp42tc971zitp7ace32ce-7185-4eae-841f-0b668d43cfd3) 100% no-repeat",
+                              "backgroundSize": "100% 100%",
+                              "width": 750,
+                              "position": "absolute",
+                              "left": 0,
+                              "top": 749,
+                              "display": "flex",
+                              "flexDirection": "column"
+                          }
+                      }
+                  }
+              ],
+              "props": {
+                  "className": "box_6",
+                  "style": {
+                      "height": 928,
+                      "background": "url(https://lanhu-oss-proxy.lanhuapp.com/ps1s6jhrxzyqw5atl0pcc87g8xb5oo94dhm463f94d5-d44c-4b24-85e1-e5b05650f125) 100% no-repeat",
+                      "backgroundSize": "100% 100%",
+                      "display": "flex",
+                      "flexDirection": "column",
+                      "width": 750,
+                      "position": "absolute",
+                      "left": 0,
+                      "top": 0,
+                      "opacity": 1
+                  }
+              }
+          }
+      ],
+      "thirdpartyComponent": "none"
+  }
+}

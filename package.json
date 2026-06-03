@@ -1,0 +1,25 @@
+{
+  "name": "lanhu-node",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "server-nest",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm:dev:server\" \"npm:dev:react\"",
+    "dev:server": "npm run dev -w @lanhu/server-nest",
+    "dev:vue": "npm run dev -w @lanhu/debug-vue",
+    "dev:react": "npm run dev -w @lanhu/debug-react",
+    "dev:core": "npm run build -w @lanhu/core -- --watch",
+    "build": "npm run build -w @lanhu/core && npm run build -w @lanhu/server-nest",
+    "test": "vitest run",
+    "check": "tsc --noEmit -p packages/lanhu-core"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.2"
+  }
+}

@@ -1,0 +1,43 @@
+# Dependencies & build
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Environment & secrets（保留 .env.example、apps/*/.env.development 等模板）
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Logs & OS
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+coverage/
+.vitest/
+
+# IDE（本地偏好，勿提交）
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# 占位文件（空目录标记，不提交）
+.gitkeep
+
+# Markdown（默认不提交；仓库文档与各包 README 除外）
+*.md
+# !README.md
+# !docs/
+# !docs/**/*.md
+# !packages/**/README.md
+# !apps/**/README.md
+# !server-nest/README.md
+# !mcp/README.md
+
+# analyze 落盘（对齐 PY `DATA_DIR`）
+data/lanhu_designs/
+data/.DS_Store
+
