@@ -62,6 +62,12 @@ export function PipelineToolbar() {
           ) : null}
         </div>
         <p className="text-muted-foreground text-xs">
+          <strong className="text-foreground font-normal">注意：</strong>
+          一键 analyze 仅在服务端内嵌 list 用于选稿，<strong className="text-foreground font-normal">不会</strong>
+          把全量设计稿写入「设计」选稿区（最多 prepend 当前分析的那 1 张）。要看完整列表请先点
+          project/images，或到「设计」阶段切换后再 analyze。
+        </p>
+        <p className="text-muted-foreground text-xs">
           下方为全部分步接口（与 Vue 调试台一致，日常全部暴露）。有 HTML 后到「转换」预览；日志与 JSON 在「结果」「切图」。
         </p>
       </CardContent>

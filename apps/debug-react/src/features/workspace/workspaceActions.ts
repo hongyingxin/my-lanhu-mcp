@@ -792,7 +792,7 @@ export function buildApiActions(state: RootState, runners: ActionRunners) {
       id: "analyze",
       group: "流水线",
       label: "一键 analyze",
-      desc: "POST /api/designs/analyze · list→schema/sketch→HTML",
+      desc: "POST /api/designs/analyze · 服务端内嵌 list 选稿→schema/sketch→HTML · 不写全量选稿列表（请先 project/images）",
       ready: !mockReady && Boolean(lanhuUrl),
       done: Boolean(state.inspect.analyzeResult),
       run: runners.analyze,

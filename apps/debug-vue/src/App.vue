@@ -659,7 +659,7 @@ const apiActions = computed(() => {
     id: "analyze",
     group: "流水线",
     label: "一键 analyze",
-    desc: "POST /api/designs/analyze · list→schema/sketch→HTML",
+    desc: "POST /api/designs/analyze · 服务端内嵌 list 选稿→schema/sketch→HTML · 不写全量选稿列表（请先 project/images）",
     ready: !mockReady && Boolean(lanhuUrl.value.trim()),
     done: Boolean(analyzeResult.value),
     run: () => runAction("analyze", runAnalyzeFlow),
@@ -1219,6 +1219,10 @@ onMounted(() => {
         </button>
         <span v-if="params" class="hint mono">pid={{ params.project_id }} · image={{ params.doc_id || "—" }}</span>
       </div>
+      <p class="hint analyze-hint">
+        一键 analyze 仅在服务端内嵌 list 用于选稿，不会把全量设计稿写入选稿区（最多保留当前分析的 1 张）。要看完整列表请先点
+        project/images。
+      </p>
       <div class="row analyze-options">
         <label class="mock-toggle">
           <input v-model="analyzeWithSlices" type="checkbox" />
