@@ -4,6 +4,7 @@
   "workspaces": [
     "packages/*",
     "server-nest",
+    "mcp",
     "apps/*"
   ],
   "scripts": {
@@ -12,7 +13,9 @@
     "dev:vue": "npm run dev -w @lanhu/debug-vue",
     "dev:react": "npm run dev -w @lanhu/debug-react",
     "dev:core": "npm run build -w @lanhu/core -- --watch",
-    "build": "npm run build -w @lanhu/core && npm run build -w @lanhu/server-nest",
+    "build": "npm run build -w @lanhu/core && npm run build -w @lanhu/server-nest && npm run build -w @lanhu/mcp",
+    "build:mcp": "npm run build -w @lanhu/mcp",
+    "dev:mcp": "npm run dev -w @lanhu/mcp",
     "test": "vitest run",
     "check": "tsc --noEmit -p packages/lanhu-core"
   },

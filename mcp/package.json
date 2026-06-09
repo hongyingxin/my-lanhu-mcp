@@ -1,0 +1,26 @@
+{
+  "name": "@lanhu/mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server for Lanhu design tools (stdio)",
+  "bin": {
+    "lanhu-mcp": "./dist/server.js"
+  },
+  "scripts": {
+    "dev": "npm run build -w @lanhu/core && tsx src/server.ts",
+    "build": "npm run build -w @lanhu/core && tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "check": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@lanhu/core": "*",
+    "@modelcontextprotocol/sdk": "^1.18.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.3"
+  }
+}

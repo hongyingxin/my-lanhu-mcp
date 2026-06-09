@@ -1,0 +1,87 @@
+mode: analyze
+include: [
+  "html",
+  "tokens",
+  "layers",
+  "layout",
+  "image",
+  "slices"
+]
+
+// Structured Content:
+
+{
+  "status": "success",
+  "mode": "analyze",
+  "project_name": "美术-2026-上半年",
+  "total_designs": 1,
+  "include": [
+    "html",
+    "image",
+    "tokens",
+    "layout",
+    "layers",
+    "slices"
+  ],
+  "designs": [
+    {
+      "name": "每周 拷贝",
+      "id": "97a68773-5b42-4e94-bee1-523f275ed97d",
+      "convert_source": "schema",
+      "html_code": "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\" /><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" /><title>Document</title><style> .page { background-color: rgba(36, 21, 19, 1); position: relative; width: 750px; height: 1463px; overflow: hidden; } .image_1 { width: 750px; height: 738px; } .image-wrapper_1 { width: 750px; height: 726px; margin: 0px 0px 1px 0px; } .image_2 { width: 702px; height: 188px; margin: 36px 0 0 24px; } .image_3 { width: 702px; height: 188px; margin: 123px 0 191px 24px; } body * { box-sizing: border-box; flex-shrink: 0; } body { font-family: PingFangSC-Regular, Roboto, Helvetica Neue, Helvetica, Tahoma, Arial, PingFang SC-Light, Microsoft YaHei; } input { background-color: transparent; border: 0; } button { margin: 0; padding: 0; border: 1px solid transparent; outline: none; background-color: transparent; } button:active { opacity: 0.6; } .flex-col { display: flex; flex-direction: column; } .flex-row { display: flex; flex-direction: row; } .justify-start { display: flex; justify-content: flex-start; } .justify-center { display: flex; justify-content: center; } .justify-end { display: flex; justify-content: flex-end; } .justify-evenly { display: flex; justify-content: space-evenly; } .justify-around { display: flex; justify-content: space-around; } .justify-between { display: flex; justify-content: space-between; } .align-start { display: flex; align-items: flex-start; } .align-center { display: flex; align-items: center; } .align-end { display: flex; align-items: flex-end; } </style></head><body><div class=\"page flex-col\"><img class=\"image_1\" referrerpolicy=\"no-referrer\" src=\"./assets/slices/image_1.png\" /><div class=\"image-wrapper_1 flex-col\"><img class=\"image_2\" referrerpolicy=\"no-referrer\" src=\"./assets/slices/image_2.png\" /><img class=\"image_3\" referrerpolicy=\"no-referrer\" src=\"./assets/slices/image_3.png\" /></div></div></body></html>",
+      "image_url_mapping": {
+        "./assets/slices/image_1.png": "https://lanhu-oss-proxy.lanhuapp.com/ps8fw2qke747g6ectqt0vtmh4pv0q8zsqjt4f65b982-5e3b-4afb-ae46-83488fe27c93",
+        "./assets/slices/image_2.png": "https://lanhu-oss-proxy.lanhuapp.com/ps34zga23bgcfewcfsoziducdyw2414g4q64a84233e-0d34-45a7-b5b3-12dc480d2f63",
+        "./assets/slices/image_3.png": "https://lanhu-oss-proxy.lanhuapp.com/psigt3is9wrsbay2qu48e4fcy0bagonadsaa6d335be-0f1b-40ce-a244-63f8095090e7"
+      },
+      "layout_summary": "[lanhupage] .page w:750 h:1463 flex-col\n  [lanhuimage] .image_1 w:750 h:738\n  [lanhublock] .image-wrapper_1 w:750 h:726 flex-col margin:0px 0px 1px 0px\n    [lanhuimage] .image_2 w:702 h:188 margin:36px 0px 0px 24px\n    [lanhuimage] .image_3 w:702 h:188 margin:123px 0px 191px 24px",
+      "layer_tree": "Board: 每周 拷贝 (750x1463)\nTotal layers: 4\n\nlayerSection: 702 拷贝 (702x188 @24,1085)\nlayerSection: 702 (702x188 @24,774)\nlayerSection: 头图 (750x738 @0,0)",
+      "design_tokens": null,
+      "sketch_annotations": null,
+      "preview_image": {
+        "contentType": "image/png",
+        "hasBase64": true
+      },
+      "slices": null,
+      "warnings": [
+        "Design Tokens 为空（Sketch 中未找到高风险元素）",
+        "DDS Schema HTML 可用，已跳过 Sketch fallback"
+      ]
+    }
+  ]
+}
+
+// Unstructured Content:
+
+Design Analysis Results
+Project: 美术-2026-上半年
+1/1 HTML codes generated
+
+--- 每周 拷贝 ---
+```html
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Document</title><style> .page { background-color: rgba(36, 21, 19, 1); position: relative; width: 750px; height: 1463px; overflow: hidden; } .image_1 { width: 750px; height: 738px; } .image-wrapper_1 { width: 750px; height: 726px; margin: 0px 0px 1px 0px; } .image_2 { width: 702px; height: 188px; margin: 36px 0 0 24px; } .image_3 { width: 702px; height: 188px; margin: 123px 0 191px 24px; } body * { box-sizing: border-box; flex-shrink: 0; } body { font-family: PingFangSC-Regular, Roboto, Helvetica Neue, Helvetica, Tahoma, Arial, PingFang SC-Light, Microsoft YaHei; } input { background-color: transparent; border: 0; } button { margin: 0; padding: 0; border: 1px solid transparent; outline: none; background-color: transparent; } button:active { opacity: 0.6; } .flex-col { display: flex; flex-direction: column; } .flex-row { display: flex; flex-direction: row; } .justify-start { display: flex; justify-content: flex-start; } .justify-center { display: flex; justify-content: center; } .justify-end { display: flex; justify-content: flex-end; } .justify-evenly { display: flex; justify-content: space-evenly; } .justify-around { display: flex; justify-content: space-around; } .justify-between { display: flex; justify-content: space-between; } .align-start { display: flex; align-items: flex-start; } .align-center { display: flex; align-items: center; } .align-end { display: flex; align-items: flex-end; } </style></head><body><div class="page flex-col"><img class="image_1" referrerpolicy="no-referrer" src="./assets/slices/image_1.png" /><div class="image-wrapper_1 flex-col"><img class="image_2" referrerpolicy="no-referrer" src="./assets/slices/image_2.png" /><img class="image_3" referrerpolicy="no-referrer" src="./assets/slices/image_3.png" /></div></div></body></html>
+```
+
+--- Layout Summary ---
+[lanhupage] .page w:750 h:1463 flex-col
+  [lanhuimage] .image_1 w:750 h:738
+  [lanhublock] .image-wrapper_1 w:750 h:726 flex-col margin:0px 0px 1px 0px
+    [lanhuimage] .image_2 w:702 h:188 margin:36px 0px 0px 24px
+    [lanhuimage] .image_3 w:702 h:188 margin:123px 0px 191px 24px
+
+Image assets (3):
+  ./assets/slices/image_1.png <- https://lanhu-oss-proxy.lanhuapp.com/ps8fw2qke747g6ectqt0vtmh4pv0q8zsqjt4f65b982-5e3b-4afb-ae46-83488fe27c93
+  ./assets/slices/image_2.png <- https://lanhu-oss-proxy.lanhuapp.com/ps34zga23bgcfewcfsoziducdyw2414g4q64a84233e-0d34-45a7-b5b3-12dc480d2f63
+  ./assets/slices/image_3.png <- https://lanhu-oss-proxy.lanhuapp.com/psigt3is9wrsbay2qu48e4fcy0bagonadsaa6d335be-0f1b-40ce-a244-63f8095090e7
+
+--- Layer Structure ---
+Board: 每周 拷贝 (750x1463)
+Total layers: 4
+
+layerSection: 702 拷贝 (702x188 @24,1085)
+layerSection: 702 (702x188 @24,774)
+layerSection: 头图 (750x738 @0,0)
+
+--- Warnings ---
+- Design Tokens 为空（Sketch 中未找到高风险元素）
+- DDS Schema HTML 可用，已跳过 Sketch fallback

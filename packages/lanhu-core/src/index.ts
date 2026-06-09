@@ -14,10 +14,15 @@ export {
 } from "./lanhu/designs.js";
 export { normalizeDesignQuotes, pickDesign, pickDesigns } from "./lanhu/pick-design.js";
 export type { DesignSelector } from "./lanhu/pick-design.js";
+export { mapConcurrent } from "./pipeline/concurrency.js";
 export {
   analyzeDesign,
   analyzeDesignBatch,
+  analyzeDesignWithInclude,
+  DEFAULT_ANALYZE_INCLUDE,
+  resolveAnalyzeInclude,
 } from "./pipeline/analyze-design.js";
+export type { AnalyzeInclude, AnalyzeDesignSliceResult } from "./pipeline/analyze-include.js";
 export { buildQuery, parseLanhuUrl } from "./lanhu/parse-url.js";
 export {
   convertLanhuSchema,
