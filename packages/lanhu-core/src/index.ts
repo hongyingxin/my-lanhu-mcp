@@ -78,3 +78,4 @@ export type {
   LanhuUrlParams,
   UnknownRecord,
 } from "./types.js";
+export { getRepoRoot, loadRepoEnvFile } from "./env/repo-env.js";

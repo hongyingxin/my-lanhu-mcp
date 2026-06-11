@@ -24,6 +24,12 @@ export function ConvertPanel() {
   }
 
   const isSketch = convertDemo.source === "sketch";
+  const iframeSrcDoc = convertDemo.after.htmlPreviewDoc || convertDemo.after.htmlFull;
+  console.log("[ConvertPanel iframe]", {
+    htmlPreviewDoc: convertDemo.after.htmlPreviewDoc,
+    htmlFull: convertDemo.after.htmlFull,
+    srcDoc: iframeSrcDoc,
+  });
 
   return (
     <Card>
@@ -65,7 +71,7 @@ export function ConvertPanel() {
             <div className="mb-1 text-xs font-medium">转换后 · 页面预览</div>
             <iframe
               className="bg-background h-128 w-full rounded-md border"
-              srcDoc={convertDemo.after.htmlPreviewDoc || convertDemo.after.htmlFull}
+              srcDoc={iframeSrcDoc}
               sandbox="allow-same-origin"
               title="html preview"
             />

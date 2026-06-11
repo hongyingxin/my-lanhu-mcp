@@ -36,10 +36,7 @@ function normalizeDesignNames(designNames: string | string[]): DesignSelector {
 
 function createClient(config: McpConfig): LanhuClient {
   const cookie = requireLanhuCookie(config);
-  return new LanhuClient({
-    cookie,
-    ddsCookie: config.ddsCookie ?? cookie,
-  });
+  return new LanhuClient({ cookie });
 }
 
 function getHtmlFromConvert(
@@ -76,15 +73,15 @@ function formatAnalyzeSummary(
   options: { workflowGuide?: boolean } = {},
 ): string {
   const workflowGuide = options.workflowGuide ?? true;
-  const lines: string[] = ["Design Analysis Results"];
-  lines.push(`Project: ${projectName ?? "Unknown"}`);
+  const lines: string[] = ["设计稿分析结果"];
+  lines.push(`项目：${projectName ?? "未知"}`);
 
   if (includeSet.has("html")) {
     const success = slices.filter((s) => getHtmlFromConvert(s.convert)).length;
     const fallback = slices.filter((s) => s.convertSource === "sketch").length;
-    lines.push(`${success}/${slices.length} HTML codes generated`);
+    lines.push(`${success}/${slices.length} 份 HTML 已生成`);
     if (fallback > 0) {
-      lines.push(`${fallback} design(s) using Sketch fallback`);
+      lines.push(`${fallback} 张设计稿使用 Sketch 回退`);
     }
   }
 
@@ -109,39 +106,39 @@ function formatAnalyzeSummary(
       lines.push(html);
       lines.push("```");
     } else if (includeSet.has("html") && !html) {
-      lines.push(`Failed or skipped HTML (${slice.warnings.join("; ") || "no output"})`);
+      lines.push(`HTML 生成失败或已跳过（${slice.warnings.join("; ") || "无输出"}）`);
     }
 
     if (slice.layoutSummary && includeSet.has("layout")) {
-      lines.push("\n--- Layout Summary ---");
+      lines.push("\n--- 布局摘要 ---");
       lines.push(slice.layoutSummary);
     }
 
     const mapping = getMappingFromConvert(slice.convert);
     if (mapping && Object.keys(mapping).length > 0 && includeSet.has("slices")) {
-      lines.push(`\nImage assets (${Object.keys(mapping).length}):`);
+      lines.push(`\n图片资源（${Object.keys(mapping).length}）：`);
       for (const [localPath, remoteUrl] of Object.entries(mapping)) {
         lines.push(`  ${localPath} <- ${remoteUrl}`);
       }
     }
 
     if (slice.layerTree && includeSet.has("layers")) {
-      lines.push("\n--- Layer Structure ---");
+      lines.push("\n--- 图层结构 ---");
       lines.push(slice.layerTree);
     }
 
     if (slice.designTokens && includeSet.has("tokens")) {
-      lines.push("\n--- Design Tokens ---");
+      lines.push("\n--- 设计令牌（Design Tokens）---");
       lines.push(slice.designTokens);
     }
 
     if (slice.sketchAnnotations && includeSet.has("html")) {
-      lines.push("\n--- Sketch Annotations ---");
+      lines.push("\n--- Sketch 标注 ---");
       lines.push(slice.sketchAnnotations);
     }
 
     if (slice.warnings.length) {
-      lines.push("\n--- Warnings ---");
+      lines.push("\n--- 警告 ---");
       for (const w of slice.warnings) {
         lines.push(`- ${w}`);
       }

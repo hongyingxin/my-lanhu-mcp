@@ -11,10 +11,7 @@ export function registerProjectDesignsResource(server: McpServer, config: McpCon
     { description: "列出蓝湖项目内的全部设计图（画板列表）。" },
     async (uri, { pid, tid }) => {
       const cookie = requireLanhuCookie(config);
-      const client = new LanhuClient({
-        cookie,
-        ddsCookie: config.ddsCookie ?? cookie,
-      });
+      const client = new LanhuClient({ cookie });
       const url = `https://lanhuapp.com/web/#/item/project/stage?pid=${pid}&tid=${tid}`;
       const result = await listDesigns(client, url);
       return {

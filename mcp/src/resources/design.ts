@@ -22,10 +22,7 @@ export function registerDesignResource(server: McpServer, config: McpConfig): vo
     { description: "获取单张蓝湖设计稿的详细分析（HTML、tokens、图层、切图等）。" },
     async (uri, { pid, tid, design_id }) => {
       const cookie = requireLanhuCookie(config);
-      const client = new LanhuClient({
-        cookie,
-        ddsCookie: config.ddsCookie ?? cookie,
-      });
+      const client = new LanhuClient({ cookie });
 
       const url = `https://lanhuapp.com/web/#/item/project/stage?pid=${pid}&tid=${tid}`;
       const parsed = parseLanhuUrl(url);

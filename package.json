@@ -5,12 +5,15 @@
     "packages/*",
     "server-nest",
     "mcp",
-    "apps/*"
+    "apps/debug-react",
+    "apps/debug-vue",
+    "apps/demo-vue"
   ],
   "scripts": {
     "dev": "concurrently \"npm:dev:server\" \"npm:dev:react\"",
     "dev:server": "npm run dev -w @lanhu/server-nest",
     "dev:vue": "npm run dev -w @lanhu/debug-vue",
+    "dev:demo-vue": "npm run dev -w @lanhu/demo-vue",
     "dev:react": "npm run dev -w @lanhu/debug-react",
     "dev:core": "npm run build -w @lanhu/core -- --watch",
     "build": "npm run build -w @lanhu/core && npm run build -w @lanhu/server-nest && npm run build -w @lanhu/mcp",

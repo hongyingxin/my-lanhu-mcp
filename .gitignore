@@ -3,11 +3,9 @@ node_modules/
 dist/
 *.tsbuildinfo
 
-# Environment & secrets（保留 .env.example、apps/*/.env.development 等模板）
-.env
+# Environment（根目录 .env 可提交；本地覆盖用 .env.local）
 .env.local
 .env.*.local
-!.env.example
 
 # Logs & OS
 *.log
@@ -40,4 +38,6 @@ coverage/
 # analyze 落盘（对齐 PY `DATA_DIR`）
 data/lanhu_designs/
 data/.DS_Store
+
+apps/vite-vue/
 

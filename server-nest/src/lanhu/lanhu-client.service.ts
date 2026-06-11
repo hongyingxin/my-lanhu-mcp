@@ -1,6 +1,6 @@
 import { Injectable, ServiceUnavailableException } from "@nestjs/common";
 import { LanhuClient } from "@lanhu/core";
-import { getDdsCookie, getLanhuCookie } from "../env.js";
+import { getLanhuCookie } from "../env.js";
 import {
   COOKIE_REQUIRED_MESSAGE,
   resolveRequestCookie,
@@ -23,7 +23,7 @@ export class LanhuClientService {
 
   createClient(body: unknown): LanhuClient {
     const cookie = this.resolveCookie(body);
-    const ddsCookie = resolveRequestDdsCookie(body, getDdsCookie(), cookie);
+    const ddsCookie = resolveRequestDdsCookie(body, undefined, cookie);
     return new LanhuClient({ cookie, ddsCookie });
   }
 }

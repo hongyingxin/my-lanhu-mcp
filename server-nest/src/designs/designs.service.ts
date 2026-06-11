@@ -30,7 +30,7 @@ import {
   toErrorMessage,
   COOKIE_REQUIRED_MESSAGE,
 } from "../common/request.util.js";
-import { getDdsCookie, getLanhuCookie, getLanhuDataDir } from "../env.js";
+import { getLanhuCookie, getLanhuDataDir } from "../env.js";
 
 @Injectable()
 export class DesignsService {
@@ -194,7 +194,7 @@ export class DesignsService {
       throw new ServiceUnavailableException(COOKIE_REQUIRED_MESSAGE);
     }
 
-    const ddsCookie = resolveRequestDdsCookie(body, getDdsCookie(), cookie);
+    const ddsCookie = resolveRequestDdsCookie(body, undefined, cookie);
     const design = getDesignSelector(body);
     const withSlices = getBooleanField(body, "withSlices");
     const concurrency = getNumberField(body, "concurrency");
