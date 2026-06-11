@@ -21,6 +21,7 @@ export const DEFAULT_ANALYZE_INCLUDE: AnalyzeInclude[] = [
   "html",
   "tokens",
   "layers",
+  "layout",
   "image",
   "slices",
 ];

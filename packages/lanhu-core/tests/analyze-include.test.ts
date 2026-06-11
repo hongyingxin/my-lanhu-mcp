@@ -8,7 +8,14 @@ describe("resolveAnalyzeInclude", () => {
   it("uses TS-aligned default when omitted", () => {
     const set = resolveAnalyzeInclude();
     expect([...set].sort()).toEqual([...DEFAULT_ANALYZE_INCLUDE].sort());
-    expect(DEFAULT_ANALYZE_INCLUDE).toEqual(["html", "tokens", "layers", "image"]);
+    expect(DEFAULT_ANALYZE_INCLUDE).toEqual([
+      "html",
+      "tokens",
+      "layers",
+      "layout",
+      "image",
+      "slices",
+    ]);
   });
 
   it("respects explicit include list", () => {

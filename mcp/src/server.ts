@@ -6,6 +6,8 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { loadConfig } from "./config.js";
+import { registerAllPrompts } from "./prompts/index.js";
+import { registerDesignResource } from "./resources/design.js";
 import { registerProjectDesignsResource } from "./resources/project-designs.js";
 import { registerAllTools } from "./tools/index.js";
 
@@ -18,6 +20,8 @@ export function createServer(): McpServer {
 
   registerAllTools(server, config);
   registerProjectDesignsResource(server, config);
+  registerDesignResource(server, config);
+  registerAllPrompts(server);
 
   return server;
 }

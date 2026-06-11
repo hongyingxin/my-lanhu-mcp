@@ -18,6 +18,7 @@ import {
   type LanhuDesignSummary,
 } from "@lanhu/core";
 
+import { buildDesignWorkflowGuide } from "../analyze/design-workflow-guide.js";
 import { type McpConfig, requireLanhuCookie } from "../config.js";
 import { createToolError, createToolResult, type ToolContent } from "../result.js";
 
@@ -61,11 +62,20 @@ function getMappingFromConvert(
   return after.mapping;
 }
 
+function shouldAttachWorkflowGuide(
+  includeSet: Set<AnalyzeInclude>,
+  workflowGuide: boolean,
+): boolean {
+  return workflowGuide && includeSet.has("html");
+}
+
 function formatAnalyzeSummary(
   projectName: string | undefined,
   slices: Awaited<ReturnType<typeof analyzeDesignWithInclude>>[],
   includeSet: Set<AnalyzeInclude>,
+  options: { workflowGuide?: boolean } = {},
 ): string {
+  const workflowGuide = options.workflowGuide ?? true;
   const lines: string[] = ["Design Analysis Results"];
   lines.push(`Project: ${projectName ?? "Unknown"}`);
 
@@ -76,6 +86,17 @@ function formatAnalyzeSummary(
     if (fallback > 0) {
       lines.push(`${fallback} design(s) using Sketch fallback`);
     }
+  }
+
+  if (includeSet.has("image") && slices.length > 1) {
+    lines.push("");
+    lines.push("📋 设计图列表（自上而下顺序）：");
+    lines.push("下方图片顺序与列表中各画板区块一一对应，请按顺序关联图片与代码。");
+  }
+
+  if (shouldAttachWorkflowGuide(includeSet, workflowGuide)) {
+    lines.push("");
+    lines.push(buildDesignWorkflowGuide());
   }
 
   for (const slice of slices) {
@@ -135,37 +156,46 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
     "lanhu_design",
     {
       description:
-        "Unified Lanhu design tool. Supports listing, analyzing, extracting tokens, and getting slices.\n\n" +
-        "Workflow: mode=list (or Resource project-designs) → design_names → analyze/slices/tokens.\n\n" +
-        "Modes:\n" +
-        "  - list: List all designs in the project\n" +
-        "  - analyze: Design analysis with HTML/CSS, tokens, layers (default)\n" +
-        "  - slices: Extract slice/asset info (B set, first design only if multiple)\n" +
-        "  - tokens: Extract design tokens only\n\n" +
-        "For detailDetach URLs, pass design_names matching image_id or use list first.",
+        "蓝湖设计稿统一工具。支持列出画板、分析还原、提取设计令牌（tokens）、获取切图信息。\n\n" +
+        "推荐流程：mode=list（或 Resource project-designs）→ design_names → analyze/slices/tokens。\n\n" +
+        "模式说明：\n" +
+        "  - list：列出项目内全部设计图\n" +
+        "  - analyze：分析设计稿，输出 HTML/CSS、tokens、图层等（默认）\n" +
+        "  - slices：提取切图/资源信息（B 套方案，多稿时仅取第一张）\n" +
+        "  - tokens：仅提取设计令牌\n\n" +
+        "analyze 选项：workflow_guide 默认为 true，且 include 含 html 时会在文本中附带 STEP 1~5 还原指引。\n\n" +
+        "detailDetach 链接需传入与 image_id 匹配的 design_names，或先 list 再选稿。",
       inputSchema: {
-        url: z.string().min(1).describe("Lanhu project URL (stage or detailDetach)."),
+        url: z.string().min(1).describe("蓝湖项目链接（stage 或 detailDetach 页面 URL）。"),
         mode: z
           .enum(["list", "analyze", "slices", "tokens"])
           .default("analyze")
-          .describe("Operation mode. Default: analyze."),
+          .describe("操作模式。默认 analyze。"),
         design_names: z
           .union([z.string(), z.array(z.string())])
           .optional()
-          .describe("Required for analyze/slices/tokens. Index, id, name, or 'all'."),
+          .describe("analyze/slices/tokens 必填。支持序号、id、名称或 'all'。"),
         include: z
           .array(IncludeOption)
           .optional()
           .describe(
-            "Analyze only. Default: ['html','tokens','layers','image','slices']. Use mode=slices for Scheme B.",
+            "仅 analyze 有效。默认 ['html','tokens','layers','layout','image','slices']。B 套切图请用 mode=slices。",
           ),
         with_slices: z
           .boolean()
           .optional()
-          .describe("Analyze only: attach B-set slice metadata via getSlices."),
+          .describe("仅 analyze：通过 getSlices 附加 B 套切图元数据。"),
+        workflow_guide: z
+          .boolean()
+          .optional()
+          .default(true)
+          .describe(
+            "仅 analyze：在文本回复中附带 STEP 1~5 设计稿还原工作流。" +
+              "默认 true；仅当 include 含 html 时展示。设为 false 可节省 token。",
+          ),
       },
     },
-    async ({ url, mode, design_names, include, with_slices }) => {
+    async ({ url, mode, design_names, include, with_slices, workflow_guide }) => {
       try {
         const client = createClient(config);
         const parsed = parseLanhuUrl(url);
@@ -339,7 +369,10 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
           }
         }
 
-        const summaryText = formatAnalyzeSummary(listResult.projectName, slices, includeSet);
+        const attachWorkflowGuide = shouldAttachWorkflowGuide(includeSet, workflow_guide ?? true);
+        const summaryText = formatAnalyzeSummary(listResult.projectName, slices, includeSet, {
+          workflowGuide: workflow_guide ?? true,
+        });
         content.unshift({ type: "text", text: summaryText });
 
         const structuredDesigns = slices.map((slice) => ({
@@ -367,6 +400,7 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
             project_name: listResult.projectName ?? null,
             total_designs: targetDesigns.length,
             include: includeList,
+            workflow_guide: attachWorkflowGuide,
             designs: structuredDesigns,
           },
         };

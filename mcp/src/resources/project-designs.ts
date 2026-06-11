@@ -5,10 +5,10 @@ import type { McpConfig } from "../config.js";
 import { requireLanhuCookie } from "../config.js";
 
 export function registerProjectDesignsResource(server: McpServer, config: McpConfig): void {
-  server.resource(
+  server.registerResource(
     "project-designs",
     new ResourceTemplate("lanhu://project/{pid}/designs?tid={tid}", { list: undefined }),
-    { description: "List all design images in a Lanhu project" },
+    { description: "列出蓝湖项目内的全部设计图（画板列表）。" },
     async (uri, { pid, tid }) => {
       const cookie = requireLanhuCookie(config);
       const client = new LanhuClient({
