@@ -9,10 +9,14 @@ import {
   analyzeDesign,
   analyzeDesignBatch,
   convertLanhuSchema,
+  convertLanhuSketch,
+  extractFullAnnotationsFromSketch,
   getDesignSchemaJson,
   getSketchJson,
   getSlices,
   listDesigns,
+  resolveDesignImageUrl,
+  resolveDesignScale,
 } from "@lanhu/core";
 import type { UnknownRecord } from "@lanhu/core";
 import { LanhuClientService } from "../lanhu/lanhu-client.service.js";
@@ -131,6 +135,71 @@ export class DesignsService {
       getSketchJson(client, fields.imageId, fields.teamId, fields.projectId),
     );
     return { ok: true, ...result, sketchJson: result.sketch };
+  }
+
+  private async loadSketchForDesign(body: unknown) {
+    const fields = getDesignFields(body);
+    if (!fields) {
+      throw new BadRequestException("Missing required fields: projectId, imageId");
+    }
+
+    const designName =
+      getStringField(body, "designName") ?? getStringField(body, "design_name") ?? "design";
+    const designImageUrl =
+      getStringField(body, "designImageUrl") ??
+      getStringField(body, "design_image_url") ??
+      getStringField(body, "url");
+
+    const client = this.lanhu.createClient(body);
+    const sketchResult = await this.wrap(() =>
+      getSketchJson(client, fields.imageId, fields.teamId, fields.projectId),
+    );
+
+    return { fields, designName, designImageUrl, sketchResult };
+  }
+
+  async convertSketch(body: unknown) {
+    const { designName, designImageUrl, sketchResult } = await this.loadSketchForDesign(body);
+    const convert = convertLanhuSketch(sketchResult.sketch, {
+      designName,
+      designImageUrl: resolveDesignImageUrl(designImageUrl),
+    });
+    return {
+      ok: true,
+      sketch: sketchResult.sketch,
+      sketchMeta: {
+        imageId: sketchResult.imageId,
+        versionId: sketchResult.versionId,
+        jsonUrl: sketchResult.jsonUrl,
+        documentInfo: sketchResult.documentInfo,
+      },
+      convert,
+    };
+  }
+
+  async sketchLayerAnnotations(body: unknown) {
+    const { designName, designImageUrl, sketchResult } = await this.loadSketchForDesign(body);
+    const convert = convertLanhuSketch(sketchResult.sketch, {
+      designName,
+      designImageUrl: resolveDesignImageUrl(designImageUrl),
+    });
+    return {
+      ok: true,
+      designScale: convert.after.designScale,
+      layerAnnotations: convert.after.layerAnnotations,
+      mappingCount: convert.after.mappingCount,
+    };
+  }
+
+  async sketchAnnotations(body: unknown) {
+    const { sketchResult } = await this.loadSketchForDesign(body);
+    const designScale = resolveDesignScale(sketchResult.sketch);
+    const sketchAnnotations = extractFullAnnotationsFromSketch(sketchResult.sketch, designScale);
+    return {
+      ok: true,
+      designScale,
+      sketchAnnotations,
+    };
   }
 
   async convert(body: unknown) {

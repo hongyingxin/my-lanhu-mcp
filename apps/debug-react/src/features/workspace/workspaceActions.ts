@@ -2,10 +2,13 @@ import {
   API_BASE,
   apiAnalyze,
   apiConvertDesign,
+  apiConvertSketch,
   apiDesignDetail,
   apiDesignSchema,
   apiDesignSlices,
   apiDesignSketch,
+  apiSketchAnnotations,
+  apiSketchLayerAnnotations,
   apiDesignSectors,
   apiListDesigns,
   apiMultiInfo,
@@ -59,7 +62,8 @@ import {
 } from "@/store/slicesSlice";
 import { setActiveTab, setLoading, setResultGroup, setToast } from "@/store/uiSlice";
 import { resultGroupForTab } from "./constants";
-import { applyAnalyzeResult } from "./analyze/applyAnalyzeResult";
+import { applyAnalyzeResult, normalizeSketchConvert } from "./analyze/applyAnalyzeResult";
+import { formatLayerAnnotationsText } from "./resultFormat";
 import { mapServerParams } from "./mappers";
 import {
   selectDesignFields,
@@ -112,6 +116,15 @@ function ensureParams(state: RootState) {
 function ensureDesign(state: RootState) {
   ensureParams(state);
   if (!selectSelectedDesign(state)) throw new Error("请先获取设计列表并选择设计稿");
+}
+
+function selectSketchApiFields(state: RootState) {
+  const design = selectSelectedDesign(state)!;
+  return {
+    ...selectDesignFields(state),
+    designName: design.name || "design",
+    designImageUrl: design.url,
+  };
 }
 
 function resetDownstreamArtifacts(dispatch: AppDispatch) {
@@ -763,6 +776,99 @@ export function createActionRunners(dispatch: AppDispatch, getState: () => RootS
         setResultAndTab(dispatch, "sketch", sketch);
       }),
 
+    convertSketch: () =>
+      runWorkspaceAction(dispatch, getState, "convertSketch", async () => {
+        const state = getState();
+        ensureCookie(state);
+        ensureDesign(state);
+        const started = performance.now();
+        const data = (await apiConvertSketch(selectSketchApiFields(state))) as {
+          ok?: boolean;
+          error?: string;
+          sketch?: unknown;
+          sketchMeta?: { documentInfo?: unknown };
+          convert?: import("@/api/types").ConvertDemo;
+        };
+        if (!data.ok || !data.convert) throw new Error(data.error || "Sketch 转换失败");
+        if (data.sketch) {
+          dispatch(setSketchJson(data.sketch));
+          dispatch(setResult({ key: "sketch", data: data.sketch }));
+        }
+        if (data.sketchMeta?.documentInfo) {
+          const detail = { code: "00000", result: data.sketchMeta.documentInfo };
+          dispatch(setDesignDetail(detail));
+          dispatch(setResult({ key: "designDetail", data: detail }));
+        }
+        const normalized = normalizeSketchConvert(data.convert);
+        dispatch(applyConvertResult(normalized));
+        const htmlFull = normalized.after.htmlFull ?? "";
+        dispatch(setResult({ key: "sketchHtml", data: htmlFull }));
+        const layerText = formatLayerAnnotationsText(normalized.after.layerAnnotations ?? []);
+        if (layerText !== "暂无 layerAnnotations") {
+          dispatch(setResult({ key: "layerAnnotations", data: layerText }));
+        }
+        logServerCall(
+          dispatch,
+          "/api/designs/convert-sketch",
+          started,
+          `html=${htmlFull.length} · layers=${normalized.after.layerAnnotations?.length ?? 0}`,
+        );
+        dispatch(setResultGroup("convert"));
+        dispatch(setActiveTab("sketchHtml"));
+        showToast(dispatch, "Sketch → HTML 完成");
+      }),
+
+    sketchLayerAnnotations: () =>
+      runWorkspaceAction(dispatch, getState, "sketchLayerAnnotations", async () => {
+        const state = getState();
+        ensureCookie(state);
+        ensureDesign(state);
+        const started = performance.now();
+        const data = (await apiSketchLayerAnnotations(selectSketchApiFields(state))) as {
+          ok?: boolean;
+          error?: string;
+          layerAnnotations?: unknown[];
+          designScale?: number;
+        };
+        if (!data.ok) throw new Error(data.error || "Sketch CSS 标注提取失败");
+        const text = formatLayerAnnotationsText(data.layerAnnotations ?? []);
+        dispatch(setResult({ key: "layerAnnotations", data: text }));
+        logServerCall(
+          dispatch,
+          "/api/designs/sketch-layer-annotations",
+          started,
+          `scale=${data.designScale ?? "?"} · layers=${data.layerAnnotations?.length ?? 0}`,
+        );
+        dispatch(setResultGroup("analyze"));
+        dispatch(setActiveTab("layerAnnotations"));
+        showToast(dispatch, "Sketch CSS 标注已提取");
+      }),
+
+    sketchAnnotations: () =>
+      runWorkspaceAction(dispatch, getState, "sketchAnnotations", async () => {
+        const state = getState();
+        ensureCookie(state);
+        ensureDesign(state);
+        const started = performance.now();
+        const data = (await apiSketchAnnotations(selectDesignFields(state))) as {
+          ok?: boolean;
+          error?: string;
+          sketchAnnotations?: string;
+          designScale?: number;
+        };
+        if (!data.ok) throw new Error(data.error || "Sketch 完整标注提取失败");
+        dispatch(setResult({ key: "sketchAnnotations", data: data.sketchAnnotations ?? "" }));
+        logServerCall(
+          dispatch,
+          "/api/designs/sketch-annotations",
+          started,
+          `scale=${data.designScale ?? "?"} · chars=${data.sketchAnnotations?.length ?? 0}`,
+        );
+        dispatch(setResultGroup("analyze"));
+        dispatch(setActiveTab("sketchAnnotations"));
+        showToast(dispatch, "Sketch 完整标注已提取");
+      }),
+
     sliceFetch: () =>
       runWorkspaceAction(dispatch, getState, "sliceFetch", () => loadSliceDownloadList(dispatch, getState)),
 
@@ -886,6 +992,33 @@ export function buildApiActions(state: RootState, runners: ActionRunners) {
       ready: mockReady || Boolean(selectSelectedDesign(state)?.id && state.session.params?.project_id),
       done: Boolean(state.session.sketchJson),
       run: runners.sketchJson,
+    },
+    {
+      id: "convertSketch",
+      group: "Sketch",
+      label: "Sketch → HTML",
+      desc: "POST Node /api/designs/convert-sketch · convertLanhuSketch",
+      ready: mockReady || Boolean(selectSelectedDesign(state)?.id && state.session.params?.project_id),
+      done: Boolean(state.inspect.results.sketchHtml),
+      run: runners.convertSketch,
+    },
+    {
+      id: "sketchLayerAnnotations",
+      group: "Sketch",
+      label: "Sketch CSS 标注",
+      desc: "POST Node /api/designs/sketch-layer-annotations · layerAnnotations",
+      ready: mockReady || Boolean(selectSelectedDesign(state)?.id && state.session.params?.project_id),
+      done: Boolean(state.inspect.results.layerAnnotations),
+      run: runners.sketchLayerAnnotations,
+    },
+    {
+      id: "sketchAnnotations",
+      group: "Sketch",
+      label: "Sketch 完整标注",
+      desc: "POST Node /api/designs/sketch-annotations · extractFullAnnotationsFromSketch",
+      ready: mockReady || Boolean(selectSelectedDesign(state)?.id && state.session.params?.project_id),
+      done: Boolean(state.inspect.results.sketchAnnotations),
+      run: runners.sketchAnnotations,
     },
   ];
 }

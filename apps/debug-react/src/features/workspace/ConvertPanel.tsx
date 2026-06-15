@@ -11,7 +11,7 @@ export function ConvertPanel() {
         <CardHeader className="pb-2">
           <CardTitle className="text-base">Schema 转换演示</CardTitle>
           <p className="text-muted-foreground text-xs">
-            暂无转换结果。请到「分析」执行「一键 analyze」或「Schema → HTML」。
+            暂无转换结果。请到「分析」执行「一键 analyze」、「Schema → HTML」或「Sketch → HTML」。
           </p>
         </CardHeader>
         <CardContent>

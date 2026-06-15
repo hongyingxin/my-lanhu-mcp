@@ -16,6 +16,7 @@ import {
   type ConvertLanhuSchemaResult,
   type DesignSelector,
   type LanhuDesignSummary,
+  type SketchLayerAnnotation,
 } from "@lanhu/core";
 
 import { buildDesignWorkflowGuide } from "../analyze/design-workflow-guide.js";
@@ -64,6 +65,23 @@ function shouldAttachWorkflowGuide(
   workflowGuide: boolean,
 ): boolean {
   return workflowGuide && includeSet.has("html");
+}
+
+function formatLayerAnnotationsText(annotations: SketchLayerAnnotation[] | undefined): string {
+  if (!annotations || annotations.length === 0) {
+    return "";
+  }
+  const lines: string[] = [`CSS 标注（共 ${annotations.length} 层）：`];
+  for (const la of annotations) {
+    const cssStr = Object.entries(la.css)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join("; ");
+    let line = `  [${la.type}] ${la.name}: ${cssStr}`;
+    if (la.text) line += ` | text="${la.text.slice(0, 50)}"`;
+    if (la.slice_url) line += ` | slice=${la.slice_url}`;
+    lines.push(line);
+  }
+  return lines.join("\n");
 }
 
 function formatAnalyzeSummary(
@@ -132,8 +150,13 @@ function formatAnalyzeSummary(
       lines.push(slice.designTokens);
     }
 
+    if (slice.layerAnnotations && slice.layerAnnotations.length > 0 && includeSet.has("html")) {
+      lines.push("\n--- CSS 标注 ---");
+      lines.push(formatLayerAnnotationsText(slice.layerAnnotations));
+    }
+
     if (slice.sketchAnnotations && includeSet.has("html")) {
-      lines.push("\n--- Sketch 标注 ---");
+      lines.push("\n--- Sketch 完整标注 ---");
       lines.push(slice.sketchAnnotations);
     }
 

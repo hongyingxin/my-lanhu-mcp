@@ -40,6 +40,21 @@ export class DesignsController {
     return this.designs.sketch(body);
   }
 
+  @Post("convert-sketch")
+  convertSketch(@Body() body: unknown) {
+    return this.designs.convertSketch(body);
+  }
+
+  @Post("sketch-layer-annotations")
+  sketchLayerAnnotations(@Body() body: unknown) {
+    return this.designs.sketchLayerAnnotations(body);
+  }
+
+  @Post("sketch-annotations")
+  sketchAnnotations(@Body() body: unknown) {
+    return this.designs.sketchAnnotations(body);
+  }
+
   @Post("convert")
   convert(@Body() body: unknown) {
     return this.designs.convert(body);

@@ -16,9 +16,10 @@ import {
 } from "@/store/inspectSlice";
 import { onAnalyzeSlices } from "@/store/slicesSlice";
 import { mapServerParams } from "../mappers";
+import { formatLayerAnnotationsText } from "../resultFormat";
 import type { ConvertDemo } from "@/api/types";
 
-function normalizeSketchConvert(convert: ConvertDemo): ConvertDemo {
+export function normalizeSketchConvert(convert: ConvertDemo): ConvertDemo {
   const htmlFull = convert.after.htmlFull ?? "";
   const bodyMatch = htmlFull.match(/<body[^>]*>([\s\S]*)<\/body>/i);
   const htmlBody = bodyMatch ? bodyMatch[1]!.trim() : htmlFull;
@@ -100,6 +101,12 @@ export function applyAnalyzeResult(dispatch: AppDispatch, data: any) {
     dispatch(applyConvertResult(normalized));
   }
 
+  const layerAnnotationsRaw =
+    data.layerAnnotations ??
+    (data.convertSource === "sketch" ? data.convert?.after?.layerAnnotations : undefined);
+  const sketchHtml =
+    data.convertSource === "sketch" ? (data.convert?.after?.htmlFull as string | undefined) : undefined;
+
   dispatch(
     mergeResults({
       analyze: {
@@ -118,6 +125,10 @@ export function applyAnalyzeResult(dispatch: AppDispatch, data: any) {
       layoutSummary: data.layoutSummary ?? null,
       layerTree: data.layerTree ?? null,
       sketchAnnotations: data.sketchAnnotations ?? null,
+      layerAnnotations: layerAnnotationsRaw
+        ? formatLayerAnnotationsText(layerAnnotationsRaw)
+        : null,
+      sketchHtml: sketchHtml ?? null,
     }),
   );
 

@@ -66,6 +66,8 @@ export type InspectResultKey =
   | "designTokens"
   | "layoutSummary"
   | "layerTree"
-  | "sketchAnnotations";
+  | "sketchAnnotations"
+  | "sketchHtml"
+  | "layerAnnotations";
 
 export type InspectResults = Partial<Record<InspectResultKey, unknown>>;

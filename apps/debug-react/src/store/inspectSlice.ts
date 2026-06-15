@@ -60,6 +60,8 @@ const inspectSlice = createSlice({
       delete state.results.layoutSummary;
       delete state.results.layerTree;
       delete state.results.sketchAnnotations;
+      delete state.results.sketchHtml;
+      delete state.results.layerAnnotations;
     },
   },
 });

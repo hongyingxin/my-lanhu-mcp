@@ -172,33 +172,39 @@ export async function analyzeDesignWithInclude(
       }
     }
 
-    if ((includeSet.has("html") || includeSet.has("slices")) && !schemaConvert) {
+    if (includeSet.has("html") || includeSet.has("tokens") || includeSet.has("layers")) {
+      // 提取 Sketch 标注作为补充（无论是否已有 Schema HTML）
+      try {
+        const annotations = extractFullAnnotationsFromSketch(result.sketch, designScale);
+        if (annotations.trim()) {
+          result.sketchAnnotations = annotations;
+        }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        pushWarning(warnings, `Sketch 完整标注提取失败: ${message}`);
+      }
+
       try {
         const sketchConvert = convertLanhuSketch(result.sketch, {
           designName: design.name,
           designImageUrl: resolveDesignImageUrl(design.url),
         });
-        result.sketchConvert = sketchConvert;
-        result.convert = sketchConvert;
-        result.convertSource = "sketch";
         result.layerAnnotations = sketchConvert.after.layerAnnotations;
-        pushWarning(warnings, "Schema 不可用，已使用 Sketch fallback 生成 HTML");
 
-        try {
-          const annotations = extractFullAnnotationsFromSketch(result.sketch, designScale);
-          if (annotations.trim()) {
-            result.sketchAnnotations = annotations;
-          }
-        } catch (error) {
-          const message = error instanceof Error ? error.message : String(error);
-          pushWarning(warnings, `Sketch 完整标注提取失败: ${message}`);
+        if (!schemaConvert && (includeSet.has("html") || includeSet.has("slices"))) {
+          result.sketchConvert = sketchConvert;
+          result.convert = sketchConvert;
+          result.convertSource = "sketch";
+          pushWarning(warnings, "Schema 不可用，已使用 Sketch fallback 生成 HTML");
+        } else if (schemaConvert) {
+          pushWarning(warnings, "DDS Schema HTML 可用，同时提取了 Sketch 标注作为参考");
         }
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
-        pushWarning(warnings, `Sketch fallback 转换失败: ${message}`);
+        if (!schemaConvert) {
+          pushWarning(warnings, `Sketch fallback 转换失败: ${message}`);
+        }
       }
-    } else if (schemaConvert) {
-      pushWarning(warnings, "DDS Schema HTML 可用，已跳过 Sketch fallback");
     }
   }
 

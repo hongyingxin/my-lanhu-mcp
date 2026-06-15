@@ -17,7 +17,11 @@ export function analyzeEmptyInsightHint(
     layerTree:
       "响应无 layerTree：需 analyze 成功拉取 Sketch（board 或 artboard）。见 Warnings / Sketch Tab。",
     sketchAnnotations:
-      "响应无 sketchAnnotations：需 analyze 成功拉取 Sketch。见 Warnings Tab。",
+      "响应无 sketchAnnotations：需 analyze 成功拉取 Sketch，或点「Sketch 完整标注」。见 Warnings Tab。",
+    layerAnnotations:
+      "响应无 layerAnnotations：DDS 成功时 analyze 不会生成；请点「Sketch CSS 标注」或「Sketch → HTML」。",
+    sketchHtml:
+      "响应无 Sketch HTML：请点「Sketch → HTML」（POST /api/designs/convert-sketch），或 analyze 走 Sketch fallback。",
   };
   const warnings = state.inspect.results.warnings;
   const extra =
@@ -79,6 +83,14 @@ export function formatResult(key: InspectResultKey | string, state: RootState): 
     if (inspect.results.sketchAnnotations) return String(inspect.results.sketchAnnotations);
     return analyzeEmptyInsightHint("sketchAnnotations", state);
   }
+  if (key === "layerAnnotations") {
+    if (inspect.results.layerAnnotations) return String(inspect.results.layerAnnotations);
+    return analyzeEmptyInsightHint("layerAnnotations", state);
+  }
+  if (key === "sketchHtml") {
+    if (typeof inspect.results.sketchHtml === "string") return inspect.results.sketchHtml;
+    return analyzeEmptyInsightHint("sketchHtml", state);
+  }
 
   const data = inspect.results[key as InspectResultKey];
   if (data === null || data === undefined) return "暂无数据";
@@ -90,6 +102,31 @@ export function resultMeta(key: string, state: RootState): string {
   if (text === "暂无数据" || text.startsWith("请先") || text.startsWith("iframe")) return "";
   const lines = text.split("\n").length;
   return `${text.length.toLocaleString()} 字符 · ${lines.toLocaleString()} 行`;
+}
+
+export function formatLayerAnnotationsText(annotations: unknown): string {
+  if (!Array.isArray(annotations) || annotations.length === 0) {
+    return "暂无 layerAnnotations";
+  }
+  const lines: string[] = [`CSS annotations (${annotations.length} layers):`];
+  for (const item of annotations) {
+    if (!item || typeof item !== "object") continue;
+    const la = item as {
+      type?: string;
+      name?: string;
+      css?: Record<string, string>;
+      text?: string;
+      slice_url?: string;
+    };
+    const cssStr = Object.entries(la.css ?? {})
+      .map(([k, v]) => `${k}: ${v}`)
+      .join("; ");
+    let line = `  [${la.type ?? "layer"}] ${la.name ?? "—"}: ${cssStr}`;
+    if (la.text) line += ` | text="${la.text.slice(0, 50)}"`;
+    if (la.slice_url) line += ` | slice=${la.slice_url}`;
+    lines.push(line);
+  }
+  return lines.join("\n");
 }
 
 export function formatConvertBefore(before: ConvertDemo["before"]): string {

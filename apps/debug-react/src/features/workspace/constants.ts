@@ -3,7 +3,7 @@ import type { ResultTabGroup } from "@/store/uiSlice";
 export const CONSOLE_STAGES = [
   { id: "connect" as const, label: "连接", desc: "Cookie · URL · Mock · 服务状态" },
   { id: "design" as const, label: "选稿", desc: "设计稿列表与切换" },
-  { id: "pipeline" as const, label: "分析", desc: "一键 analyze · 分步 API（12 个）" },
+  { id: "pipeline" as const, label: "分析", desc: "一键 analyze · 分步 API（15 个）" },
   { id: "convert" as const, label: "转换", desc: "Schema / Sketch 转换演示" },
   { id: "results" as const, label: "结果", desc: "请求日志 · 分组检视" },
   { id: "slices" as const, label: "切图", desc: "A/B 套下载" },
@@ -16,7 +16,9 @@ export const RESULT_TABS = [
   { key: "layoutSummary", label: "布局摘要", group: "analyze" as ResultTabGroup },
   { key: "layerTree", label: "图层树", group: "analyze" as ResultTabGroup },
   { key: "sketchAnnotations", label: "Sketch 标注", group: "analyze" as ResultTabGroup },
+  { key: "layerAnnotations", label: "CSS 图层标注", group: "analyze" as ResultTabGroup },
   { key: "htmlPreview", label: "页面预览", group: "convert" as ResultTabGroup },
+  { key: "sketchHtml", label: "Sketch HTML", group: "convert" as ResultTabGroup },
   { key: "convertCss", label: "转换后 CSS", group: "convert" as ResultTabGroup },
   { key: "convertHtml", label: "HTML Body", group: "convert" as ResultTabGroup },
   { key: "convertHtmlFull", label: "完整 HTML", group: "convert" as ResultTabGroup },

@@ -65,6 +65,50 @@ export async function apiDesignSketch(fields: {
   });
 }
 
+export async function apiConvertSketch(fields: {
+  projectId: string;
+  teamId: string | null;
+  imageId: string;
+  designName?: string;
+  designImageUrl?: string;
+}) {
+  return post("/api/designs/convert-sketch", {
+    project_id: fields.projectId,
+    team_id: fields.teamId,
+    image_id: fields.imageId,
+    designName: fields.designName,
+    designImageUrl: fields.designImageUrl,
+  });
+}
+
+export async function apiSketchLayerAnnotations(fields: {
+  projectId: string;
+  teamId: string | null;
+  imageId: string;
+  designName?: string;
+  designImageUrl?: string;
+}) {
+  return post("/api/designs/sketch-layer-annotations", {
+    project_id: fields.projectId,
+    team_id: fields.teamId,
+    image_id: fields.imageId,
+    designName: fields.designName,
+    designImageUrl: fields.designImageUrl,
+  });
+}
+
+export async function apiSketchAnnotations(fields: {
+  projectId: string;
+  teamId: string | null;
+  imageId: string;
+}) {
+  return post("/api/designs/sketch-annotations", {
+    project_id: fields.projectId,
+    team_id: fields.teamId,
+    image_id: fields.imageId,
+  });
+}
+
 export async function apiConvertDesign(args: {
   projectId?: string;
   teamId?: string | null;
