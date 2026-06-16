@@ -1,39 +1,19 @@
-import healthMock from "./data/1.json";
-import sectorsMock from "./data/2.json";
-import imagesMock from "./data/3.json";
-import previewMock from "./data/4.json";
-import multiInfoMock from "./data/5.json";
-import schemaReviseMock from "./data/6.json";
-import schemaMock from "./data/7.json";
-import designDetailMock from "./data/8.json";
-import sketchMock from "./data/9.json";
-
 import type { LanhuParams } from "@/api/parse-url";
 import type { DesignItem } from "@/api/types";
 
 const MOCK_DATA: Record<string, unknown> = {
-  health: healthMock,
-  sectors: sectorsMock,
-  images: imagesMock,
-  preview: previewMock,
-  multiInfo: multiInfoMock,
-  schemaRevise: schemaReviseMock,
-  schema: schemaMock,
-  designDetail: designDetailMock,
-  sketch: sketchMock,
+  health: {},
+  sectors: {},
+  images: { data: { images: [] } },
+  preview: { data: "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==", contentType: "image/png" },
+  multiInfo: { result: { images: [] } },
+  schemaRevise: { data: {} },
+  schema: {},
+  designDetail: { result: {} },
+  sketch: {},
 };
 
-export const MOCK_MANIFEST = [
-  { key: "health", file: "1.json", label: "/api/health" },
-  { key: "sectors", file: "2.json", label: "project_sectors" },
-  { key: "images", file: "3.json", label: "project/images" },
-  { key: "preview", file: "4.json", label: "预览图 CDN" },
-  { key: "multiInfo", file: "5.json", label: "multi_info" },
-  { key: "schemaRevise", file: "6.json", label: "store_schema_revise" },
-  { key: "schema", file: "7.json", label: "Schema JSON" },
-  { key: "designDetail", file: "8.json", label: "project/image" },
-  { key: "sketch", file: "9.json", label: "Sketch JSON" },
-] as const;
+export const MOCK_MANIFEST = [] as const;
 
 function unwrapProxyResponse(mock: unknown): unknown {
   if (mock && typeof mock === "object" && "ok" in mock && "data" in mock) {
@@ -86,9 +66,6 @@ export function loadMockEntry(key: string) {
   const raw = loadMockFile(key);
   if (key === "preview") {
     return { blob: previewBlobFromMock(raw as { data?: string; contentType?: string }), meta: raw };
-  }
-  if (key === "schema") {
-    return unwrapProxyResponse(raw);
   }
   return unwrapProxyResponse(raw);
 }

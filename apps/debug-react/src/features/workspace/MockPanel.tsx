@@ -32,8 +32,7 @@ export function MockPanel({ runners }: Props) {
       </CardHeader>
       <CardContent className="space-y-3">
         <p className="text-muted-foreground text-xs">
-          接口数据在 <code className="text-foreground">src/mock/data/1.json</code> ~{" "}
-          <code className="text-foreground">9.json</code>，一键加载后可跳过网络请求；Schema 转换走 server。
+          启用 Mock 模式后可跳过网络请求，直接加载本地 Mock 数据；Schema 转换走 server。
         </p>
         <div className="flex flex-wrap gap-2">
           {MOCK_MANIFEST.map((item) => (

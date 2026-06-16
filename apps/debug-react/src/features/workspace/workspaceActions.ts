@@ -377,7 +377,7 @@ export async function loadMockData(
     prependLog({
       ok: true,
       method: "MOCK",
-      url: "src/mock/data/*.json",
+      url: "MOCK_DATA",
       status: 200,
       elapsedMs: 0,
       note: `已加载 ${MOCK_MANIFEST.length} 个 mock 文件`,
