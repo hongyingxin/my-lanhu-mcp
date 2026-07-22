@@ -3,13 +3,15 @@
 NestJS 版调试 HTTP 服务（默认入口，默认端口 **3001**）。
 
 - 业务逻辑全部在 `@lanhu/core`（本服务只做 HTTP 入参校验与 `LanhuClient` 创建）
-- Cookie：请求 `body.cookie` 优先，否则 `.env` 的 `LANHU_COOKIE` / `LANHU_DDS_COOKIE`
+- Cookie：请求 `body.cookie` 优先，否则 `.env` 的 `LANHU_COOKIE`（DDS 默认复用同一 Cookie；body 可传 `ddsCookie` / `dds_cookie` 覆盖）
 
 ```bash
 npm run dev -w @lanhu/server-nest   # 或根目录 npm run dev:server
 ```
 
-调试台 `apps/debug-react` 只请求本服务的 `http://localhost:3001/api/...`，不直连蓝湖。
+调试台 `apps/debug-react` 只请求 `http://localhost:3001/api/...`，不直连蓝湖。
+
+**架构与 env** → [`../docs/CONTEXT.md`](../docs/CONTEXT.md) · **排错** → [`../docs/TROUBLESHOOTING.md`](../docs/TROUBLESHOOTING.md) · **原型 HTTP 细节** → [`../docs/prototype-and-mcp.md`](../docs/prototype-and-mcp.md) §5
 
 ---
 
@@ -50,6 +52,9 @@ debug-react  →  POST /api/...  →  DesignsService / ApiController
 | `POST /api/designs/schema-revise` | `schemaRevise` | **`getDdsSchemaRevision(versionId)`** | 是（dds） | `version_id` / `versionId` |
 | `POST /api/designs/schema` | `schema` | **`getDesignSchemaJson(client, imageId, teamId, projectId)`** | 是 | `project_id`, `image_id`, `team_id?` |
 | `POST /api/designs/sketch` | `sketch` | **`getSketchJson(client, imageId, teamId, projectId)`** | 是 | 同上 |
+| `POST /api/designs/convert-sketch` | `convertSketch` | **`getSketchJson`** → **`convertLanhuSketch`** | 是 / 否 | `project_id`, `image_id`, `team_id?` |
+| `POST /api/designs/sketch-layer-annotations` | `sketchLayerAnnotations` | **`getSketchJson`** → **`convertLanhuSketch`**（仅 `layerAnnotations`） | 是 / 否 | 同上 |
+| `POST /api/designs/sketch-annotations` | `sketchAnnotations` | **`getSketchJson`** → **`extractFullAnnotationsFromSketch`** | 是 / 否 | 同上 |
 | `POST /api/designs/convert` | `convert` | 见下表 **convert 分支** | 视 body | `schema?` 或 `project_id` + `image_id` + `designName?` |
 | `POST /api/designs/preview` | `preview` | **`client.fetchBinaryUrl(url)`** | 是（CDN 等） | `url` |
 | `POST /api/designs/slices` | `slices` | **`getSlices(client, imageId, teamId, projectId)`** | 是 | `project_id`, `image_id`, `team_id?` |
@@ -104,6 +109,9 @@ debug-react  →  POST /api/...  →  DesignsService / ApiController
 | `POST /api/designs/schema-revise` | 已知 `version_id` 时，查 DDS **Schema 修订**（`data_resource_url`），分步调试 schema 第 1 步 |
 | `POST /api/designs/schema` | **下载 Schema JSON**（multi_info → schema_revise → CDN），供查看或交给 convert |
 | `POST /api/designs/sketch` | **下载 Sketch JSON**（图层树、标注、PS 切图信息等），无 Schema 或要做 Sketch fallback 时用 |
+| `POST /api/designs/convert-sketch` | **Sketch → HTML**（+ mapping），分步调试 Sketch fallback |
+| `POST /api/designs/sketch-layer-annotations` | 仅返回 Sketch 转换中的 **CSS 图层标注**（`layerAnnotations`） |
+| `POST /api/designs/sketch-annotations` | 仅返回 Sketch **标注文本**（`sketchAnnotations`） |
 | `POST /api/designs/convert` | **Schema → HTML**（+ mapping）。body 带 `schema` 则只算不拉蓝湖；否则先拉 schema 再转 |
 | `POST /api/designs/preview` | 按 URL **代理下载二进制**（预览图、切图 CDN 等），返回 base64，给调试台展示/打包下载 |
 | `POST /api/designs/slices` | **切图 B 套**：登记切图列表 + `scaleUrls` 多倍率链接 |
@@ -123,10 +131,30 @@ analyze **不会**默认批量下载 A 套 mapping 里每张 PNG；落盘仅有 
 GET  /api/health
 POST /api/parse-url
 POST /api/designs/list | sectors | detail | multi-info | schema-revise
-POST /api/designs/schema | sketch | convert | preview | slices | analyze
+POST /api/designs/schema | sketch | convert-sketch | sketch-layer-annotations | sketch-annotations
+POST /api/designs/convert | preview | slices | analyze
+POST /api/pages/list-documents | list | download | analyze | analyze-local
+GET  /api/pages/screenshot
 ```
 
 **日常建议**：联调优先 `list` + `analyze`；要拆问题再用中间路由；切图下载用 `slices` + `preview`。
+
+---
+
+## 原型接口 `PagesController` → `PagesService`
+
+原型 URL 须为 `#/item/project/product?tid=...&pid=...`；列页/下载/分析须带 `docId`（或 body 传 `doc_id` / `image_id`）。
+
+| HTTP | Service 方法 | `@lanhu/core` | 访问蓝湖外网 | 主要 body |
+|------|--------------|---------------|--------------|-----------|
+| `POST /api/pages/list-documents` | `listDocuments` | **`listProductDocuments`** | 是 | `url` |
+| `POST /api/pages/list` | `list` | **`listPages`** | 是 | `url` + docId |
+| `POST /api/pages/download` | `download` | **`downloadResources`** | 是 | `url` + docId；`force_update?` |
+| `POST /api/pages/analyze` | `analyze` | **`analyzePrototypePages`**（含 Playwright） | 是 | `url` + docId；**`page_names`**（必填） |
+| `POST /api/pages/analyze-local` | `analyzeLocal` | **`analyzeLocalPage`** | 否 | `outputDir` + `pageName`（已下载目录内重分析） |
+| `GET /api/pages/screenshot` | — | 读 `LANHU_DATA_DIR` 下截图文件 | 否 | query `path` |
+
+参数细节、落盘目录与 MCP `lanhu_page` 差异见 [`../docs/prototype-and-mcp.md`](../docs/prototype-and-mcp.md) §4–§6。
 
 ---
 
@@ -140,4 +168,6 @@ POST /api/designs/schema | sketch | convert | preview | slices | analyze
 - `src/api/api.controller.ts`
 - `src/designs/designs.controller.ts`
 - `src/designs/designs.service.ts`
+- `src/pages/pages.controller.ts`
+- `src/pages/pages.service.ts`
 - `src/lanhu/lanhu-client.service.ts`

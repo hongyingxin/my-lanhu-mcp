@@ -75,7 +75,7 @@ lanhu-node/
 1. **Schema（DDS）**：`multi_info` → `store_schema_revise` → 下载 schema → `convertLanhuSchema`
 2. **Sketch**：Schema 不可用或 `detailDetach` 时，`getSketchJson` → `convertSketchToHtml`
 
-`include` 默认含 `html`、`tokens`、`layers`、`layout`、`image`；B 套切图用 `mode=slices` 或 analyze 的 `with_slices`。
+`include` 默认含 `html`、`tokens`、`layers`、`layout`、`image`、`slices`；B 套切图元数据另用 `mode=slices` 或 analyze 的 `with_slices`。
 
 ### 3.2 原型 / PRD（Axure）
 
@@ -153,7 +153,7 @@ GET screenshot
 
 通用：`GET /api/health` · `POST /api/parse-url`
 
-完整参数与响应见 [`server-nest/README.md`](../server-nest/README.md)。
+完整参数与响应见 [`server-nest/README.md`](../server-nest/README.md)（设计稿 + 原型 `/api/pages/*`）。
 
 **切图 A/B 套**：analyze 默认产出 A 套 mapping；B 套走 `/api/designs/slices` 或 analyze 的 `withSlices`。调试台切图 Tab 可手动切换 `mapping` / `scaleUrls`。
 
@@ -164,6 +164,7 @@ GET screenshot
 ```bash
 cp .env.example .env          # 填 LANHU_COOKIE
 npm install
+npx playwright install chromium   # 原型分析需要（首次或升级 playwright 后）
 npm run dev                   # server :3001 + debug-react :5174
 npm run dev:server            # 仅 HTTP
 npm run dev:react             # 仅 React 调试台
@@ -177,11 +178,14 @@ npm run check                 # core 类型检查
 
 | 变量 | 说明 |
 |------|------|
-| `LANHU_COOKIE` | 蓝湖登录 Cookie（必填） |
-| `LANHU_DDS_COOKIE` | DDS 专用 Cookie（可选） |
+| `LANHU_COOKIE` | 蓝湖登录 Cookie（必填；server / MCP 均读取） |
 | `LANHU_DATA_DIR` | 落盘目录，默认 `./data` |
 
-Mock 模式：调试台开启后不请求 server，读 `apps/debug-*/src/mock/`。
+DDS 请求默认复用 `LANHU_COOKIE`。HTTP 请求 body 可传 `ddsCookie` / `dds_cookie` 覆盖；`.env.example` 中的 `LANHU_DDS_COOKIE` 为预留项，**当前 server / MCP 不读取**。
+
+Mock 模式：调试台开启后不请求 server，读 `apps/debug-react/src/mock/`。
+
+Cookie 获取、503、Playwright 安装失败等见 [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md)。
 
 ---
 
@@ -203,17 +207,18 @@ Mock 模式：调试台开启后不请求 server，读 `apps/debug-*/src/mock/`�
 
 ```text
 继续 lanhu-node，请先读：
-@docs/CONTEXT.md
 @docs/README.md
+@docs/CONTEXT.md
 
 当前任务：<填写>
 涉及模块：<core | server-nest | mcp | debug-react>
 ```
 
-按主题追加：
+文档地图与包旁 README 分工见 [`README.md`](./README.md)。按主题追加：
 
 | 主题 | 追加文档 |
 |------|----------|
 | Cursor 调 MCP | `@docs/CURSOR_MCP.md` |
 | 原型 / lanhu_page | `@docs/prototype-and-mcp.md` |
 | MCP 方案细节 | `@docs/MCP_DESIGN.md` |
+| Cookie / Playwright 排错 | `@docs/TROUBLESHOOTING.md` |

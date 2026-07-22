@@ -2,26 +2,26 @@
 
 > 在 [`MCP_DESIGN.md`](./MCP_DESIGN.md) 方案定稿基础上的**工程实现蓝图**。  
 > 读者：实现者 / Code Review；实现变更以本文件 + 代码为准。  
-> 最后更新：2026-06-05
+> 最后更新：2026-07-22
 
 ---
 
 ## 1. 目标与边界
 
-### 1.1 第一期交付
+### 1.1 已交付
 
 | 交付项 | 说明 |
 |--------|------|
-| **Tool** | `lanhu_design`（4 mode） |
-| **Resource** | `project-designs` |
-| **Prompt** | 第二期；第一期可空注册或跳过 |
-| **传输** | stdio（Cursor 默认）；HTTP 不做了 |
+| **Tool** | `lanhu_design`（4 mode）、`lanhu_page`（原型） |
+| **Resource** | `project-designs`、单稿 `design` |
+| **Prompt** | `frontend-dev`、`design-review` |
+| **传输** | stdio（Cursor 默认） |
 | **依赖** | 只调 `@lanhu/core`，不调 `server-nest` |
 
-### 1.2 不做（第一期）
+### 1.2 尚未实现
 
-- `lanhu_resolve_invite_link`、`lanhu_page`、留言板
-- 复制 `server-nest` 分步 HTTP 逻辑
+- `lanhu_resolve_invite_link`、留言板（say 系列）
+- 复制 `server-nest` 分步 HTTP 逻辑到 MCP
 - 外部 MCP tool 别名
 
 ---
@@ -40,25 +40,27 @@ MCP 作为 **可运行入口** 放在仓库根 `mcp/`（与 `server-nest/` 同�
 
 ```text
 mcp/
-├── package.json          # name: @lanhu/mcp, bin: lanhu-mcp
+├── package.json
 ├── tsconfig.json
-├── config.example.env    # LANHU_COOKIE / DDS_COOKIE 说明
 ├── README.md
 ├── src/
-│   ├── server.ts         # createServer + main(stdio)
-│   ├── config.ts         # 读 env，校验 Cookie
-│   ├── result.ts         # createToolResult / 错误格式化
+│   ├── server.ts
+│   ├── config.ts
+│   ├── result.ts
 │   ├── resources/
-│   │   └── project-designs.ts
-│   ├── prompts/          # 第二期
-│   │   ├── frontend-dev.ts
-│   │   └── design-review.ts
-│   └── tools/
-│       ├── index.ts      # registerAllTools
-│       └── lanhu-design.ts   # 四 mode 分发 + MCP 响应格式化（不含 include 分支）
-└── tests/
-    ├── lanhu-design-schema.test.ts
-    └── pick-design-names.test.ts
+│   │   ├── project-designs.ts
+│   │   └── design.ts
+│   ├── prompts/
+│   │   └── design-prompts.ts
+│   ├── tools/
+│   │   ├── index.ts
+│   │   ├── lanhu-design.ts
+│   │   └── lanhu-page.ts
+│   ├── format/
+│   │   └── page-result.ts
+│   └── analyze/
+│       └── design-workflow-guide.ts
+└── dist/                   # npm run build 产物
 ```
 
 根 `package.json` workspaces 增加 **`"mcp"`**（与 `"server-nest"` 写法一致）。
@@ -114,8 +116,10 @@ server-nest / debug-react   ← 独立，MCP 不依赖
 
 | 变量 | 必填 | 说明 |
 |------|------|------|
-| `LANHU_COOKIE` | 是 | 蓝湖 Cookie |
-| `DDS_COOKIE` | 否 | 默认回退 `LANHU_COOKIE` |
+| `LANHU_COOKIE` | 是 | 蓝湖 Cookie（读仓库根 `.env` 或 `mcp.json` env） |
+| `LANHU_DATA_DIR` | 否 | 落盘根目录，默认 `./data` |
+
+DDS 请求复用 `LANHU_COOKIE`。`.env.example` 中的 `LANHU_DDS_COOKIE` 为预留项，MCP 当前不读取。
 
 启动时无 Cookie → `ConfigurationError`，tool 返回 `isError: true` 友好文案。
 
@@ -152,7 +156,7 @@ const inputSchema = {
   design_names: z.union([z.string(), z.array(z.string())]).optional(),
   include: z.array(IncludeOption).optional(),              // 仅 analyze
   with_slices: z.boolean().optional(),                     // 仅 analyze，B 套，默认 false
-  // slices 专用（第一期可先实现，第二期文档化）
+  // slices 专用（`slice_format` / `slice_scale` 后续扩展）
   slice_format: z.enum(["png", "webp", "svg"]).optional(),
   slice_scale: z.string().optional(),                      // 1x / 2x / ios_2x …
 };
@@ -217,10 +221,10 @@ registerLanhuDesignTool(server)
 ### 5.1 `analyze-include.ts`
 
 ```typescript
-export type AnalyzeInclude = "html" | "image" | "tokens" | "layout" | "layers";
+export type AnalyzeInclude = "html" | "image" | "tokens" | "layout" | "layers" | "slices";
 
 export const DEFAULT_ANALYZE_INCLUDE: AnalyzeInclude[] =
-  ["html", "tokens", "layers", "image"];
+  ["html", "tokens", "layers", "layout", "image", "slices"];
 
 export function resolveAnalyzeInclude(include?: AnalyzeInclude[]): Set<AnalyzeInclude>;
 
@@ -279,7 +283,7 @@ interface LanhuDesignAnalyzeStructured {
 1. `text`：人类可读 summary（HTML 成功数、Sketch fallback 数、warnings）
 2. `image`（可选）：`include` 含 image 时 base64 封面（每张稿一条）
 
-**体积控制**：`htmlCode` 可截断 preview 字段 + 全量在 structuredContent；或提供 `html_max_chars`（第二期）。
+**体积控制**：`htmlCode` 可截断 preview 字段 + 全量在 structuredContent；或提供 `html_max_chars`（后续可选）。
 
 ---
 
@@ -355,14 +359,14 @@ server.resource(
 
 ---
 
-## 9. Prompt（第二期）
+## 9. Prompt
 
 | Prompt | 文件 | 行为 |
 |--------|------|------|
-| `frontend-dev` | `prompts/frontend-dev.ts` | 生成像素级还原 user message |
-| `design-review` | `prompts/design-review.ts` | 生成走查 user message |
+| `frontend-dev` | `prompts/design-prompts.ts` | 像素级还原任务话术 |
+| `design-review` | `prompts/design-prompts.ts` | 设计走查任务话术 |
 
-第一期 `server.ts` 可留注释占位，不注册。
+已在 `server.ts` 通过 `registerAllPrompts` 注册；不替代 `lanhu_design` 取数。
 
 ---
 
@@ -395,7 +399,7 @@ export function createToolError(error: unknown, context?: object);
 - [x] Resource `project-designs`
 - [x] `mcp.json` 示例写入 `mcp/README.md`
 
-### Phase B — analyze 对齐 TS
+### Phase B — analyze 与 include
 
 - [x] core：`analyze-include.ts` + `include` + image 不依赖 persist
 - [x] `lanhu_design`：`mode=analyze` + `include` + 多稿 batch
@@ -404,8 +408,9 @@ export function createToolError(error: unknown, context?: object);
 ### Phase C — 抛光
 
 - [ ] `slice_format` / `slice_scale` 后处理
-- [ ] Prompt 两个
-- [x] 单测 `resolveAnalyzeInclude` 默认
+- [x] Prompt `frontend-dev` / `design-review`
+- [x] Tool `lanhu_page`
+- [x] 单测 `resolveAnalyzeInclude` 默认（`packages/lanhu-core/tests/analyze-include.test.ts`）
 - [ ] 手动 Cursor 验收清单
 
 ---

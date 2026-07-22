@@ -14,9 +14,10 @@
 |------|------|
 | 主 Tool | `lanhu_design` |
 | mode | `list` \| `analyze` \| `slices` \| `tokens` |
-| 辅助 | Resource `project-designs`；Prompt `frontend-dev` / `design-review`（可选，第二期） |
+| 辅助 | Resource `project-designs`、单稿 `design`；Prompt `frontend-dev` / `design-review` |
 | 业务实现 | 薄壳调 `@lanhu/core`，不复制 `server-nest` 分步逻辑 |
-| 第一期范围 | 仅设计稿；`lanhu_page`（PRD）、`lanhu_resolve_invite_link`、留言板 6 tool 后做 |
+| 已实现 Tool | `lanhu_design`（设计稿）、`lanhu_page`（原型） |
+| 尚未实现 | `lanhu_resolve_invite_link`、留言板（say 系列） |
 
 ---
 
@@ -201,7 +202,7 @@ lanhu_design(url, mode, design_names?, include?)
 | 是否拉蓝湖 | **否** |
 | 与 `frontend-dev` 区别 | review = 对照检查偏差点；frontend-dev = 从稿 **写出** 代码 |
 
-**Prompt 优先级**：第二期体验增强；第一期 **`lanhu_design` + Resource 即可**。
+**Prompt 说明**：已在 `mcp/src/prompts/` 注册；只生成任务话术，**不**自动拉蓝湖数据，Agent 仍须调 `lanhu_design`。
 
 ---
 
@@ -270,7 +271,7 @@ flowchart LR
 | 4 | **不**在 analyze 响应中返回全量 `designs[]` |
 | 5 | 注册 Resource `project-designs` |
 | 6 | [可选] Prompt `frontend-dev`、`design-review` |
-| 7 | [后期] `lanhu_resolve_invite_link`、`lanhu_page`、留言板 |
+| 7 | [后期] `lanhu_resolve_invite_link`、留言板 |
 
 ### 10.1 与 HTTP analyze 的差异（MCP 刻意保留）
 

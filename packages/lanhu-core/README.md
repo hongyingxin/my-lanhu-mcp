@@ -10,23 +10,9 @@ npm run build -w @lanhu/core
 npm run check -w @lanhu/core
 ```
 
-测试用例目录：`tests/`（阶段 2 迁入 vitest，见根目录 `npm test`）。
+测试：`tests/` · 根目录 `npm test`。
 
-HTTP 路由与调试台对应关系见 [`../../server-nest/README.md`](../../server-nest/README.md)。
-
----
-
-## 在 monorepo 中的位置
-
-```text
-apps/debug-react  →  server-nest  →  @lanhu/core  →  蓝湖 / DDS / CDN
-mcp/              →  @lanhu/core
-```
-
-| 层 | 做什么 | 是否访问蓝湖外网 |
-|----|--------|------------------|
-| **拉数据** | `LanhuClient`、`listDesigns`、`getDesignSchemaJson`… | 是（需 Cookie） |
-| **算结果** | `convertLanhuSchema`、`extractDesignTokens`、`normalizeDesignSectors`… | 否（只吃内存 JSON） |
+**项目架构** → [`../../docs/CONTEXT.md`](../../docs/CONTEXT.md) · **HTTP 路由** → [`../../server-nest/README.md`](../../server-nest/README.md) · **排错** → [`../../docs/TROUBLESHOOTING.md`](../../docs/TROUBLESHOOTING.md)
 
 ---
 
@@ -159,6 +145,34 @@ packages/lanhu-core/
 | `pickDesign` / `pickDesigns` | 按 index / 全名 / 子串选稿 |
 | `normalizeDesignQuotes` | 弯引号 → 直引号 |
 
+### `lanhu/pages.ts` — 原型 / PRD（Axure）
+
+使用 `createLanhuFetch({ cookie })` 或 `LanhuClient` 派生的 fetch；URL 须为 `#/item/project/product?tid=...&pid=...`，列页/下载/分析须带 `docId`。
+
+| 导出 | 用途 | 访问蓝湖 |
+|------|------|----------|
+| `listProductDocuments(fetch, teamId, projectId)` | 项目下 PRD/原型文档列表 | 是 |
+| `listPages(fetch, url)` | 单份文档内页面树（sitemap） | 是 |
+| `downloadResources(fetch, url, outputDir, forceUpdate?)` | 下载整包 Axure 静态资源 | 是 |
+| `analyzePrototypePages(fetch, url, outputDir, pageNames, opts?)` | 下载 → 修 HTML → **Playwright** 截图/文本/样式 | 是 / 否 |
+| `analyzeLocalPage(outputDir, pageName, opts?)` | 对已下载目录单页重分析（不访问蓝湖） | 否 |
+| `getPrototypeDocumentInfo(fetch, url)` | 文档元信息 + mapping URL | 是 |
+| `resolvePrototypeDocumentUrl(url, docId)` | 拼带 docId 的标准 product URL | 否 |
+
+`pageNames` 为页面**展示名**、`"all"` 或数组；**不**直接读 URL 中的 `pageId`（MCP/HTTP 层负责映射）。
+
+### `transform/page-*` + `persist/data-dir.ts`（原型）
+
+| 导出 | 用途 |
+|------|------|
+| `fixHtmlFiles(outputDir)` | 修复 Axure HTML 路径与脚本 |
+| `renderPrototypePages(...)` | Playwright 渲染引擎（低层） |
+| `extractPageContentFromFile` / `extractPageContentFromHtml` | 静态 HTML 提取（辅助） |
+| `formatPageDesignInfo` | 样式摘要文本 |
+| `resolveAxureOutputDir` / `resolveAxureScreenshotDir` | `data/axure_extract_{docId8}/` 路径 |
+
+原型管线与 MCP 行为详见 [`../../docs/prototype-and-mcp.md`](../../docs/prototype-and-mcp.md)。HTTP 路由见 [`../../server-nest/README.md`](../../server-nest/README.md) §原型接口。
+
 ### `pipeline/analyze-design.ts`
 
 | 导出 | 用途 |
@@ -197,6 +211,23 @@ parseLanhuUrl
 
 - 失败步骤写入 `warnings[]`，不中断整条（除非 list 等关键步失败）。
 - 返回 `AnalyzeDesignResult`：`design`、`convert`、`schema`、`sketch`、`designTokens`、`layoutSummary`、`layerTree`、`sketchAnnotations`、`layerAnnotations`、`slices` 等。
+
+---
+
+## 原型分析流水线
+
+```text
+parseLanhuUrl（kind=prototype）
+  → [无 docId] listProductDocuments
+  → [有 docId] getPrototypeDocumentInfo → downloadResources
+  → listPages
+  → fixHtmlFiles
+  → renderPrototypePages（Playwright）
+  → 截图 + 文本 + 样式 JSON
+```
+
+- 落盘：`resolveAxureOutputDir` / `resolveAxureScreenshotDir`（见 [`../../data/README.md`](../../data/README.md)）。
+- 需本机已执行 `npx playwright install chromium`（见 [`../../docs/TROUBLESHOOTING.md`](../../docs/TROUBLESHOOTING.md) §3）。
 
 ---
 
@@ -250,6 +281,9 @@ parseLanhuUrl
 | `LanhuSlicesResult` / `LanhuSliceInfo` | B 套切图列表 |
 | `AnalyzeDesignResult` | 流水线聚合结果 |
 | `ConvertLanhuSchemaResult` / `ConvertSketchResult` | 转换结果（before/after/mapping） |
+| `LanhuPageEntry` / `LanhuPagesListResult` | 原型文档内页面列表 |
+| `DownloadResourcesResult` | Axure 包下载结果 |
+| `AnalyzeLocalPageResult` | 单页本地重分析结果 |
 
 ---
 
@@ -280,18 +314,36 @@ const analyzed = await analyzeDesign({
 });
 ```
 
+```ts
+import { createLanhuFetch, analyzePrototypePages } from "@lanhu/core";
+
+const fetch = createLanhuFetch({ cookie: process.env.LANHU_COOKIE });
+const url = "https://lanhuapp.com/web/#/item/project/product?tid=...&pid=...&docId=...";
+
+// 分析文档内全部页面（需已安装 Playwright Chromium）
+const proto = await analyzePrototypePages(
+  fetch,
+  url,
+  "./data/axure_extract_xxx",
+  "all",
+);
+```
+
 ---
 
 ## 依赖与约束
 
 - Node.js ≥ 20，`"type": "module"`
-- 需要有效蓝湖 **Cookie**（`LANHU_COOKIE`；DDS 可用 `LANHU_DDS_COOKIE` 或回退同一 Cookie）
+- 需要有效蓝湖 **Cookie**（`LANHU_COOKIE`；DDS 默认复用同一 Cookie，或 HTTP body 传 `ddsCookie`）
 - 列表 / schema 等设计稿接口通常需要 URL 中的 **`tid`（team_id）**
+- 原型 Playwright 分析需 **`npx playwright install chromium`**（`@lanhu/core` 依赖 `playwright`）
 
 ---
 
 ## 相关文档
 
+- 文档索引：[`../../docs/README.md`](../../docs/README.md)
 - 项目上下文：[`../../docs/CONTEXT.md`](../../docs/CONTEXT.md)
-- HTTP 路由说明：[`../../server-nest/README.md`](../../server-nest/README.md)
+- HTTP 路由：[`../../server-nest/README.md`](../../server-nest/README.md)
 - 原型管线：[`../../docs/prototype-and-mcp.md`](../../docs/prototype-and-mcp.md)
+- 排错：[`../../docs/TROUBLESHOOTING.md`](../../docs/TROUBLESHOOTING.md)

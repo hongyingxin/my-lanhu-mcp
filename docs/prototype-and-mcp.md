@@ -144,7 +144,11 @@ flowchart TD
 
 ### 3.4 分析引擎（Playwright full）
 
-使用 Playwright 在本地 HTTP 服务中打开 HTML 并截图、提取文本/样式，不再以静态 HTML 解析为默认路径：
+使用 Playwright 在本地 HTTP 服务中打开 HTML 并截图、提取文本/样式，不再以静态 HTML 解析为默认路径。
+
+**前置**：仓库根执行 `npx playwright install chromium`（见 [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md) §3）。
+
+流程：
 
 1. 本地 HTTP 托管 Axure 目录
 2. Chromium 打开目标 HTML，`networkidle` + 短暂等待
@@ -206,8 +210,9 @@ data/
 | `POST /api/pages/list-documents` | 项目 PRD 列表（无 docId） |
 | `POST /api/pages/list` | 文档内页面列表 |
 | `POST /api/pages/download` | 下载 Axure 包 |
-| `POST /api/pages/analyze` | 下载 + 分析（需 `page_names`，单页） |
-| `GET /api/pages/screenshot?path=...` | 截图预览 |
+| `POST /api/pages/analyze` | 下载 + 分析（需 `page_names`；可 `"all"`） |
+| `POST /api/pages/analyze-local` | 对已下载目录内单页重跑 Playwright 分析（不访问蓝湖） |
+| `GET /api/pages/screenshot?path=...` | 截图预览（路径须在 `LANHU_DATA_DIR` 下） |
 
 ### 5.2 与 MCP 的差异
 
