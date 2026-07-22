@@ -1,6 +1,6 @@
 # @lanhu/debug-react
 
-蓝湖调试台 **React** 版（Vite + shadcn/ui + Redux Toolkit + React Router），功能对标 `apps/debug-vue`（仅 HTTP + server 转换，无本地 `converter/`）。
+蓝湖调试台 **React** 版（Vite + shadcn/ui + Redux Toolkit + React Router）。仅通过 HTTP 调 `server-nest`，无浏览器内本地转换。
 
 ## 技术栈
 
@@ -43,7 +43,7 @@ npm run dev:react    # :5174
 ```text
 src/
 ├── api/                      # debug-api、parse-url
-├── mock/data/                # 1.json–9.json（自 debug-vue 迁入）
+├── mock/data/                # 1.json–9.json（离线 Mock）
 ├── store/                    # RTK slices
 ├── features/
 │   ├── workspace/            # 调试台主界面与 actions
@@ -53,13 +53,13 @@ src/
 └── router.tsx
 ```
 
-## 与 debug-vue 差异
+## 设计说明
 
 - Schema 转换：**仅** `POST /api/designs/convert`（Mock 加载后亦走 server）
-- 无 `converter/lanhu-to-html` 本地转换
+- 无浏览器内 `converter/` 本地转换
 
 ## list vs 一键 analyze
 
 - **project/images**（`POST /api/designs/list`）→ 全项目设计稿列表，用于「选稿」。
-- **一键 analyze**（`POST /api/designs/analyze`）→ 只深度分析**当前选中/URL 匹配的一张**，不会用 analyze 回填整份列表（与 PY MCP 一致）。
-- 推荐顺序：连接 → **project/images** → 选稿 → analyze。说明见 [`docs/COMPARISON_AND_ROADMAP.md` §3.2.1](../../docs/COMPARISON_AND_ROADMAP.md#321-list-与-analyze-职责分工易混符合-py-预期)。
+- **一键 analyze**（`POST /api/designs/analyze`）→ 只深度分析**当前选中/URL 匹配的一张**，不会用 analyze 回填整份列表。
+- 推荐顺序：连接 → **project/images** → 选稿 → analyze。详见 [`docs/MCP_DESIGN.md` §6](../../docs/MCP_DESIGN.md#6-list-与-analyze-的职责分工易混点)。

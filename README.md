@@ -23,7 +23,6 @@ npm run dev            # server :3001 + debug-react :5174
 # 或分别启动：
 npm run dev:server
 npm run dev:react
-npm run dev:vue        # Vue 调试台 :5173
 npm run dev:mcp        # MCP stdio
 npm run test
 npm run build

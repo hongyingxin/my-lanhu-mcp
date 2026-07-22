@@ -42,9 +42,7 @@ lanhu-node/
 ├── server-nest/             # Nest HTTP 调试 API（:3001）
 ├── mcp/                     # stdio MCP：lanhu_design、lanhu_page
 ├── apps/
-│   ├── debug-react/         # 主调试台（:5174，npm run dev 默认启动）
-│   ├── debug-vue/           # Vue 调试台（:5173）
-│   └── demo-vue/
+│   └── debug-react/         # 主调试台（:5174，npm run dev 默认启动）
 ├── data/                    # analyze / 原型缓存落盘（gitignore）
 ├── docs/                    # 项目文档
 └── package.json             # npm workspaces 根
@@ -169,7 +167,6 @@ npm install
 npm run dev                   # server :3001 + debug-react :5174
 npm run dev:server            # 仅 HTTP
 npm run dev:react             # 仅 React 调试台
-npm run dev:vue               # Vue 调试台 :5173
 npm run dev:mcp               # MCP stdio（配合 Inspector / Cursor）
 npm run build                 # core + server-nest + mcp
 npm test                      # vitest（packages/lanhu-core/tests）

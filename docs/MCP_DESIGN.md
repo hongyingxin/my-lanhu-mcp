@@ -1,10 +1,8 @@
 # MCP 设计稿能力 — 方案定稿
 
 > 本文档汇总 lanhu-node 设计稿 MCP 的讨论结论与实现约定。  
-> 对照实现：`packages/lanhu-core`、`mcp/`（待套壳）、`server-nest`。  
-> TS 行为参考：`~/个人/lanhu-mcp-server`；PY 对照：`~/个人/project/lanhu-text-mcp`。  
-> TS 运行细节另见 [`DESIGN_TOOL_FLOW.md`](./DESIGN_TOOL_FLOW.md)。  
-> 最后更新：2026-06-05
+> 对照实现：`packages/lanhu-core`、`mcp/`、`server-nest`。  
+> 最后更新：2026-07-22
 
 ---
 
@@ -22,26 +20,16 @@
 
 ---
 
-## 2. 为何 1 Tool + 4 Mode（而非 PY 式 4 Tool）
+## 2. 为何 1 Tool + 4 Mode
 
-### 2.1 TS vs PY 表面对比
-
-| 维度 | PY `lanhu-text-mcp` | TS `lanhu-mcp-server` | **NODE 定稿** |
-|------|---------------------|----------------------|---------------|
-| 设计 list | `lanhu_get_designs` | `lanhu_design(mode=list)` | 同 TS |
-| 设计 analyze | `lanhu_get_ai_analyze_design_result` | `lanhu_design(mode=analyze)` | 同 TS |
-| 切图 | `lanhu_get_design_slices` | `lanhu_design(mode=slices)` | 同 TS |
-| tokens | 合在 analyze | `lanhu_design(mode=tokens)` | 同 TS |
-| 总 tool 数（设计） | 3 个独立 | 1 个 + mode | **1 个 + mode** |
-
-### 2.2 不拆 4 Tool 的理由
+### 2.1 不拆 4 Tool 的理由
 
 1. **与 `@lanhu/core` 一致**：`listDesigns` / `analyzeDesign` / `getSlices` 已是一条流水线，MCP 只做参数映射与返回格式化。
-2. **与 `CONTEXT.md` 方向一致**：结构参考 TS MCP，语义对齐 PY analyze。
+2. **与 `CONTEXT.md` 方向一致**：一个设计稿入口，语义清晰。
 3. **维护成本**：`url`、选稿、`detailDetach` vs `stage`、`tid` 规则只写一份 tool description。
 4. **HTTP 调试台分工**：`server-nest` 分步路由给人点按钮；MCP 一个入口给 Agent，不必 1:1 映射十个 HTTP 路由。
 
-### 2.3 从 AI 模型角度的取舍
+### 2.2 从 AI 模型角度的取舍
 
 | 错误类型 | 1 tool + mode | 4 个独立 tool |
 |----------|---------------|---------------|
@@ -52,8 +40,6 @@
 
 **结论**：整体出错率 **1 tool + mode 更低**；通过 **强制显式 `mode`（或清晰默认策略）+ `design_names` 校验 + Resource 辅助 list** 降低漏参风险。
 
-**不做 PY 别名 wrapper**（除非日后有明确兼容旧 prompt 的需求）。
-
 ---
 
 ## 3. `lanhu_design` 参数约定（NODE 目标 schema）
@@ -61,7 +47,7 @@
 ```typescript
 lanhu_design({
   url: string,                                          // 必填，stage 或 detailDetach
-  mode?: "list" | "analyze" | "slices" | "tokens",      // 默认 "analyze"（与 TS 一致）
+  mode?: "list" | "analyze" | "slices" | "tokens",      // 默认 "analyze"
   design_names?: string | string[],                     // analyze / slices / tokens 必填；支持 "all" / 序号 / id / name
   include?: ("html" | "image" | "tokens" | "layout" | "layers")[],  // 仅 analyze；见 §5
   withSlices?: boolean,                                 // 可选：analyze 时附带 B 套切图元数据（对齐 HTTP withSlices）
@@ -118,14 +104,14 @@ lanhu_design(url, mode, design_names?, include?)
 ### 4.2 `analyze`
 
 - **必须** `design_names`（或 URL `image_id` 在 pick 时作 preferredId 兜底，但仍建议显式传名）。
-- 主路径：Schema → HTML；失败或 `detailDetach`（TS 跳过 Schema；**NODE 当前跟 PY，有 teamId 仍尝试 Schema**）→ Sketch fallback。
-- 支持 `design_names: "all"` 多稿并发（建议上限 5，对齐 TS）。
+- 主路径：Schema → HTML；失败或 `detailDetach` → Sketch fallback。
+- 支持 `design_names: "all"` 多稿并发（建议上限 5）。
 
 ### 4.3 `slices`
 
-- **必须** `design_names`（单稿为主；与 PY 一致，非 `"all"` 语义时以第一张为准）。
+- **必须** `design_names`（单稿为主；传 `"all"` 时 slices 模式仅处理第一张）。
 - 调用 `getSlices()`，返回切图列表、`scale_urls`、位置等。
-- **不能**用 `analyze` + `include: slices` 代替（TS schema 虽有 `slices` 枚举，**analyze 分支未实现**，见 §5）。
+- **不能**用 `analyze` + `include: slices` 代替（`include` 中的 `slices` 指 A 套 mapping，与 B 套 `mode=slices` 不同）。
 
 ### 4.4 `tokens`
 
@@ -137,13 +123,13 @@ lanhu_design(url, mode, design_names?, include?)
 
 ## 5. `include` 仅属于 `analyze`
 
-对照 TS 源码 `DEFAULT_INCLUDE`（**以代码为准**）：
+以 `packages/lanhu-core/src/pipeline/analyze-include.ts` 为准：
 
 ```text
-默认 include = ["html", "tokens", "layers", "image"]
+默认 include = ["html", "tokens", "layers", "layout", "image", "slices"]
 ```
 
-> 部分外部文档写默认 `["html", "tokens"]` 与 TS 实现不符；NODE 实现时须在 schema description 里写清实际默认，或刻意收紧默认并文档化。
+> 实际默认以 core 代码为准；MCP schema description 须与实现一致。
 
 | include | analyze 是否处理 | 行为 |
 |---------|------------------|------|
@@ -152,19 +138,19 @@ lanhu_design(url, mode, design_names?, include?)
 | `tokens` | ✅ | Sketch + `extractDesignTokens` |
 | `layers` | ✅ | Sketch + `extractLayerTree` |
 | `layout` | ✅ | Schema 成功时 `layoutSummary`（依赖 html 路径） |
-| `slices` | ❌ | TS schema 允许但 **未接线**；NODE 建议 **不暴露** 或实现后再开放 |
+| `slices` | ✅ | A 套 mapping（`convert.after.mapping`）；B 套切图请用 `mode=slices` 或 `withSlices: true` |
 
 **易错**：
 
 - `include: ["layout"]` 且无 `html` → 不跑 Schema，layout 可能为空。
-- `include: ["slices"]` → 当前 TS 无效；请用 `mode=slices`。
+- `include: ["slices"]` → A 套 mapping；B 套请用 `mode=slices`。
 
 **`analyze` 未覆盖的 mode**：
 
 | mode | 能否用 analyze 代替 |
 |------|---------------------|
 | `list` | ❌ |
-| `slices` | ❌（include:slices 未实现） |
+| `slices` | ❌（B 套请用 `mode=slices`） |
 | `tokens` | ⚠️ 部分重叠；专用 `mode=tokens` 更轻 |
 
 ---
@@ -280,18 +266,18 @@ flowchart LR
 |------|------|
 | 1 | 注册 `lanhu_design`，四 mode 分支调 `@lanhu/core` |
 | 2 | `design_names` 在非 list 时必填；错误返回 `available_designs` |
-| 3 | 实现 `include`（analyze）；默认与 TS 对齐或文档化收紧 |
+| 3 | 实现 `include`（analyze）；默认以 core `analyze-include.ts` 为准 |
 | 4 | **不**在 analyze 响应中返回全量 `designs[]` |
 | 5 | 注册 Resource `project-designs` |
 | 6 | [可选] Prompt `frontend-dev`、`design-review` |
 | 7 | [后期] `lanhu_resolve_invite_link`、`lanhu_page`、留言板 |
 
-### 10.1 与 TS 的差异（NODE 刻意保留）
+### 10.1 与 HTTP analyze 的差异（MCP 刻意保留）
 
-| 项 | TS | NODE（当前 core） |
-|----|----|--------------------|
-| detailDetach + Schema | 主动跳过，走 Sketch | 有 teamId 仍尝试 Schema（近 PY） |
-| HTTP analyze 默认选稿 | N/A | 未传 `design` 时 `designs[0]`（**MCP 不应沿用**） |
+| 项 | HTTP analyze | MCP |
+|----|--------------|-----|
+| 未传画板 | 默认 `designs[0]` | **`design_names` 必填** |
+| 响应 | 可含 artifacts 落盘信息 | 格式化 MCP content + structuredContent |
 
 ---
 
@@ -300,9 +286,9 @@ flowchart LR
 | 文档 | 内容 |
 |------|------|
 | **[`MCP_IMPLEMENTATION.md`](./MCP_IMPLEMENTATION.md)** | **工程实现蓝图**（目录、分期、schema、core 补强） |
-| [`DESIGN_TOOL_FLOW.md`](./DESIGN_TOOL_FLOW.md) | TS `lanhu_design` 运行逻辑与决策表 |
-| [`CONTEXT.md`](./CONTEXT.md) |  monorepo 目标、core 链路、HTTP API |
-| `packages/lanhu-core/README.md` | core 模块与 TS 文件对照 |
+| [`CURSOR_MCP.md`](./CURSOR_MCP.md) | Cursor 配置与调用示例 |
+| [`CONTEXT.md`](./CONTEXT.md) | monorepo 目标、core 链路、HTTP API |
+| `packages/lanhu-core/README.md` | core 模块与 API |
 
 ---
 
@@ -311,6 +297,6 @@ flowchart LR
 1. **stage URL 无 image_id**：analyze 内嵌 list 后默认 `designs[0]`（非「最后一张」）；detailDetach 带 image_id 则锁定单稿。
 2. **调试台一键 analyze 无全选稿列表**：服务端 analyze 不回填 designs；前端只 `prependDesign` 一张——已在调试台加说明文案。
 3. **主流水线与接口区两个「一键 analyze」**：同一 `runAnalyzeFlow`，无行为差异。
-4. **MCP tool 数量**：设计稿阶段 **1 tool 4 mode**；不对标 PY 13 tool。
-5. **analyze 是否覆盖 list/tokens/slices**：**不覆盖 list 与 slices**；与 **tokens 部分重叠**；`include:slices` 在 TS 未实现。
+4. **MCP tool 数量**：设计稿阶段 **1 tool 4 mode**。
+5. **analyze 是否覆盖 list/tokens/slices**：**不覆盖 list 与 B 套 slices**；与 **tokens 部分重叠**。
 6. **Prompt 仍须调 tool**：`frontend-dev` / `design-review` 只生成任务消息，不请求蓝湖。

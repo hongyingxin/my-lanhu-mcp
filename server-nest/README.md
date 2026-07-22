@@ -9,14 +9,14 @@ NestJS 版调试 HTTP 服务（默认入口，默认端口 **3001**）。
 npm run dev -w @lanhu/server-nest   # 或根目录 npm run dev:server
 ```
 
-调试台 `apps/debug-vue` 只请求本服务的 `http://localhost:3001/api/...`，不直连蓝湖。
+调试台 `apps/debug-react` 只请求本服务的 `http://localhost:3001/api/...`，不直连蓝湖。
 
 ---
 
 ## 调用关系说明
 
 ```text
-debug-vue  →  POST /api/...  →  DesignsService / ApiController
+debug-react  →  POST /api/...  →  DesignsService / ApiController
                                     →  @lanhu/core 函数 或  LanhuClient 方法
                                     →  （部分步骤）HTTP 访问蓝湖 / DDS / CDN
 ```
@@ -106,7 +106,7 @@ debug-vue  →  POST /api/...  →  DesignsService / ApiController
 | `POST /api/designs/sketch` | **下载 Sketch JSON**（图层树、标注、PS 切图信息等），无 Schema 或要做 Sketch fallback 时用 |
 | `POST /api/designs/convert` | **Schema → HTML**（+ mapping）。body 带 `schema` 则只算不拉蓝湖；否则先拉 schema 再转 |
 | `POST /api/designs/preview` | 按 URL **代理下载二进制**（预览图、切图 CDN 等），返回 base64，给调试台展示/打包下载 |
-| `POST /api/designs/slices` | **切图 B 套**：登记切图列表 + `scaleUrls` 多倍率链接（对标 PY `get_design_slices`） |
+| `POST /api/designs/slices` | **切图 B 套**：登记切图列表 + `scaleUrls` 多倍率链接 |
 | `POST /api/designs/analyze` | **一键流水线**：list → 选稿 → schema 转 HTML（失败则 sketch fallback）→ tokens → 可选 `withSlices`（仅附带 B 套元数据，见下） |
 
 **切图 A 套 / B 套（当前 vs 计划）**
@@ -115,7 +115,7 @@ debug-vue  →  POST /api/...  →  DesignsService / ApiController
 |----|------|--------------|------|
 | **A** | Schema/sketch 转换 `mapping` | analyze / convert **默认**；调试台「从 mapping 载入」下载 | `sliceSource: "mapping"` |
 | **B** | `getSlices` · 设计师登记切图 | 单独 `POST /api/designs/slices`，或 analyze 传 `withSlices: true` | `sliceSource: "slices"` |
-| **both** | — | 需分别调两次 | `sliceSource: "both"`（待实现，见 ROADMAP §6.1.2） |
+| **both** | — | 需分别调两次 | `sliceSource: "both"`（待实现） |
 
 analyze **不会**默认批量下载 A 套 mapping 里每张 PNG；落盘仅有 `*.image-mapping.json` 与整稿 `*.png` 预览。
 
@@ -132,7 +132,7 @@ POST /api/designs/schema | sketch | convert | preview | slices | analyze
 
 ## 与调试台 / Mock
 
-- 非 Mock：上表接口由 Vue 调用，蓝湖请求均在 **server 进程** 内完成。
+- 非 Mock：上表接口由调试台调用，蓝湖请求均在 **server 进程** 内完成。
 - Mock 若只加载本地 JSON 再 **`POST /convert` 且 body 带 `schema`**：只走 core 转换，**不访问蓝湖**（可删浏览器内 `converter`，与线上一致）。
 
 源码入口：

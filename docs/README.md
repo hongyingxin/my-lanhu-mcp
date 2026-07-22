@@ -15,8 +15,8 @@
 
 | 文档 | 用途 | 备注 |
 |------|------|------|
-| [MCP_DESIGN.md](./MCP_DESIGN.md) | MCP 方案定稿（1 Tool + 4 mode 等） | 仍有效；部分背景段落含迁移期表述 |
-| [MCP_IMPLEMENTATION.md](./MCP_IMPLEMENTATION.md) | `@lanhu/mcp` 工程蓝图 | 仍有效；对照 `mcp/` 源码 |
+| [MCP_DESIGN.md](./MCP_DESIGN.md) | MCP 方案定稿（1 Tool + 4 mode 等） |
+| [MCP_IMPLEMENTATION.md](./MCP_IMPLEMENTATION.md) | `@lanhu/mcp` 工程蓝图；对照 `mcp/` 源码 |
 | [GITIGNORE.md](./GITIGNORE.md) | `.gitignore` 规则说明 | 仍有效 |
 
 ## 代码旁文档

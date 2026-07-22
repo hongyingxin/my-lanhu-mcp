@@ -92,7 +92,7 @@ Core 层 `parseLanhuUrl` 仍兼容多种输入格式；MCP 在工具入口额外
 |------|------|------|
 | URL 解析 | `packages/lanhu-core/src/lanhu/parse-url.ts` | `parseLanhuUrl`、`buildPrototypeDocumentUrl`、`resolvePrototypeDocumentUrl` |
 | 原型 API | `packages/lanhu-core/src/lanhu/pages.ts` | 列文档、列页、下载、分析编排 |
-| HTML 修复 | `packages/lanhu-core/src/transform/fix-html-files.ts` | 对齐 Python `fix_html_files` |
+| HTML 修复 | `packages/lanhu-core/src/transform/fix-html-files.ts` | 修复 Axure 导出 HTML 路径与脚本引用 |
 | 浏览器分析 | `packages/lanhu-core/src/transform/page-browser-analyzer.ts` | Playwright 截图 + 浏览器内提取文本/样式 |
 | 样式格式化 | `packages/lanhu-core/src/transform/page-design-info-format.ts` | 样式摘要文本 |
 | 目录解析 | `packages/lanhu-core/src/persist/data-dir.ts` | `axure_extract_{docId前8位}` 路径 |
@@ -144,7 +144,7 @@ flowchart TD
 
 ### 3.4 分析引擎（Playwright full）
 
-对齐 Python 版 `screenshot_page_internal`，不再以静态 HTML 解析为默认路径：
+使用 Playwright 在本地 HTTP 服务中打开 HTML 并截图、提取文本/样式，不再以静态 HTML 解析为默认路径：
 
 1. 本地 HTTP 托管 Axure 目录
 2. Chromium 打开目标 HTML，`networkidle` + 短暂等待
@@ -227,7 +227,7 @@ data/
 1. **一个工具、一个入参**（`url`），不分 `list` / `analyze` mode。
 2. **URL 驱动分支**，与用户从蓝湖复制的链接一致。
 3. **Core 复用** `listProductDocuments` / `listPages` / `analyzePrototypePages`，MCP 只做校验、映射与格式化。
-4. **不实现** 邀请链解析、Python 四阶段 workflow prompt、`text_only` 模式。
+4. **不实现** 邀请链解析、多阶段 workflow prompt、`text_only` 模式。
 
 ### 6.2 分支逻辑
 
@@ -340,7 +340,7 @@ url = ...&docId=077bbf6d-...
 | 双 parser | 调试台 `apps/debug-react/src/api/parse-url.ts` 与 core 不完全一致，建议统一 |
 | `versionId` in URL | 未用于跳过下载；始终以 API 最新版本 + 本地缓存为准 |
 | docId 目录前缀 8 位 | 极端情况下 UUID 前缀碰撞可能冲突 |
-| Python 对齐缺口 | 邀请链、`lanhu_say` 留言板、四阶段 AI prompt 未移植 |
+| 未实现能力 | 邀请链、`lanhu_say` 留言板、多阶段 AI prompt |
 | 调试台 | 可考虑 URL 带 pageId 时默认选中/分析该页，与 MCP 行为对齐 |
 
 ---

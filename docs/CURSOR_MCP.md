@@ -130,7 +130,7 @@ Cursor 里 Agent 可通过三类能力访问蓝湖设计稿：
 
 ### 4.3 `workflow_guide`（仅 `mode=analyze`）
 
-控制返回文本里是否附带 **STEP 1~5 设计稿还原工作流说明**（对标 PY `summary_text`）。
+控制返回文本里是否附带 **STEP 1~5 设计稿还原工作流说明**（见 `mcp/src/analyze/design-workflow-guide.ts`）。
 
 | 值 | 行为 |
 |----|------|
@@ -262,6 +262,4 @@ lanhu_design
 - **图片 content**：`include` 含 `image` 时，每画板预览图 base64（多稿时文本顶部有顺序说明）
 - **structuredContent**：JSON，含 `mode`、`include`、`workflow_guide`、各 `designs[]` 字段（`html_code`、`image_url_mapping` 等）
 
-**Resource `design`**：返回 JSON（含 `html_code`、`design_tokens` 等），不含 MCP image 块与 workflow 长文。
-
-详细样例见 `mcp/docs/comparison/analyze-result-node.txt`。
+**Resource `design`**：返回 JSON（含 `html_code`、`design_tokens` 等），不含 MCP image 块与 workflow 长文。详见 `mcp/src/tools/lanhu-design.ts` 的 `formatAnalyzeSummary` 输出。

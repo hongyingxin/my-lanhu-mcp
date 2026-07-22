@@ -22,7 +22,7 @@
 
 - `lanhu_resolve_invite_link`、`lanhu_page`、留言板
 - 复制 `server-nest` 分步 HTTP 逻辑
-- PY tool 别名
+- 外部 MCP tool 别名
 
 ---
 
@@ -148,7 +148,7 @@ const IncludeOption = z.enum(["html", "image", "tokens", "layout", "layers"]);
 
 const inputSchema = {
   url: z.string().min(1),
-  mode: z.enum(["list", "analyze", "slices", "tokens"]).default("analyze"),  // 与 TS 一致
+  mode: z.enum(["list", "analyze", "slices", "tokens"]).default("analyze"),
   design_names: z.union([z.string(), z.array(z.string())]).optional(),
   include: z.array(IncludeOption).optional(),              // 仅 analyze
   with_slices: z.boolean().optional(),                     // 仅 analyze，B 套，默认 false
@@ -158,7 +158,7 @@ const inputSchema = {
 };
 ```
 
-**命名**：MCP 侧用 snake_case（`design_names`、`with_slices`）对齐 TS MCP 对外习惯；内部映射 `@lanhu/core` 的 camelCase。
+**命名**：MCP 侧用 snake_case（`design_names`、`with_slices`）；内部映射 `@lanhu/core` 的 camelCase。
 
 ### 4.2 Tool Description（给模型看）
 
@@ -206,15 +206,15 @@ registerLanhuDesignTool(server)
 
 - **analyze**：调 `analyzeDesignBatch`（core 已有）
 - **tokens**：MCP 层并发调 sketch+tokens
-- **slices**：与 TS 一致——只取 **`targetDesigns[0]`**；传 `"all"` 也仅处理第一张，响应可加 `warning`
+- **slices**：只取 **`targetDesigns[0]`**；传 `"all"` 也仅处理第一张，响应可加 `warning`
 
 ---
 
 ## 5. `mode=analyze` 与 `include`（core 单文件，已定稿）
 
-**已定稿**：`include` 放在 **`packages/lanhu-core/src/pipeline/analyze-include.ts`**；`analyze-design.ts` 负责 list / pick / batch / persist。MCP、`server-nest`、调试台共用 core，不在 `mcp/` 重复 TS `processDesign`。
+**已定稿**：`include` 放在 **`packages/lanhu-core/src/pipeline/analyze-include.ts`**；`analyze-design.ts` 负责 list / pick / batch / persist。MCP、`server-nest`、调试台共用 core。
 
-### 5.1 `analyze-include.ts`（对齐 TS `includeSet`）
+### 5.1 `analyze-include.ts`
 
 ```typescript
 export type AnalyzeInclude = "html" | "image" | "tokens" | "layout" | "layers";
@@ -224,7 +224,7 @@ export const DEFAULT_ANALYZE_INCLUDE: AnalyzeInclude[] =
 
 export function resolveAnalyzeInclude(include?: AnalyzeInclude[]): Set<AnalyzeInclude>;
 
-/** 单稿分析；从 analyzeOneDesign 迁入，按 include 守卫（对齐 TS processDesign） */
+/** 单稿分析；按 include 守卫各产物是否写入结果 */
 export async function analyzeDesignWithInclude(
   client: LanhuClient,
   ctx: { teamId?: string; projectId: string },
@@ -252,7 +252,7 @@ export interface AnalyzeDesignOptions {
 
 ### 5.2 MCP analyze 输出格式
 
-对齐 TS `createToolResult` + 略扩展：
+`createToolResult` 文本 + structuredContent，例如：
 
 ```typescript
 interface LanhuDesignAnalyzeStructured {
@@ -371,7 +371,7 @@ server.resource(
 | 场景 | 返回 |
 |------|------|
 | 无 Cookie | `isError: true`，`ConfigurationError` 文案 |
-| 省略 `mode` | 默认 **`analyze`**（与 TS 一致） |
+| 省略 `mode` | 默认 **`analyze`** |
 | 非 list 缺 `design_names` | `isError` + `hint` + `available_designs` |
 | pick 无匹配 | 同上 |
 | 蓝湖 418 / 网络 | `isError` + `message` + 可选 `requestUrl` |
@@ -422,12 +422,13 @@ export function createToolError(error: unknown, context?: object);
 
 ---
 
-## 13. 关键文件对照（实现时打开）
+## 13. 关键文件（实现时打开）
 
 | 用途 | 参考 |
 |------|------|
-| TS MCP tool 编排 | `~/个人/lanhu-mcp-server/src/tools/design.ts` |
-| TS Resource/Prompt | `~/个人/lanhu-mcp-server/src/server.ts` |
+| MCP tool 编排 | `mcp/src/tools/lanhu-design.ts` |
+| MCP 原型 tool | `mcp/src/tools/lanhu-page.ts` |
+| MCP Resource/Prompt | `mcp/src/resources/`、`mcp/src/prompts/` |
 | core analyze 编排 | `packages/lanhu-core/src/pipeline/analyze-design.ts` |
 | core include 单稿 | `packages/lanhu-core/src/pipeline/analyze-include.ts` |
 | core slices | `packages/lanhu-core/src/lanhu/designs.ts` → `getSlices` |
@@ -441,10 +442,10 @@ export function createToolError(error: unknown, context?: object);
 | # | 项 | 定稿 |
 |---|-----|------|
 | 1 | **包位置** | **方案 A**：根目录 **`mcp/`** workspace（`@lanhu/mcp`），与 `server-nest/` 同级 |
-| 2 | **`mode`** | 与 TS 一致，**默认 `analyze`** |
+| 2 | **`mode`** | **默认 `analyze`** |
 | 3 | **`include`** | **`@lanhu/core`** 单文件 `pipeline/analyze-include.ts`；MCP 只透传 + 格式化 |
 | 4 | **`include` 默认** | `["html","tokens","layers","image"]`；**不含 `slices`** |
-| 5 | **`slices` + `"all"`** | 与 TS：只取 **`targetDesigns[0]`**，可加 warning |
+| 5 | **`slices` + `"all"`** | 只取 **`targetDesigns[0]`**，可加 warning |
 | 6 | **防误用** | 非 `list` 时 **`design_names` 必填** |
 
 按 **Phase A → B** 开工。
