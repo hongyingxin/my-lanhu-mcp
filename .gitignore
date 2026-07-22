@@ -3,7 +3,8 @@ node_modules/
 dist/
 *.tsbuildinfo
 
-# Environment（根目录 .env 可提交；本地覆盖用 .env.local）
+# Environment（密钥勿提交；模板见 .env.example）
+.env
 .env.local
 .env.*.local
 
@@ -25,15 +26,6 @@ coverage/
 # 占位文件（空目录标记，不提交）
 .gitkeep
 
-# Markdown（默认不提交；仓库文档与各包 README 除外）
-# *.md
-# !README.md
-# !docs/
-# !docs/**/*.md
-# !packages/**/README.md
-# !apps/**/README.md
-# !server-nest/README.md
-# !mcp/README.md
 
 # analyze 落盘目录
 data/
