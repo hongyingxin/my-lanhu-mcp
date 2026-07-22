@@ -344,6 +344,7 @@ const proto = await analyzePrototypePages(
 
 - 文档索引：[`../../docs/README.md`](../../docs/README.md)
 - 项目上下文：[`../../docs/CONTEXT.md`](../../docs/CONTEXT.md)
+- **蓝湖外网 API**：[`../../docs/LANHU_API.md`](../../docs/LANHU_API.md)
 - HTTP 路由：[`../../server-nest/README.md`](../../server-nest/README.md)
 - 原型管线：[`../../docs/prototype-and-mcp.md`](../../docs/prototype-and-mcp.md)
 - 排错：[`../../docs/TROUBLESHOOTING.md`](../../docs/TROUBLESHOOTING.md)

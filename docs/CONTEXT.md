@@ -1,7 +1,7 @@
 # Lanhu Node — 项目上下文
 
 > 供新 Cursor 对话 / 新协作者快速恢复上下文。  
-> 文档索引见 [`README.md`](./README.md)。  
+> 文档索引见 [`docs/README.md`](./README.md) · 开发上手见 [`DEVELOPMENT.md`](./DEVELOPMENT.md)。  
 > 最后更新：2026-07-22
 
 ---
@@ -123,6 +123,8 @@ lanhu-node/
 
 ### 关键蓝湖 API
 
+详见 [`LANHU_API.md`](./LANHU_API.md)（入参 / 回参 / 调用链）。摘要：
+
 | 端点 | 域名 | 用途 |
 |------|------|------|
 | `GET /api/project/images` | lanhuapp.com | 设计稿列表 |
@@ -222,3 +224,4 @@ Cookie 获取、503、Playwright 安装失败等见 [`TROUBLESHOOTING.md`](./TRO
 | 原型 / lanhu_page | `@docs/prototype-and-mcp.md` |
 | MCP 方案细节 | `@docs/MCP_DESIGN.md` |
 | Cookie / Playwright 排错 | `@docs/TROUBLESHOOTING.md` |
+| 蓝湖外网 API | `@docs/LANHU_API.md` |
