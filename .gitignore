@@ -26,7 +26,7 @@ coverage/
 .gitkeep
 
 # Markdown（默认不提交；仓库文档与各包 README 除外）
-*.md
+# *.md
 # !README.md
 # !docs/
 # !docs/**/*.md
@@ -36,8 +36,8 @@ coverage/
 # !mcp/README.md
 
 # analyze 落盘目录
+data/
 data/lanhu_designs/
 data/.DS_Store
 
 apps/vite-vue/
-
