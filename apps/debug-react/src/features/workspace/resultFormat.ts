@@ -1,5 +1,10 @@
 import type { RootState } from "@/store";
 import type { ConvertDemo, InspectResultKey } from "@/api/types";
+import {
+  findPrototypePageResult,
+  formatPrototypeDesignInfo,
+  resolvePrototypeDisplayName,
+} from "./prototypeResultUtils";
 
 export function analyzeEmptyInsightHint(
   field: string,
@@ -90,6 +95,25 @@ export function formatResult(key: InspectResultKey | string, state: RootState): 
   if (key === "sketchHtml") {
     if (typeof inspect.results.sketchHtml === "string") return inspect.results.sketchHtml;
     return analyzeEmptyInsightHint("sketchHtml", state);
+  }
+
+  if (key === "prototypePageText") {
+    const item = findPrototypePageResult(state);
+    if (!item?.page_text?.trim() || item.page_text.trim() === "undefined") {
+      return "暂无页面文本。请重新分析（旧缓存可能无效）。";
+    }
+    const label = resolvePrototypeDisplayName(state, item);
+    return `页面：${label}\n${"─".repeat(40)}\n${item.page_text}`;
+  }
+
+  if (key === "prototypeDesignInfo") {
+    const item = findPrototypePageResult(state);
+    const label = resolvePrototypeDisplayName(state, item);
+    const body = formatPrototypeDesignInfo(item);
+    if (body === "暂无数据") {
+      return body;
+    }
+    return `页面：${label}\n${"─".repeat(40)}\n${body}`;
   }
 
   const data = inspect.results[key as InspectResultKey];

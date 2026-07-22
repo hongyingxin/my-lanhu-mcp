@@ -150,3 +150,37 @@ export async function apiAnalyze(args: { url: string; design?: string; withSlice
     withSlices: args.withSlices,
   });
 }
+
+export async function apiListPages(url: string, docId?: string | null) {
+  return post("/api/pages/list", { url, doc_id: docId ?? undefined });
+}
+
+export async function apiListProductDocuments(url: string) {
+  return post("/api/pages/list-documents", { url });
+}
+
+export async function apiDownloadPages(args: { url: string; docId?: string | null; forceUpdate?: boolean }) {
+  return post("/api/pages/download", {
+    url: args.url,
+    doc_id: args.docId ?? undefined,
+    force_update: args.forceUpdate,
+  });
+}
+
+export async function apiAnalyzePages(args: {
+  url: string;
+  docId?: string | null;
+  pageNames: string;
+  forceUpdate?: boolean;
+}) {
+  return post("/api/pages/analyze", {
+    url: args.url,
+    doc_id: args.docId ?? undefined,
+    page_names: args.pageNames,
+    force_update: args.forceUpdate,
+  });
+}
+
+export function prototypeScreenshotUrl(absPath: string): string {
+  return `${API_BASE}/api/pages/screenshot?path=${encodeURIComponent(absPath)}`;
+}

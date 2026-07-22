@@ -35,7 +35,7 @@ export function ConnectionPanel() {
             className="border-input bg-background h-9 w-full rounded-md border px-3 font-mono text-xs"
             value={settings.lanhuUrl}
             onChange={(e) => changeLanhuUrl(dispatch, e.target.value, settings.lanhuUrl)}
-            placeholder="https://lanhuapp.com/web/#/item/project/detailDetach?pid=...&image_id=..."
+            placeholder="https://lanhuapp.com/web/#/item/project/stage?pid=...&teamId=..."
           />
         </label>
         <Button variant="secondary" size="sm" onClick={saveConfig}>

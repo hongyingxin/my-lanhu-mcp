@@ -35,15 +35,18 @@ import {
   applyConvertResult,
   mergeResults,
   resetInspectArtifacts,
+  resetPrototypeInspectArtifacts,
   setResult,
 } from "@/store/inspectSlice";
 import {
   applyMockSession,
   resetDesignArtifacts,
   resetLanhuContext,
+  resetPrototypeContext,
   setDesignDetail,
   setDesigns,
   setParams,
+  setPrototypeParams,
   setPreviewObjectUrl,
   setSchemaJson,
   setSchemaRevise,
@@ -52,7 +55,7 @@ import {
   setSketchJson,
   setVersionId,
 } from "@/store/sessionSlice";
-import { persistToStorage, setHasEnvCookie, setLanhuUrl } from "@/store/settingsSlice";
+import { persistToStorage, setHasEnvCookie, setLanhuUrl, setPrototypeUrl } from "@/store/settingsSlice";
 import {
   resetSliceState,
   setSliceBData,
@@ -60,7 +63,7 @@ import {
   setSlicePanelView,
   setSliceSource,
 } from "@/store/slicesSlice";
-import { setActiveTab, setLoading, setResultGroup, setToast } from "@/store/uiSlice";
+import { setActiveTab, setLoading, setPrototypeActiveTab, setResultGroup, setToast } from "@/store/uiSlice";
 import { resultGroupForTab } from "./constants";
 import { applyAnalyzeResult, normalizeSketchConvert } from "./analyze/applyAnalyzeResult";
 import { formatLayerAnnotationsText } from "./resultFormat";
@@ -155,6 +158,31 @@ export function changeLanhuUrl(dispatch: AppDispatch, newUrl: string, previousUr
     dispatch(setResult({ key: "params", data: parsed }));
   } catch {
     // 输入过程中 URL 可能不完整，仅清空旧上下文
+  }
+}
+
+/** 原型 URL 变更：仅清空原型相关状态 */
+export function resetForPrototypeUrlChange(dispatch: AppDispatch) {
+  dispatch(resetPrototypeContext());
+  dispatch(resetPrototypeInspectArtifacts());
+}
+
+export function changePrototypeUrl(dispatch: AppDispatch, newUrl: string, previousUrl: string) {
+  dispatch(setPrototypeUrl(newUrl));
+  if (newUrl.trim() === previousUrl.trim()) return;
+
+  resetForPrototypeUrlChange(dispatch);
+
+  const trimmed = newUrl.trim();
+  if (!trimmed) return;
+
+  try {
+    const parsed = parseLanhuUrl(trimmed);
+    dispatch(setPrototypeParams(parsed));
+    dispatch(setResult({ key: "prototypeParams", data: parsed }));
+    dispatch(setPrototypeActiveTab("prototypeParams"));
+  } catch {
+    // 输入过程中 URL 可能不完整
   }
 }
 

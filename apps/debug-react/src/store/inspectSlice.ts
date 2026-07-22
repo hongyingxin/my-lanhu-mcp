@@ -63,6 +63,16 @@ const inspectSlice = createSlice({
       delete state.results.sketchHtml;
       delete state.results.layerAnnotations;
     },
+    resetPrototypeInspectArtifacts(state) {
+      delete state.results.prototypeParams;
+      delete state.results.prototypeList;
+      delete state.results.prototypeDocuments;
+      delete state.results.prototypeDownload;
+      delete state.results.prototypeAnalyze;
+      delete state.results.prototypePageText;
+      delete state.results.prototypeDesignInfo;
+      delete state.results.prototypeScreenshots;
+    },
   },
 });
 
@@ -73,6 +83,7 @@ export const {
   setAnalyzeResult,
   applyConvertResult,
   resetInspectArtifacts,
+  resetPrototypeInspectArtifacts,
 } = inspectSlice.actions;
 
 export default inspectSlice.reducer;

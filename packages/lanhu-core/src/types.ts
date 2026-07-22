@@ -21,6 +21,7 @@ export interface LanhuUrlParams {
   projectId: string;
   docId?: string;
   imageId?: string;
+  pageId?: string;
   versionId?: string;
   rawParams: Record<string, string>;
 }

@@ -19,6 +19,18 @@ export function resolveDesignOutputDir(dataDir: string, projectId: string): stri
   return join(resolveLanhuDataDir(dataDir), "lanhu_designs", projectId);
 }
 
+/** `data/axure_extract_{docId前8位}` */
+export function resolveAxureOutputDir(dataDir: string, docId: string): string {
+  const safeId = docId.trim().slice(0, 8) || "unknown";
+  return join(resolveLanhuDataDir(dataDir), `axure_extract_${safeId}`);
+}
+
+/** `data/axure_extract_{docId前8位}_screenshots` */
+export function resolveAxureScreenshotDir(dataDir: string, docId: string): string {
+  const safeId = docId.trim().slice(0, 8) || "unknown";
+  return join(resolveLanhuDataDir(dataDir), `axure_extract_${safeId}_screenshots`);
+}
+
 export async function ensureDir(dir: string): Promise<void> {
   await mkdir(dir, { recursive: true });
 }

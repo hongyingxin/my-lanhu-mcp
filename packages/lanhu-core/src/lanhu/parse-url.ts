@@ -50,6 +50,7 @@ export function parseLanhuUrl(input: string): LanhuUrlParams {
   const teamId = rawParams["tid"] ?? rawParams["teamId"] ?? rawParams["team_id"];
   const projectId = rawParams["pid"] ?? rawParams["project_id"];
   const docId = rawParams["docId"] ?? rawParams["image_id"];
+  const pageId = rawParams["pageId"] ?? rawParams["page_id"];
   const versionId = rawParams["versionId"];
 
   if (!projectId) {
@@ -70,9 +71,24 @@ export function parseLanhuUrl(input: string): LanhuUrlParams {
     projectId,
     docId,
     imageId: docId,
+    pageId,
     versionId,
     rawParams,
   };
+}
+
+/** 为仅有 tid/pid 的项目链接补上 docId，供 list/download/analyze 使用。 */
+export function buildPrototypeDocumentUrl(inputUrl: string, docId: string): string {
+  const parsed = parseLanhuUrl(inputUrl);
+  const params = new URLSearchParams(parsed.rawParams);
+  params.set("docId", docId);
+  params.set("image_id", docId);
+  const route = parsed.route ?? "/item/project/product";
+  if (/^https?:\/\//i.test(parsed.rawUrl)) {
+    const origin = parsed.rawUrl.split("#")[0] ?? "https://lanhuapp.com/web/";
+    return `${origin}#${route}?${params.toString()}`;
+  }
+  return `#${route}?${params.toString()}`;
 }
 
 export function buildQuery(params: Record<string, string | number | boolean | null | undefined>): string {

@@ -1,3 +1,70 @@
+export interface PrototypePageItem {
+  index: number;
+  name: string;
+  filename: string;
+  id: string;
+  type: string;
+  level: number;
+  folder: string;
+  path: string;
+  has_children: boolean;
+}
+
+export interface PrototypeListResult {
+  ok?: boolean;
+  document_id?: string;
+  document_name?: string;
+  document_type?: string;
+  total_pages?: number;
+  pages?: PrototypePageItem[];
+}
+
+export interface ProductDocumentItem {
+  doc_id: string;
+  name: string;
+  type: string;
+  doc_url: string;
+  create_time?: string;
+  update_time?: string;
+}
+
+export interface ProductDocumentsListResult {
+  ok?: boolean;
+  total?: number;
+  documents?: ProductDocumentItem[];
+}
+
+export interface PrototypeAnalyzeResultItem {
+  page_name: string;
+  success: boolean;
+  page_text?: string;
+  page_design_info?: unknown;
+  page_design_info_text?: string;
+  title?: string;
+  text_lines?: string[];
+  screenshot_path?: string;
+  from_cache?: boolean;
+  size?: string;
+  error?: string;
+}
+
+export interface PrototypeAnalyzeResult {
+  ok?: boolean;
+  output_dir?: string;
+  screenshot_output_dir?: string;
+  total_requested?: number;
+  successful?: number;
+  failed?: number;
+  document?: PrototypeListResult;
+  download?: {
+    status?: string;
+    version_id?: string;
+    reason?: string;
+    output_dir?: string;
+  };
+  results?: PrototypeAnalyzeResultItem[];
+}
+
 export interface DesignItem {
   index: number;
   id: string;
@@ -68,6 +135,14 @@ export type InspectResultKey =
   | "layerTree"
   | "sketchAnnotations"
   | "sketchHtml"
-  | "layerAnnotations";
+  | "layerAnnotations"
+  | "prototypeParams"
+  | "prototypeList"
+  | "prototypeDocuments"
+  | "prototypeDownload"
+  | "prototypeAnalyze"
+  | "prototypePageText"
+  | "prototypeDesignInfo"
+  | "prototypeScreenshots";
 
 export type InspectResults = Partial<Record<InspectResultKey, unknown>>;

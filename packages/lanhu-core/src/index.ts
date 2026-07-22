@@ -12,6 +12,23 @@ export {
   getSlices,
   listDesigns,
 } from "./lanhu/designs.js";
+export {
+  analyzeLocalPage,
+  analyzePrototypePages,
+  downloadResources,
+  getPrototypeDocumentInfo,
+  listPages,
+  listProductDocuments,
+  resolvePrototypeDocumentUrl,
+} from "./lanhu/pages.js";
+export type {
+  AnalyzeLocalPageResult,
+  DownloadResourcesResult,
+  LanhuPageEntry,
+  LanhuPagesListResult,
+  ProductDocumentEntry,
+  ProductDocumentsListResult,
+} from "./lanhu/pages.js";
 export { normalizeDesignQuotes, pickDesign, pickDesigns } from "./lanhu/pick-design.js";
 export type { DesignSelector } from "./lanhu/pick-design.js";
 export { mapConcurrent } from "./pipeline/concurrency.js";
@@ -23,7 +40,7 @@ export {
   resolveAnalyzeInclude,
 } from "./pipeline/analyze-design.js";
 export type { AnalyzeInclude, AnalyzeDesignSliceResult } from "./pipeline/analyze-include.js";
-export { buildQuery, parseLanhuUrl } from "./lanhu/parse-url.js";
+export { buildQuery, buildPrototypeDocumentUrl, parseLanhuUrl } from "./lanhu/parse-url.js";
 export {
   convertLanhuSchema,
   convertLanhuToHtml,
@@ -46,9 +63,30 @@ export type { SketchLayerAnnotation } from "./transform/sketch-to-html.js";
 export { persistAnalyzeArtifacts } from "./persist/analyze-artifacts.js";
 export {
   resolveLanhuDataDir,
+  resolveAxureOutputDir,
+  resolveAxureScreenshotDir,
   resolveDesignOutputDir,
   safeDesignFilename,
 } from "./persist/data-dir.js";
+export {
+  extractPageContentFromFile,
+  extractPageContentFromHtml,
+  parseInlineStyle,
+} from "./transform/page-static-extractor.js";
+export { fixHtmlFiles } from "./transform/fix-html-files.js";
+export { formatPageDesignInfo } from "./transform/page-design-info-format.js";
+export { renderPrototypePages } from "./transform/page-browser-analyzer.js";
+export type {
+  RenderPrototypePageResult,
+  RenderPrototypePagesOptions,
+} from "./transform/page-browser-analyzer.js";
+export type {
+  ExtractedPageContent,
+  ExtractedPageImage,
+  ExtractPageContentOptions,
+  PageDesignInfo,
+  StyleCounterEntry,
+} from "./transform/page-static-extractor.js";
 export type { AnalyzeArtifactsPaths } from "./persist/analyze-artifacts.js";
 export type {
   AnalyzeDesignBatchItem,

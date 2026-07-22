@@ -1,4 +1,4 @@
-import type { ResultTabGroup } from "@/store/uiSlice";
+import type { ResultTabGroup, PrototypeResultTabGroup } from "@/store/uiSlice";
 
 export const CONSOLE_STAGES = [
   { id: "connect" as const, label: "连接", desc: "Cookie · URL · Mock · 服务状态" },
@@ -8,6 +8,26 @@ export const CONSOLE_STAGES = [
   { id: "results" as const, label: "结果", desc: "请求日志 · 分组检视" },
   { id: "slices" as const, label: "切图", desc: "A/B 套下载" },
 ] as const;
+
+export const PROTOTYPE_RESULT_TABS = [
+  { key: "prototypeParams", label: "URL 参数", group: "meta" as PrototypeResultTabGroup },
+  { key: "prototypeDocuments", label: "项目文档", group: "meta" as PrototypeResultTabGroup },
+  { key: "prototypeList", label: "页面列表", group: "meta" as PrototypeResultTabGroup },
+  { key: "prototypeDownload", label: "下载结果", group: "meta" as PrototypeResultTabGroup },
+  { key: "prototypeAnalyze", label: "分析结果", group: "output" as PrototypeResultTabGroup },
+  { key: "prototypeScreenshots", label: "页面截图", group: "output" as PrototypeResultTabGroup },
+  { key: "prototypePageText", label: "页面文本", group: "output" as PrototypeResultTabGroup },
+  { key: "prototypeDesignInfo", label: "样式摘要", group: "output" as PrototypeResultTabGroup },
+] as const;
+
+export const PROTOTYPE_RESULT_TAB_GROUPS: { id: PrototypeResultTabGroup; label: string }[] = [
+  { id: "output", label: "分析产出" },
+  { id: "meta", label: "元信息" },
+];
+
+export function firstPrototypeTabInGroup(group: PrototypeResultTabGroup): string {
+  return PROTOTYPE_RESULT_TABS.find((t) => t.group === group)?.key ?? "prototypeList";
+}
 
 export const RESULT_TABS = [
   { key: "analyze", label: "Analyze", group: "analyze" as ResultTabGroup },

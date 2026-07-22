@@ -1,12 +1,19 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 import type { LanhuParams } from "@/api/parse-url";
-import type { DesignItem } from "@/api/types";
+import type { DesignItem, PrototypePageItem } from "@/api/types";
 
 export interface SessionState {
   params: LanhuParams | null;
+  prototypeParams: LanhuParams | null;
   designs: DesignItem[];
   selectedDesignId: string | null;
+  prototypePages: PrototypePageItem[];
+  prototypeDocuments: import("@/api/types").ProductDocumentItem[];
+  selectedPrototypeDocId: string | null;
+  selectedPrototypePageName: string | null;
+  prototypeDocumentName: string | null;
+  prototypeOutputDir: string | null;
   sectors: unknown;
   versionId: string | null;
   schemaRevise: unknown;
@@ -18,8 +25,15 @@ export interface SessionState {
 
 const initialState: SessionState = {
   params: null,
+  prototypeParams: null,
   designs: [],
   selectedDesignId: null,
+  prototypePages: [],
+  prototypeDocuments: [],
+  selectedPrototypeDocId: null,
+  selectedPrototypePageName: null,
+  prototypeDocumentName: null,
+  prototypeOutputDir: null,
   sectors: null,
   versionId: null,
   schemaRevise: null,
@@ -36,11 +50,32 @@ const sessionSlice = createSlice({
     setParams(state, action: PayloadAction<LanhuParams | null>) {
       state.params = action.payload;
     },
+    setPrototypeParams(state, action: PayloadAction<LanhuParams | null>) {
+      state.prototypeParams = action.payload;
+    },
     setDesigns(state, action: PayloadAction<DesignItem[]>) {
       state.designs = action.payload;
     },
     setSelectedDesignId(state, action: PayloadAction<string | null>) {
       state.selectedDesignId = action.payload;
+    },
+    setPrototypeDocuments(state, action: PayloadAction<import("@/api/types").ProductDocumentItem[]>) {
+      state.prototypeDocuments = action.payload;
+    },
+    setSelectedPrototypeDocId(state, action: PayloadAction<string | null>) {
+      state.selectedPrototypeDocId = action.payload;
+    },
+    setPrototypePages(state, action: PayloadAction<PrototypePageItem[]>) {
+      state.prototypePages = action.payload;
+    },
+    setSelectedPrototypePageName(state, action: PayloadAction<string | null>) {
+      state.selectedPrototypePageName = action.payload;
+    },
+    setPrototypeDocumentName(state, action: PayloadAction<string | null>) {
+      state.prototypeDocumentName = action.payload;
+    },
+    setPrototypeOutputDir(state, action: PayloadAction<string | null>) {
+      state.prototypeOutputDir = action.payload;
     },
     setSectors(state, action: PayloadAction<unknown>) {
       state.sectors = action.payload;
@@ -82,7 +117,7 @@ const sessionSlice = createSlice({
         state.previewObjectUrl = "";
       }
     },
-    /** 蓝湖 URL 变更：清空列表与参数，避免选稿/分析仍用上一稿数据 */
+    /** 设计稿 URL 变更：清空选稿列表与设计相关缓存 */
     resetLanhuContext(state) {
       state.params = null;
       state.designs = [];
@@ -97,6 +132,16 @@ const sessionSlice = createSlice({
         URL.revokeObjectURL(state.previewObjectUrl);
         state.previewObjectUrl = "";
       }
+    },
+    /** 原型 URL 变更：清空原型页面列表与下载缓存 */
+    resetPrototypeContext(state) {
+      state.prototypeParams = null;
+      state.prototypePages = [];
+      state.prototypeDocuments = [];
+      state.selectedPrototypeDocId = null;
+      state.selectedPrototypePageName = null;
+      state.prototypeDocumentName = null;
+      state.prototypeOutputDir = null;
     },
     applyMockSession(
       state,
@@ -131,8 +176,15 @@ const sessionSlice = createSlice({
 
 export const {
   setParams,
+  setPrototypeParams,
   setDesigns,
   setSelectedDesignId,
+  setPrototypePages,
+  setPrototypeDocuments,
+  setSelectedPrototypeDocId,
+  setSelectedPrototypePageName,
+  setPrototypeDocumentName,
+  setPrototypeOutputDir,
   setSectors,
   setVersionId,
   setSchemaRevise,
@@ -143,6 +195,7 @@ export const {
   prependDesign,
   resetDesignArtifacts,
   resetLanhuContext,
+  resetPrototypeContext,
   applyMockSession,
 } = sessionSlice.actions;
 

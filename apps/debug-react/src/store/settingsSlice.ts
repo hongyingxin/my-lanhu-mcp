@@ -1,10 +1,12 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export const STORAGE_KEY = "lanhu-debug-react-config";
+export const WORKSPACE_MODE_KEY = "lanhu-debug-workspace-mode";
 
 export interface SettingsState {
   cookie: string;
   lanhuUrl: string;
+  prototypeUrl: string;
   useMock: boolean;
   analyzeWithSlices: boolean;
   hasEnvCookie: boolean;
@@ -13,6 +15,7 @@ export interface SettingsState {
 const initialState: SettingsState = {
   cookie: "",
   lanhuUrl: "",
+  prototypeUrl: "",
   useMock: false,
   analyzeWithSlices: false,
   hasEnvCookie: false,
@@ -27,6 +30,9 @@ const settingsSlice = createSlice({
     },
     setLanhuUrl(state, action: PayloadAction<string>) {
       state.lanhuUrl = action.payload;
+    },
+    setPrototypeUrl(state, action: PayloadAction<string>) {
+      state.prototypeUrl = action.payload;
     },
     setUseMock(state, action: PayloadAction<boolean>) {
       state.useMock = action.payload;
@@ -45,6 +51,7 @@ const settingsSlice = createSlice({
         if (saved.cookie) state.cookie = saved.cookie;
         const url = saved.lanhuUrl ?? saved.url;
         if (url) state.lanhuUrl = url;
+        if (saved.prototypeUrl) state.prototypeUrl = saved.prototypeUrl;
         if (saved.useMock) state.useMock = true;
         if (saved.analyzeWithSlices) state.analyzeWithSlices = true;
       } catch {
@@ -58,6 +65,7 @@ const settingsSlice = createSlice({
           cookie: state.cookie.trim(),
           url: state.lanhuUrl.trim(),
           lanhuUrl: state.lanhuUrl.trim(),
+          prototypeUrl: state.prototypeUrl.trim(),
           useMock: state.useMock,
           analyzeWithSlices: state.analyzeWithSlices,
         }),
@@ -69,6 +77,7 @@ const settingsSlice = createSlice({
 export const {
   setCookie,
   setLanhuUrl,
+  setPrototypeUrl,
   setUseMock,
   setAnalyzeWithSlices,
   setHasEnvCookie,

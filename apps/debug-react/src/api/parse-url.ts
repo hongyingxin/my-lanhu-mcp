@@ -2,6 +2,7 @@ export interface LanhuParams {
   team_id: string | null;
   project_id: string;
   doc_id: string | null;
+  page_id: string | null;
   version_id: string | null;
   source?: string;
 }
@@ -32,6 +33,7 @@ export function parseLanhuUrl(url: string): LanhuParams {
     team_id: params.tid || null,
     project_id: projectId,
     doc_id: params.docId || params.image_id || null,
+    page_id: params.pageId || null,
     version_id: params.versionId || null,
   };
 }
