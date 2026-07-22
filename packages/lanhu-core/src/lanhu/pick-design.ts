@@ -1,6 +1,6 @@
 import type { LanhuDesignSummary } from "../types.js";
 
-/** 弯引号 → 直引号，对齐 PY `get_design_slices` / MCP 选稿 */
+/** 弯引号 → 直引号，用于设计稿名称匹配 */
 export function normalizeDesignQuotes(value: string): string {
   return value
     .replace(/\u201c/g, '"')

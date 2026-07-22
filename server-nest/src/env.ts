@@ -12,7 +12,7 @@ export function getLanhuCookie(): string | undefined {
   return cookie || undefined;
 }
 
-/** 对齐 PY `DATA_DIR`，默认仓库根目录 `data/` */
+/** 本地数据目录，默认仓库根目录 `data/` */
 export function getLanhuDataDir(): string {
   const custom = (process.env["LANHU_DATA_DIR"] ?? "").trim();
   const repoRoot = getRepoRoot();

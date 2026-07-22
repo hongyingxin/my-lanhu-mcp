@@ -525,7 +525,7 @@ function appendPhotoshopSlices(
   }
 }
 
-/** 对标 lanhu_mcp_server.get_design_slices_info：仅元数据 + 下载 URL，不下载文件（golden 测试用） */
+/** 从 Sketch JSON 提取切图元数据与下载 URL（不下载文件） */
 export function extractSlicesFromSketch(
   sketch: UnknownRecord,
   includeMetadata: boolean,

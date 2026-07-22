@@ -1,4 +1,4 @@
-/** 对标 lanhu-text-mcp `_build_scale_urls` / `_build_ps_scale_urls` */
+/** 构建切图各倍率/平台的 scaleUrls */
 
 export type SliceImageFormat = "png" | "webp";
 

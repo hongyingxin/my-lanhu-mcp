@@ -1,7 +1,5 @@
 // @ts-nocheck
-/**
- * 从 Sketch JSON 提取完整文本标注（对标 lanhu-text-mcp / TS-MCP sketch-annotations）。
- */
+/** 从 Sketch JSON 提取完整文本标注 */
 import type { UnknownRecord } from "../types.js";
 
 function isRecord(value: unknown): value is UnknownRecord {

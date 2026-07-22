@@ -68,9 +68,7 @@ function inferPreviewMimeType(url: string): string {
   return "image/png";
 }
 
-/**
- * 按 `include` 分析单张设计稿（对齐 TS MCP `processDesign` + includeSet）。
- */
+/** 按 `include` 分析单张设计稿 */
 export async function analyzeDesignWithInclude(
   client: LanhuClient,
   ctx: { teamId?: string; projectId: string },

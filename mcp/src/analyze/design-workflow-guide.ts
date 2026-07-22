@@ -1,5 +1,5 @@
 /**
- * MCP analyze 返回中的设计稿还原工作流说明（对标 PY summary_text STEP 1~5）。
+ * MCP analyze 返回中的设计稿还原工作流说明（STEP 1~5）。
  * 仅用于 Agent 行为指引，不参与 @lanhu/core 数据管道。
  */
 export function buildDesignWorkflowGuide(): string {

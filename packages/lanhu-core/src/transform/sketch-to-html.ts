@@ -1,6 +1,4 @@
-/**
- * Sketch/PSD JSON → HTML+CSS（对标 lanhu-text-mcp `convert_sketch_to_html`）。
- */
+/** Sketch/PSD JSON → HTML+CSS */
 import type { UnknownRecord } from "../types.js";
 import { isSketchRecord } from "./sketch-utils.js";
 

@@ -1,6 +1,4 @@
-/**
- * 从 Sketch JSON 提取高风险元素的设计参数（对标 lanhu-text-mcp `_extract_design_tokens`）。
- */
+/** 从 Sketch JSON 提取高风险元素的设计参数 */
 import type { UnknownRecord } from "../types.js";
 import { isSketchRecord } from "./sketch-utils.js";
 

@@ -21,9 +21,7 @@ function asNumber(value: unknown, fallback = 0): number {
   return fallback;
 }
 
-/**
- * 对齐 PY `_normalize_design_sectors`：分组路径 + image_id → 所属分组列表。
- */
+/** 规范化设计稿分组：分组路径 + image_id → 所属分组列表。 */
 export function normalizeDesignSectors(
   sectors: UnknownRecord[],
 ): [LanhuDesignSectorSummary[], Map<string, LanhuDesignSectorSummary[]>] {

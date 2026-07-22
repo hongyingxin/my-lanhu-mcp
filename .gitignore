@@ -35,7 +35,7 @@ coverage/
 # !server-nest/README.md
 # !mcp/README.md
 
-# analyze 落盘（对齐 PY `DATA_DIR`）
+# analyze 落盘目录
 data/lanhu_designs/
 data/.DS_Store
 

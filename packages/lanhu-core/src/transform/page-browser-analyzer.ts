@@ -365,9 +365,7 @@ async function renderSinglePage(
   };
 }
 
-/**
- * 浏览器渲染原型页并提取文本/样式/截图，对齐 Python `screenshot_page_internal`。
- */
+/** 浏览器渲染原型页并提取文本/样式/截图 */
 export async function renderPrototypePages(
   resourceDir: string,
   pageNames: string[],

@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 import type { PageDesignInfo } from "./page-static-extractor.js";
 
-/** 对齐 Python `_format_page_design_info`。 */
+/** 格式化页面设计信息为可读文本 */
 export function formatPageDesignInfo(designInfo: PageDesignInfo | undefined, resourceDir = ""): string {
   if (!designInfo) {
     return "";

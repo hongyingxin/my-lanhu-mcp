@@ -1,5 +1,5 @@
 /**
- * 从 DDS Schema 节点树提取布局摘要（对标 TS-MCP layout-summary）。
+ * 从 DDS Schema 节点树提取布局摘要。
  * 兼容蓝湖 DDS：`style` / `eleName` 在节点顶层，而非仅 `props.style` / `props.className`。
  */
 import type { UnknownRecord } from "../types.js";

@@ -57,9 +57,7 @@ async function writeJson(path: string, value: unknown): Promise<void> {
   await writeFile(path, JSON.stringify(value, null, 2), "utf8");
 }
 
-/**
- * 将 analyze 结果落盘（对齐 PY-MCP `DATA_DIR/lanhu_designs/{pid}/`）。
- */
+/** 将 analyze 结果落盘到 `DATA_DIR/lanhu_designs/{pid}/` */
 export async function persistAnalyzeArtifacts(
   client: LanhuClient,
   design: LanhuDesignSummary,

@@ -74,7 +74,7 @@ function fixHtmlContent(content: string): string {
   return $.html();
 }
 
-/** 修复 Axure HTML，对齐 Python `fix_html_files`。 */
+/** 修复 Axure HTML 中的资源路径与脚本引用 */
 export async function fixHtmlFiles(directory: string): Promise<number> {
   const entries = await readdir(directory, { withFileTypes: true });
   let fixedCount = 0;

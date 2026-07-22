@@ -1,7 +1,7 @@
 import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 
-/** 对齐 PY `DATA_DIR`，默认 `./data` */
+/** 本地数据目录，默认 `./data`（可通过 `LANHU_DATA_DIR` 覆盖） */
 export function resolveLanhuDataDir(explicit?: string): string {
   const trimmed = explicit?.trim();
   if (trimmed) {
