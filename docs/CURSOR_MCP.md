@@ -51,7 +51,7 @@ Cursor 里 Agent 可通过三类能力访问蓝湖设计稿：
 4. Agent 在项目里写代码 / 做审查
 ```
 
-单张 `detailDetach` URL 可跳过 list，直接 `design_names` 传 `image_id` 或画板名。
+单张 `detailDetach` URL 可直接 `mode=analyze`（可省略 `design_names`）；`stage` 全项目须 `design_names` 或先 list。
 
 ---
 
@@ -62,11 +62,19 @@ Cursor 里 Agent 可通过三类能力访问蓝湖设计稿：
 | mode | 说明 | 需要 `design_names` | 默认 |
 |------|------|---------------------|------|
 | `list` | 列出项目内所有设计稿 | 否 | |
-| `analyze` | 深度分析（HTML/CSS、tokens、图层等） | 是 | **是** |
-| `slices` | 仅 B 套切图元数据（`getSlices`） | 是（多张时只用第一张） | |
-| `tokens` | 仅 Design Tokens | 是 | |
+| `analyze` | 深度分析（HTML/CSS、tokens、图层等） | 有条件（见下） | **是** |
+| `slices` | 仅 B 套切图元数据（`getSlices`） | 有条件（见下） | |
+| `tokens` | 仅 Design Tokens | 有条件（见下） | |
 
-`design_names` 支持：画板名、序号（如 `"1"`）、id、`"all"`。
+**`design_names` 何时可省略**
+
+| URL 情况 | 是否可省略 `design_names` |
+|----------|---------------------------|
+| `detailDetach` 含 `image_id` | ✅ 自动分析 URL 指定画板 |
+| list 仅 1 张设计稿 | ✅ 自动选该张 |
+| `stage` 全项目（多稿） | ❌ 必填，或先 `mode=list` |
+
+`design_names` 支持：画板名、序号（如 `"1"`）、id、`"all"`。显式传入时优先于 URL 的 `image_id`。
 
 **示例（Agent 调用 JSON）：**
 
@@ -247,7 +255,7 @@ analyze 同时带 B 套切图元数据。
 lanhu_design
 ├── url                    必填，蓝湖项目 URL（stage 或 detailDetach）
 ├── mode                   list | analyze（默认）| slices | tokens
-├── design_names           analyze/slices/tokens 必填
+├── design_names           analyze/slices/tokens：URL 含 image_id 或仅 1 张时可省略；stage 多稿必填
 ├── include                仅 analyze；控制返回数据类型
 ├── workflow_guide         仅 analyze；默认 true；需 include 含 html 才插入 STEP 1~5
 └── with_slices            仅 analyze；是否额外挂 B 套 getSlices 元数据

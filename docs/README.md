@@ -1,6 +1,6 @@
 # 文档索引
 
-> 最后更新：2026-07-22
+> 最后更新：2026-08-13
 
 本仓库采用 **「docs 手册 + 包旁 README」**，不把所有 `.md` 搬进 `docs/`。
 
@@ -35,6 +35,7 @@
 | [**prototype-and-mcp.md**](./prototype-and-mcp.md) | 原型 URL 语义、Playwright 管线、HTTP §5 / MCP `lanhu_page` |
 | [**CONTEXT.md**](./CONTEXT.md) | **项目总览**：能力边界、链路、技术选型（**新对话先读**） |
 | [**TROUBLESHOOTING.md**](./TROUBLESHOOTING.md) | Cookie、Playwright 安装、503 / MCP 常见错误 |
+| [**CHANGELOG.md**](./CHANGELOG.md) | **版本迭代记录**（功能变更、升级注意） |
 | [**MCP_INSPECTOR.md**](./MCP_INSPECTOR.md) | MCP Inspector 本地调试 |
 
 ---

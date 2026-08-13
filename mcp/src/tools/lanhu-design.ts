@@ -14,7 +14,6 @@ import {
   type AnalyzeInclude,
   type ConvertSketchResult,
   type ConvertLanhuSchemaResult,
-  type DesignSelector,
   type LanhuDesignSummary,
   type SketchLayerAnnotation,
 } from "@lanhu/core";
@@ -22,18 +21,9 @@ import {
 import { buildDesignWorkflowGuide } from "../analyze/design-workflow-guide.js";
 import { type McpConfig, requireLanhuCookie } from "../config.js";
 import { createToolError, createToolResult, type ToolContent } from "../result.js";
+import { resolveDesignSelector } from "./resolve-design-selector.js";
 
 const IncludeOption = z.enum(["html", "image", "tokens", "layout", "layers", "slices"]);
-
-function normalizeDesignNames(designNames: string | string[]): DesignSelector {
-  if (typeof designNames === "string") {
-    return designNames;
-  }
-  if (designNames.length === 1) {
-    return designNames[0]!;
-  }
-  return designNames.map(String);
-}
 
 function createClient(config: McpConfig): LanhuClient {
   const cookie = requireLanhuCookie(config);
@@ -177,14 +167,14 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
     {
       description:
         "蓝湖设计稿统一工具。支持列出画板、分析还原、提取设计令牌（tokens）、获取切图信息。\n\n" +
-        "推荐流程：mode=list（或 Resource project-designs）→ design_names → analyze/slices/tokens。\n\n" +
+        "推荐流程：detailDetach（含 image_id）可直接 analyze；stage 全项目则 mode=list → design_names → analyze。\n\n" +
         "模式说明：\n" +
         "  - list：列出项目内全部设计图\n" +
         "  - analyze：分析设计稿，输出 HTML/CSS、tokens、图层等（默认）\n" +
         "  - slices：提取切图/资源信息（B 套方案，多稿时仅取第一张）\n" +
         "  - tokens：仅提取设计令牌\n\n" +
-        "analyze 选项：workflow_guide 默认为 true，且 include 含 html 时会在文本中附带 STEP 1~5 还原指引。\n\n" +
-        "detailDetach 链接需传入与 image_id 匹配的 design_names，或先 list 再选稿。",
+        "design_names：URL 含 image_id 或 list 仅 1 张时可省略；stage 多稿时必填（名称/序号/id/all）。\n\n" +
+        "analyze 选项：workflow_guide 默认为 true，且 include 含 html 时会在文本中附带 STEP 1~5 还原指引。",
       inputSchema: {
         url: z.string().min(1).describe("蓝湖项目链接（stage 或 detailDetach 页面 URL）。"),
         mode: z
@@ -194,7 +184,10 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
         design_names: z
           .union([z.string(), z.array(z.string())])
           .optional()
-          .describe("analyze/slices/tokens 必填。支持序号、id、名称或 'all'。"),
+          .describe(
+            "analyze/slices/tokens 选稿：画板名 / 序号 / id / 'all' / 数组。" +
+              "URL 含 image_id 或 list 仅 1 张时可省略；stage 多稿时必填。",
+          ),
         include: z
           .array(IncludeOption)
           .optional()
@@ -241,24 +234,25 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
           );
         }
 
-        if (!design_names) {
+        const selection = resolveDesignSelector(design_names, parsed, listResult);
+        if (!selection.ok) {
           return createToolResult(
-            "design_names is required for analyze/slices/tokens mode.",
+            selection.message,
             {
               status: "error",
-              hint: "Pass design_names='all' or a specific name/index/id.",
-              available_designs: listResult.designs.map((d) => ({
-                index: d.index,
-                id: d.id,
-                name: d.name,
-              })),
+              hint: selection.hint,
+              auto_selectable: selection.autoSelectable,
+              available_designs: selection.availableDesigns,
             },
             true,
           );
         }
 
-        const selector = normalizeDesignNames(design_names);
-        const targetDesigns = pickDesigns(listResult.designs, selector, parsed.docId ?? parsed.imageId);
+        const targetDesigns = pickDesigns(
+          listResult.designs,
+          selection.selector,
+          parsed.docId ?? parsed.imageId,
+        );
 
         if (!targetDesigns.length) {
           return createToolResult(
@@ -295,6 +289,7 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
             {
               status: "success",
               mode: "slices",
+              design_names_resolved_from: selection.resolvedFrom,
               warning,
               ...slicesResult,
             },
@@ -342,6 +337,7 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
           return createToolResult(sections.join("\n").trim(), {
             status: "success",
             mode: "tokens",
+            design_names_resolved_from: selection.resolvedFrom,
             total: targetDesigns.length,
           });
         }
@@ -419,6 +415,7 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
             mode: "analyze",
             project_name: listResult.projectName ?? null,
             total_designs: targetDesigns.length,
+            design_names_resolved_from: selection.resolvedFrom,
             include: includeList,
             workflow_guide: attachWorkflowGuide,
             designs: structuredDesigns,

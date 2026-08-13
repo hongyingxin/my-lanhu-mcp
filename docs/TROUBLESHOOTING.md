@@ -75,7 +75,7 @@ npx playwright install chromium
 | 现象 | 处理 |
 |------|------|
 | Cursor 看不到 tool | 检查 `mcp.json` 路径是否为 **`mcp/dist/server.js`** 或 dev 用 `tsx mcp/src/server.ts`；改代码后需重启 MCP |
-| list 正常 analyze 报 `design_names` | MCP 非 list 模式**必须**传 `design_names`（与 HTTP 默认选第一张不同） |
+| list 正常 analyze 报 `design_names` | stage 多稿 URL 须传 `design_names` 或先 list；detailDetach 含 `image_id` 可省略 |
 | Inspector 无 env | 使用 `-e LANHU_COOKIE="..."` 或在 UI Env 填写 |
 
 本地调试步骤：[`MCP_INSPECTOR.md`](./MCP_INSPECTOR.md)。

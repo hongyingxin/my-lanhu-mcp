@@ -21,7 +21,11 @@ export function registerDesignPrompts(server: McpServer): void {
               "要求：\n" +
               "1. 字体、字号、颜色、间距等样式必须与设计稿一致\n" +
               "2. 将所有图片资源下载到项目本地路径后再引用\n" +
-              "3. 布局结构与设计稿精确对齐",
+              "3. 布局结构与设计稿精确对齐\n\n" +
+              "数据获取：调用 lanhu_design，推荐参数：\n" +
+              '- mode: "analyze"\n' +
+              `- design_names: ${design_name ? `"${design_name}"` : "若 URL 含 image_id 可省略，否则传画板名/序号/id"}\n` +
+              "- include 默认即可（含 html、tokens、image 等）",
           },
         },
       ],
@@ -50,7 +54,7 @@ export function registerDesignPrompts(server: McpServer): void {
               "4. 标出潜在的实现难点或风险\n\n" +
               "数据获取：请先调用 lanhu_design，推荐参数：\n" +
               '- mode: "analyze"\n' +
-              `- design_names: ${design_name ? `"${design_name}"` : "<画板名>"}\n` +
+              `- design_names: ${design_name ? `"${design_name}"` : "若 URL 含 image_id 可省略，否则传画板名/序号/id"}\n` +
               '- include: ["layout", "layers", "image", "tokens"]\n' +
               "- workflow_guide: false\n\n" +
               "说明：审查场景不要 include html，以节省 token；视觉对照依赖 image 预览图与 tokens/layers。",

@@ -168,11 +168,11 @@ const inputSchema = {
 
 要点写入 `registerTool` description：
 
-1. **Workflow**：`mode=list`（或 Resource）→ 确认 `design_names` → `analyze` / `slices` / `tokens`
+1. **Workflow**：detailDetach（含 image_id）可直接 analyze；stage 全项目则 list → `design_names` → analyze
 2. **list 与 analyze 分离**：analyze **不**返回全量 designs
 3. **slices**：B 套 `getSlices` + scaleUrls；webp/png 用 `slice_format`
 4. **mapping**：在 `analyze` + `include: html` 的 `structuredContent.convert.mapping`（A 套）
-5. **detailDetach**：有 `image_id` 时 list 仅 1 张
+5. **detailDetach**：有 `image_id` 时可省略 `design_names`；list 仅 1 张同理
 
 ### 4.3 分发流程
 
@@ -186,10 +186,11 @@ registerLanhuDesignTool(server)
     ├─ mode === "list"
     │     → createToolResult(summary, { projectName, totalDesigns, designs })
     │
-    ├─ mode !== "list" && !design_names
-    │     → isError + hint: available_designs[]
+    ├─ mode !== "list"
+    │     → resolveDesignSelector(design_names, parsed, listResult)
+    │         → 无法推断 → isError + hint + available_designs[]
     │
-    ├─ pickDesigns(designs, design_names, parsed.docId)
+    ├─ pickDesigns(designs, selector, parsed.docId)
     │     → 空 → isError + available_designs
     │
     ├─ mode === "slices"  → handleSlicesMode(...)
@@ -376,7 +377,7 @@ server.resource(
 |------|------|
 | 无 Cookie | `isError: true`，`ConfigurationError` 文案 |
 | 省略 `mode` | 默认 **`analyze`** |
-| 非 list 缺 `design_names` | `isError` + `hint` + `available_designs` |
+| 非 list 且无法推断选稿 | `isError` + `hint` + `available_designs` |
 | pick 无匹配 | 同上 |
 | 蓝湖 418 / 网络 | `isError` + `message` + 可选 `requestUrl` |
 | slices 缺 tid | `isError` + hint 换 stage URL |
@@ -451,6 +452,6 @@ export function createToolError(error: unknown, context?: object);
 | 3 | **`include`** | **`@lanhu/core`** 单文件 `pipeline/analyze-include.ts`；MCP 只透传 + 格式化 |
 | 4 | **`include` 默认** | `["html","tokens","layers","image"]`；**不含 `slices`** |
 | 5 | **`slices` + `"all"`** | 只取 **`targetDesigns[0]`**，可加 warning |
-| 6 | **防误用** | 非 `list` 时 **`design_names` 必填** |
+| 6 | **防误用** | stage 多稿时 **`design_names` 必填**；URL 含 `image_id` 可省略 |
 
 按 **Phase A → B** 开工。

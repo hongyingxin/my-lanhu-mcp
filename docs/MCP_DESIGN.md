@@ -49,7 +49,7 @@
 lanhu_design({
   url: string,                                          // 必填，stage 或 detailDetach
   mode?: "list" | "analyze" | "slices" | "tokens",      // 默认 "analyze"
-  design_names?: string | string[],                     // analyze / slices / tokens 必填；支持 "all" / 序号 / id / name
+  design_names?: string | string[],                     // 有条件必填；支持 "all" / 序号 / id / name；见 §3.2
   include?: ("html" | "image" | "tokens" | "layout" | "layers")[],  // 仅 analyze；见 §5
   withSlices?: boolean,                                 // 可选：analyze 时附带 B 套切图元数据（对齐 HTTP withSlices）
 })
@@ -64,11 +64,14 @@ lanhu_design({
 | `mode=slices` | `POST /api/designs/slices` | B 套切图元数据 |
 | `mode=tokens` | （无独立 HTTP） | 仅 sketch + `extractDesignTokens` |
 
-### 3.2 MCP 比 HTTP 更严的约定
+### 3.2 MCP 与 HTTP 的选稿约定
 
 | 项 | 调试台 HTTP | MCP |
 |----|-------------|-----|
-| 未传画板 | 默认 `designs[0]` | **`design_names` 必填**（list 除外） |
+| URL 含 `image_id` | 自动选该稿 | **同样自动选**（可省略 `design_names`） |
+| list 仅 1 张 | 自动选 | **同样自动选** |
+| stage 多稿、未传画板 | 默认 `designs[0]` | **报错** + `available_designs`（不默默选第一张） |
+| 显式 `design_names` | 按 selector 选 | 优先于 URL `image_id` |
 | 全量列表 | 仅 `list` 或先点 project/images | 仅 `mode=list` 或 Resource |
 | `include` | 无，analyze 默认拉较全 | 应有，控制输出体积 |
 
@@ -86,13 +89,13 @@ lanhu_design(url, mode, design_names?, include?)
     │     → 返回全项目 designs[]（不按 URL image_id 过滤 stage 全量）
     │
     ├─ mode === "slices"
-    │     → 必须 design_names → pickDesign → getSlices()
+    │     → design_names 可省略（见 §3.2）→ pickDesign → getSlices()
     │
     ├─ mode === "tokens"
-    │     → 必须 design_names → getSketchJson → extractDesignTokens（轻量，无 HTML）
+    │     → design_names 可省略（见 §3.2）→ getSketchJson → extractDesignTokens（轻量，无 HTML）
     │
     └─ mode === "analyze"
-          → 必须 design_names → pickDesign → Schema/Sketch/HTML/tokens/…
+          → design_names 可省略（见 §3.2）→ pickDesign → Schema/Sketch/HTML/tokens/…
           → 由 include 控制输出（§5）
 ```
 
@@ -104,19 +107,20 @@ lanhu_design(url, mode, design_names?, include?)
 
 ### 4.2 `analyze`
 
-- **必须** `design_names`（或 URL `image_id` 在 pick 时作 preferredId 兜底，但仍建议显式传名）。
+- **`design_names` 可省略**当 URL 含 `image_id`，或 list 仅 1 张；stage 多稿时必填。
+- 显式 `design_names` 优先于 URL `image_id`（允许 override）。
 - 主路径：Schema → HTML；失败或 `detailDetach` → Sketch fallback。
 - 支持 `design_names: "all"` 多稿并发（建议上限 5）。
 
 ### 4.3 `slices`
 
-- **必须** `design_names`（单稿为主；传 `"all"` 时 slices 模式仅处理第一张）。
+- **`design_names` 可省略**条件同 analyze（单稿为主；传 `"all"` 时 slices 模式仅处理第一张）。
 - 调用 `getSlices()`，返回切图列表、`scale_urls`、位置等。
 - **不能**用 `analyze` + `include: slices` 代替（`include` 中的 `slices` 指 A 套 mapping，与 B 套 `mode=slices` 不同）。
 
 ### 4.4 `tokens`
 
-- **必须** `design_names`。
+- **`design_names` 可省略**条件同 analyze。
 - 仅 `getSketchJson` + `extractDesignTokens`。
 - 与 `analyze` + `include: ["tokens"]` **能力重叠**，但本 mode 更轻、返回更干净；适合「只要 tokens、不要 HTML/封面」。
 
@@ -266,7 +270,7 @@ flowchart LR
 | 步骤 | 内容 |
 |------|------|
 | 1 | 注册 `lanhu_design`，四 mode 分支调 `@lanhu/core` |
-| 2 | `design_names` 在非 list 时必填；错误返回 `available_designs` |
+| 2 | `design_names` 在 stage 多稿时必填；缺参返回 `available_designs` 与 `hint` |
 | 3 | 实现 `include`（analyze）；默认以 core `analyze-include.ts` 为准 |
 | 4 | **不**在 analyze 响应中返回全量 `designs[]` |
 | 5 | 注册 Resource `project-designs` |
@@ -277,7 +281,7 @@ flowchart LR
 
 | 项 | HTTP analyze | MCP |
 |----|--------------|-----|
-| 未传画板 | 默认 `designs[0]` | **`design_names` 必填** |
+| 未传画板 | 默认 `designs[0]` | stage 多稿：**报错**；URL 含 `image_id` 或仅 1 张：**自动选** |
 | 响应 | 可含 artifacts 落盘信息 | 格式化 MCP content + structuredContent |
 
 ---
