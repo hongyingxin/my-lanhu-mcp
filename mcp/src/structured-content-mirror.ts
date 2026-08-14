@@ -1,6 +1,9 @@
 /** 已注册的镜像 key：lanhu_design mode=list */
 export const LANHU_DESIGN_LIST_MIRROR_KEY = "lanhu_design:list";
 
+/** 已注册的镜像 key：lanhu_design mode=slices */
+export const LANHU_DESIGN_SLICES_MIRROR_KEY = "lanhu_design:slices";
+
 /**
  * C-JSON 镜像：将 structuredContent 以紧凑 JSON 追加到 content 文本末尾。
  *
@@ -11,6 +14,7 @@ export const LANHU_DESIGN_LIST_MIRROR_KEY = "lanhu_design:list";
  */
 export const STRUCTURED_CONTENT_MIRROR_KEYS = [
   LANHU_DESIGN_LIST_MIRROR_KEY,
+  LANHU_DESIGN_SLICES_MIRROR_KEY,
 ] as const;
 
 export type StructuredContentMirrorKey = (typeof STRUCTURED_CONTENT_MIRROR_KEYS)[number];

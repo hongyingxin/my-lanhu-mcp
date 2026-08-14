@@ -10,11 +10,12 @@ import {
 
 describe("structured-content-mirror", () => {
   it("lists mirror keys", () => {
-    expect(STRUCTURED_CONTENT_MIRROR_KEYS).toEqual(["lanhu_design:list"]);
+    expect(STRUCTURED_CONTENT_MIRROR_KEYS).toEqual(["lanhu_design:list", "lanhu_design:slices"]);
   });
 
   it("mirrors only registered keys", () => {
     expect(shouldMirrorStructuredContent("lanhu_design:list")).toBe(true);
+    expect(shouldMirrorStructuredContent("lanhu_design:slices")).toBe(true);
     expect(shouldMirrorStructuredContent("lanhu_design:analyze")).toBe(false);
     expect(shouldMirrorStructuredContent("lanhu_page:list")).toBe(false);
   });
@@ -39,6 +40,27 @@ describe("structured-content-mirror", () => {
     if (result.content[0]?.type === "text") {
       expect(result.content[0].text).toContain('"mode":"list"');
       expect(result.content[0].text.startsWith("Loaded 1 design(s).\n\n")).toBe(true);
+    }
+  });
+
+  it("createToolResult mirrors slices mode", () => {
+    const structured = {
+      status: "success",
+      mode: "slices",
+      totalSlices: 2,
+      slices: [{ name: "icon", downloadUrl: "https://example.com/a.png" }],
+    };
+    const result = createToolResult(
+      "Loaded 2 slice(s) for 首页.",
+      structured,
+      false,
+      "lanhu_design:slices",
+    );
+    expect(result.structuredContent).toEqual(structured);
+    expect(result.content[0]?.type).toBe("text");
+    if (result.content[0]?.type === "text") {
+      expect(result.content[0].text).toContain('"mode":"slices"');
+      expect(result.content[0].text.startsWith("Loaded 2 slice(s) for 首页.\n\n")).toBe(true);
     }
   });
 });

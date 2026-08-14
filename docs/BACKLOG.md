@@ -38,13 +38,13 @@ MCP 工具结果有两个通道（见 `mcp/src/result.ts`）：
 
 - 常量名单：`mcp/src/structured-content-mirror.ts` → `STRUCTURED_CONTENT_MIRROR_KEYS`
 - `lanhu_design:list` ✅：`content` = 摘要 + 紧凑 JSON 镜像
+- `lanhu_design:slices` ✅：`content` = 摘要 + 紧凑 JSON 镜像（B 套切图元数据）
 - **不** mirror：`analyze` / `tokens`
 
 **仍待做（在名单中追加 key 后同样走 mirror）**
 
 | 待追加 key | 说明 |
 |------------|------|
-| `lanhu_design:slices` | 切图元数据 |
 | `lanhu_design:selection_error` | 选稿失败时的 `available_designs` |
 
 ### 各 mode 现状
@@ -52,7 +52,7 @@ MCP 工具结果有两个通道（见 `mcp/src/result.ts`）：
 | mode | `content` | 计划 |
 |------|-----------|------|
 | `list` | 摘要 + JSON 镜像 | ✅ 已实现 |
-| `slices` | 仅一行摘要 | 加入名单后 mirror |
+| `slices` | 摘要 + JSON 镜像 | ✅ 已实现 |
 | 选稿失败 | 错误文案 | 加入名单后 mirror |
 | `tokens` / `analyze` | 已有足够文本 | 不 mirror |
 

@@ -21,7 +21,10 @@ import {
 import { buildDesignWorkflowGuide } from "../analyze/design-workflow-guide.js";
 import { type McpConfig, requireLanhuCookie } from "../config.js";
 import { createToolError, createToolResult, type ToolContent } from "../result.js";
-import { LANHU_DESIGN_LIST_MIRROR_KEY } from "../structured-content-mirror.js";
+import {
+  LANHU_DESIGN_LIST_MIRROR_KEY,
+  LANHU_DESIGN_SLICES_MIRROR_KEY,
+} from "../structured-content-mirror.js";
 import { resolveDesignSelector } from "./resolve-design-selector.js";
 
 const IncludeOption = z.enum(["html", "image", "tokens", "layout", "layers", "slices"]);
@@ -288,15 +291,18 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
               : undefined;
 
           const slicesResult = await getSlices(client, target.id, teamId, projectId, true);
+          const structured = {
+            status: "success",
+            mode: "slices",
+            design_names_resolved_from: selection.resolvedFrom,
+            warning,
+            ...slicesResult,
+          };
           return createToolResult(
             `Loaded ${slicesResult.totalSlices} slice(s) for ${target.name}.`,
-            {
-              status: "success",
-              mode: "slices",
-              design_names_resolved_from: selection.resolvedFrom,
-              warning,
-              ...slicesResult,
-            },
+            structured,
+            false,
+            LANHU_DESIGN_SLICES_MIRROR_KEY,
           );
         }
 
