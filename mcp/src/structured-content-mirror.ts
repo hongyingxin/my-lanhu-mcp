@@ -4,7 +4,9 @@ export const LANHU_DESIGN_LIST_MIRROR_KEY = "lanhu_design:list";
 /**
  * C-JSON 镜像：将 structuredContent 以紧凑 JSON 追加到 content 文本末尾。
  *
- * Cursor Agent 主要读 content，读不到 structuredContent，因此仅对下列 key 做镜像。
+ * **Cursor 专项 workaround**：Agent 主要读 content，读不到 structuredContent。
+ * 仅对下列白名单 key 做镜像；若 Cursor 官方修复，可从 STRUCTURED_CONTENT_MIRROR_KEYS
+ * 移除条目并更新 mcp/tests/structured-content-mirror.test.ts（见 docs/CHANGELOG.md §0.1.2）。
  * key 格式：`{tool}:{mode}`；为其他 tool/mode 启用镜像时在此数组追加条目即可。
  */
 export const STRUCTURED_CONTENT_MIRROR_KEYS = [

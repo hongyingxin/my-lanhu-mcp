@@ -10,6 +10,11 @@
 
 解决 Cursor Agent **读不到 `structuredContent`** 的问题：`lanhu_design` **`list`** 模式下，在 `content` 文本末尾追加 Structured JSON 镜像，Agent 可直接解析完整设计稿列表。
 
+> **Cursor 专项 workaround**  
+> 镜像机制是为 **Cursor 客户端**准备的：Agent 上下文通常只含 `content`，读不到 `structuredContent`（Inspector 正常）。这不是 MCP 协议要求，其他客户端若已支持 Structured 可不受影响。  
+> 维护入口：`mcp/src/structured-content-mirror.ts` → `STRUCTURED_CONTENT_MIRROR_KEYS`（白名单）。  
+> **若 Cursor 官方修复**（Agent 能稳定消费 `structuredContent`），可从白名单移除对应 key、停做 content 双写，并同步调整 `mcp/tests/structured-content-mirror.test.ts`。详见 [`BACKLOG.md`](./BACKLOG.md) §P0。
+
 ### `@lanhu/mcp` — C-JSON 镜像（P0 部分）
 
 #### 新增

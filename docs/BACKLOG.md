@@ -34,7 +34,7 @@ MCP 工具结果有两个通道（见 `mcp/src/result.ts`）：
 
 ### C-JSON 镜像（`@lanhu/mcp`）
 
-**已发布** — [`CHANGELOG.md`](./CHANGELOG.md) §0.1.2
+**已发布** — [`CHANGELOG.md`](./CHANGELOG.md) §0.1.2（**Cursor 专项**；官方修复后可从白名单释放）
 
 - 常量名单：`mcp/src/structured-content-mirror.ts` → `STRUCTURED_CONTENT_MIRROR_KEYS`
 - `lanhu_design:list` ✅：`content` = 摘要 + 紧凑 JSON 镜像
