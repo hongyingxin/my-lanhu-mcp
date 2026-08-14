@@ -25,13 +25,17 @@ export function toErrorMessage(error: unknown): string {
   return String(error);
 }
 
+import { buildToolResultText } from "./structured-content-mirror.js";
+
 export function createToolResult(
   text: string,
   structuredContent?: Record<string, unknown>,
   isError = false,
+  mirrorKey?: string,
 ): ToolExecutionResult {
+  const contentText = buildToolResultText(text, structuredContent, mirrorKey);
   return {
-    content: [{ type: "text", text }],
+    content: [{ type: "text", text: contentText }],
     ...(structuredContent ? { structuredContent } : {}),
     ...(isError ? { isError: true } : {}),
   };

@@ -21,6 +21,7 @@ import {
 import { buildDesignWorkflowGuide } from "../analyze/design-workflow-guide.js";
 import { type McpConfig, requireLanhuCookie } from "../config.js";
 import { createToolError, createToolResult, type ToolContent } from "../result.js";
+import { LANHU_DESIGN_LIST_MIRROR_KEY } from "../structured-content-mirror.js";
 import { resolveDesignSelector } from "./resolve-design-selector.js";
 
 const IncludeOption = z.enum(["html", "image", "tokens", "layout", "layers", "slices"]);
@@ -215,22 +216,25 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
         const listResult = await listDesigns(client, url);
 
         if (mode === "list") {
+          const structured = {
+            status: "success",
+            mode: "list",
+            projectName: listResult.projectName,
+            totalDesigns: listResult.totalDesigns,
+            designs: listResult.designs.map((d) => ({
+              index: d.index,
+              id: d.id,
+              name: d.name,
+              width: d.width,
+              height: d.height,
+              sectors: d.sectors,
+            })),
+          };
           return createToolResult(
             `Loaded ${listResult.totalDesigns} design(s)${listResult.projectName ? ` from ${listResult.projectName}` : ""}.`,
-            {
-              status: "success",
-              mode: "list",
-              projectName: listResult.projectName,
-              totalDesigns: listResult.totalDesigns,
-              designs: listResult.designs.map((d) => ({
-                index: d.index,
-                id: d.id,
-                name: d.name,
-                width: d.width,
-                height: d.height,
-                sectors: d.sectors,
-              })),
-            },
+            structured,
+            false,
+            LANHU_DESIGN_LIST_MIRROR_KEY,
           );
         }
 

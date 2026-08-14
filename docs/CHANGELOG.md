@@ -4,6 +4,46 @@
 
 ---
 
+## [0.1.2] — 2026-08-14
+
+### 概述
+
+解决 Cursor Agent **读不到 `structuredContent`** 的问题：`lanhu_design` **`list`** 模式下，在 `content` 文本末尾追加 Structured JSON 镜像，Agent 可直接解析完整设计稿列表。
+
+### `@lanhu/mcp` — C-JSON 镜像（P0 部分）
+
+#### 新增
+
+- **`structured-content-mirror.ts`**  
+  常量名单 `STRUCTURED_CONTENT_MIRROR_KEYS`（格式 `{tool}:{mode}`），当前仅 `lanhu_design:list`
+- **`createToolResult(..., mirrorKey?)`**（`mcp/src/result.ts`）  
+  `mirrorKey` 命中名单时，在摘要后追加 `JSON.stringify(structuredContent)`（紧凑 JSON，不截断）
+
+#### 变更
+
+- **`lanhu_design` · `mode=list`**：`content` 由「仅一行摘要」改为「摘要 + JSON 镜像」；`structuredContent` 仍保留供 Inspector 使用
+- **`analyze` / `tokens`**：不启用 mirror（已有足够文本，避免双倍 token）
+
+#### 测试
+
+- 新增 `mcp/tests/structured-content-mirror.test.ts`（5 用例）
+
+### 升级注意
+
+1. `npm run build:mcp` 后重启 MCP（Cursor Settings → MCP Restart）
+2. Agent 调用 `list` 时，`content` 末尾会出现完整 JSON；大项目 token 消耗会增加（后续 P1 可加分页）
+
+### 未包含（后续迭代）
+
+> 完整待办见 [`BACKLOG.md`](./BACKLOG.md)。
+
+- `lanhu_design:slices`、`lanhu_design:selection_error` 加入镜像名单（P0 剩余）
+- structuredContent 中返回完整 `resolved_design` 元数据（P1）
+- stage URL 自动从浏览器上下文推断当前画板（P1）
+- `list` 分页 / sector 过滤（P1）
+
+---
+
 ## [0.1.1] — 2026-08-13
 
 ### 概述
@@ -82,8 +122,11 @@
 
 ### 未包含（后续迭代）
 
+> 完整待办见 [`BACKLOG.md`](./BACKLOG.md)。
+
 - structuredContent 中返回完整 `resolved_design` 元数据（第二阶段）
 - stage URL 自动从浏览器上下文推断当前画板
+- **P0**：Cursor Agent 读不到 `structuredContent` → list/slices/选稿失败时把数据写入 `content` 文本（见 BACKLOG §P0）
 
 ---
 

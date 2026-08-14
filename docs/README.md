@@ -36,6 +36,7 @@
 | [**CONTEXT.md**](./CONTEXT.md) | **项目总览**：能力边界、链路、技术选型（**新对话先读**） |
 | [**TROUBLESHOOTING.md**](./TROUBLESHOOTING.md) | Cookie、Playwright 安装、503 / MCP 常见错误 |
 | [**CHANGELOG.md**](./CHANGELOG.md) | **版本迭代记录**（功能变更、升级注意） |
+| [**BACKLOG.md**](./BACKLOG.md) | **待办与计划**（未实现项、已知限制下的改进方向） |
 | [**MCP_INSPECTOR.md**](./MCP_INSPECTOR.md) | MCP Inspector 本地调试 |
 
 ---
