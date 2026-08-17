@@ -15,6 +15,9 @@ import {
 const BASE_URL = "https://lanhuapp.com";
 const CDN_URL = "https://axure-file.lanhuapp.com";
 const CACHE_META_FILE = ".lanhu-page-cache.json";
+const PROJECT_MAPPING_FILE = ".lanhu-project-mapping.json";
+const DOWNLOAD_SOURCES_FILE = ".lanhu-download-sources.json";
+const PAGE_MAPPINGS_DIR = ".lanhu-page-mappings";
 
 export interface LanhuPageEntry {
   index: number;
@@ -39,11 +42,28 @@ export interface LanhuPagesListResult extends UnknownRecord {
   pages: LanhuPageEntry[];
 }
 
+export interface PrototypePageSourceEntry {
+  html_filename: string;
+  html_sign_md5: string;
+  html_cdn_url: string;
+  mapping_md5?: string;
+  mapping_cdn_url?: string;
+}
+
+export interface PrototypeDownloadSources {
+  document_id: string;
+  document_name: string;
+  version_id: string;
+  json_url: string;
+  pages: PrototypePageSourceEntry[];
+}
+
 export interface DownloadResourcesResult {
   status: "downloaded" | "cached";
   version_id: string;
   reason: "first_download" | "version_changed" | "up_to_date" | "files_missing";
   output_dir: string;
+  sources: PrototypeDownloadSources;
 }
 
 export interface AnalyzeLocalPageResult {
@@ -137,6 +157,46 @@ function normalizeAssetUrl(signMd5: string): string {
   return signMd5.startsWith("http://") || signMd5.startsWith("https://")
     ? signMd5
     : `${CDN_URL}/${signMd5}`;
+}
+
+function buildPrototypeDownloadSources(
+  docId: string,
+  docInfo: UnknownRecord,
+  versionId: string,
+  jsonUrl: string,
+  projectMapping: UnknownRecord,
+): PrototypeDownloadSources {
+  const pages = toRecord(projectMapping["pages"]);
+  const entries: PrototypePageSourceEntry[] = [];
+
+  for (const [htmlFilename, pageInfo] of Object.entries(pages)) {
+    const pageRecord = toRecord(pageInfo);
+    const htmlData = toRecord(pageRecord["html"]);
+    const htmlSignMd5 = toStringValue(htmlData["sign_md5"]);
+    if (!htmlSignMd5) {
+      continue;
+    }
+
+    const mappingMd5 = toStringValue(pageRecord["mapping_md5"]);
+    const entry: PrototypePageSourceEntry = {
+      html_filename: htmlFilename,
+      html_sign_md5: htmlSignMd5,
+      html_cdn_url: normalizeAssetUrl(htmlSignMd5),
+    };
+    if (mappingMd5) {
+      entry.mapping_md5 = mappingMd5;
+      entry.mapping_cdn_url = normalizeAssetUrl(mappingMd5);
+    }
+    entries.push(entry);
+  }
+
+  return {
+    document_id: docId,
+    document_name: toStringValue(docInfo["name"]) || "Unknown",
+    version_id: versionId,
+    json_url: jsonUrl,
+    pages: entries,
+  };
 }
 
 export interface ProductDocumentEntry {
@@ -452,6 +512,60 @@ async function saveCacheMeta(outputDir: string, meta: CacheMeta): Promise<void> 
   await saveJson(join(outputDir, CACHE_META_FILE), meta);
 }
 
+function pageMappingSidecarName(htmlFilename: string): string {
+  const stem = htmlFilename.replace(/\.html$/i, "");
+  return `${stem || "page"}.json`;
+}
+
+async function persistDownloadSidecars(
+  outputDir: string,
+  jsonUrl: string,
+  versionId: string,
+  projectMapping: UnknownRecord,
+  sources: PrototypeDownloadSources,
+  pageMappingsByHtml: Map<string, UnknownRecord>,
+): Promise<void> {
+  await mkdir(outputDir, { recursive: true });
+  await saveJson(join(outputDir, PROJECT_MAPPING_FILE), {
+    json_url: jsonUrl,
+    version_id: versionId,
+    fetched_at: new Date().toISOString(),
+    mapping: projectMapping,
+  });
+  await saveJson(join(outputDir, DOWNLOAD_SOURCES_FILE), sources);
+
+  const pageMappingsDir = join(outputDir, PAGE_MAPPINGS_DIR);
+  await mkdir(pageMappingsDir, { recursive: true });
+  for (const [htmlFilename, pageMapping] of pageMappingsByHtml) {
+    await saveJson(join(pageMappingsDir, pageMappingSidecarName(htmlFilename)), pageMapping);
+  }
+}
+
+async function backfillPageMappingSidecars(
+  fetchImpl: FetchLike,
+  outputDir: string,
+  projectMapping: UnknownRecord,
+): Promise<void> {
+  const pages = toRecord(projectMapping["pages"]);
+  const pageMappingsDir = join(outputDir, PAGE_MAPPINGS_DIR);
+  await mkdir(pageMappingsDir, { recursive: true });
+
+  for (const [htmlFilename, pageInfo] of Object.entries(pages)) {
+    const sidecarPath = join(pageMappingsDir, pageMappingSidecarName(htmlFilename));
+    if (existsSync(sidecarPath)) {
+      continue;
+    }
+
+    const pageMappingMd5 = toStringValue(toRecord(pageInfo)["mapping_md5"]);
+    if (!pageMappingMd5) {
+      continue;
+    }
+
+    const pageMapping = await fetchJson(fetchImpl, normalizeAssetUrl(pageMappingMd5));
+    await saveJson(sidecarPath, pageMapping);
+  }
+}
+
 function collectExpectedFiles(projectMapping: UnknownRecord): string[] {
   const pages = toRecord(projectMapping['pages']);
   const expected = new Set<string>();
@@ -554,6 +668,13 @@ export async function downloadResources(
   }
 
   const projectMapping = await fetchJson(fetchImpl, jsonUrl);
+  const sources = buildPrototypeDownloadSources(
+    params.docId,
+    docInfo,
+    versionId,
+    jsonUrl,
+    projectMapping,
+  );
   const outputExisted = existsSync(outputDir);
 
   if (!forceUpdate && outputExisted) {
@@ -561,11 +682,14 @@ export async function downloadResources(
     if (cacheMeta.version_id === versionId) {
       const cacheState = shouldUpdateCache(outputDir, projectMapping);
       if (!cacheState.needUpdate) {
+        await persistDownloadSidecars(outputDir, jsonUrl, versionId, projectMapping, sources, new Map());
+        await backfillPageMappingSidecars(fetchImpl, outputDir, projectMapping);
         return {
           status: "cached",
           version_id: versionId,
           reason: cacheState.reason,
           output_dir: outputDir,
+          sources,
         };
       }
     }
@@ -576,6 +700,7 @@ export async function downloadResources(
   const pages = toRecord(projectMapping['pages']);
   let isFirstPage = true;
   const downloadedFiles: string[] = [];
+  const pageMappingsByHtml = new Map<string, UnknownRecord>();
 
   for (const [htmlFilename, pageInfo] of Object.entries(pages)) {
     const pageRecord = toRecord(pageInfo);
@@ -590,6 +715,7 @@ export async function downloadResources(
     const htmlContent = await fetchText(fetchImpl, normalizeAssetUrl(htmlFileWithMd5));
     if (pageMappingMd5) {
       const pageMapping = await fetchJson(fetchImpl, normalizeAssetUrl(pageMappingMd5));
+      pageMappingsByHtml.set(htmlFilename, pageMapping);
       await downloadPageResources(fetchImpl, pageMapping, outputDir, !isFirstPage);
       isFirstPage = false;
     }
@@ -608,6 +734,14 @@ export async function downloadResources(
     total_files: downloadedFiles.length,
   });
 
+  await persistDownloadSidecars(
+    outputDir,
+    jsonUrl,
+    versionId,
+    projectMapping,
+    sources,
+    pageMappingsByHtml,
+  );
   await fixHtmlFiles(outputDir);
 
   return {
@@ -615,6 +749,7 @@ export async function downloadResources(
     version_id: versionId,
     reason: outputExisted ? "version_changed" : "first_download",
     output_dir: outputDir,
+    sources,
   };
 }
 

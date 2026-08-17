@@ -43,6 +43,8 @@ export type {
   LanhuPagesListResult,
   ProductDocumentEntry,
   ProductDocumentsListResult,
+  PrototypeDownloadSources,
+  PrototypePageSourceEntry,
 } from "./lanhu/pages.js";
 export { normalizeDesignQuotes, pickDesign, pickDesigns } from "./lanhu/pick-design.js";
 export type { DesignSelector } from "./lanhu/pick-design.js";

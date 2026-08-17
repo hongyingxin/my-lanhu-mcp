@@ -3,7 +3,10 @@ import type { ConvertDemo, InspectResultKey } from "@/api/types";
 import {
   findPrototypePageResult,
   formatPrototypeDesignInfo,
+  formatPrototypeMappingSource,
+  formatPrototypePageSources,
   resolvePrototypeDisplayName,
+  resolvePrototypeDownloadSources,
 } from "./prototypeResultUtils";
 
 export function analyzeEmptyInsightHint(
@@ -95,6 +98,25 @@ export function formatResult(key: InspectResultKey | string, state: RootState): 
   if (key === "sketchHtml") {
     if (typeof inspect.results.sketchHtml === "string") return inspect.results.sketchHtml;
     return analyzeEmptyInsightHint("sketchHtml", state);
+  }
+
+  if (key === "prototypeMappingSource") {
+    const sources = resolvePrototypeDownloadSources(state);
+    return formatPrototypeMappingSource(
+      sources
+        ? {
+            document_id: sources.document_id,
+            document_name: sources.document_name,
+            version_id: sources.version_id,
+            json_url: sources.json_url,
+          }
+        : undefined,
+    );
+  }
+
+  if (key === "prototypePageSources") {
+    const sources = resolvePrototypeDownloadSources(state);
+    return formatPrototypePageSources(sources?.pages);
   }
 
   if (key === "prototypePageText") {

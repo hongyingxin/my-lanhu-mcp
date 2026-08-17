@@ -13,6 +13,8 @@ export const PROTOTYPE_RESULT_TABS = [
   { key: "prototypeParams", label: "URL 参数", group: "meta" as PrototypeResultTabGroup },
   { key: "prototypeDocuments", label: "项目文档", group: "meta" as PrototypeResultTabGroup },
   { key: "prototypeList", label: "页面列表", group: "meta" as PrototypeResultTabGroup },
+  { key: "prototypeMappingSource", label: "Mapping 源", group: "meta" as PrototypeResultTabGroup },
+  { key: "prototypePageSources", label: "页面 CDN", group: "meta" as PrototypeResultTabGroup },
   { key: "prototypeDownload", label: "下载结果", group: "meta" as PrototypeResultTabGroup },
   { key: "prototypeAnalyze", label: "分析结果", group: "output" as PrototypeResultTabGroup },
   { key: "prototypeScreenshots", label: "页面截图", group: "output" as PrototypeResultTabGroup },

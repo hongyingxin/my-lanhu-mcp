@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 import type { ConvertDemo, InspectResultKey, InspectResults } from "@/api/types";
+import { applyPrototypeDownloadSourcesToResults } from "@/features/workspace/prototypeDownloadSources";
 
 export interface InspectState {
   results: InspectResults;
@@ -20,6 +21,15 @@ const inspectSlice = createSlice({
   reducers: {
     setResult(state, action: PayloadAction<{ key: InspectResultKey; data: unknown }>) {
       state.results[action.payload.key] = action.payload.data;
+      if (action.payload.key === "prototypeDownload") {
+        applyPrototypeDownloadSourcesToResults(state.results, action.payload.data);
+      } else if (action.payload.key === "prototypeAnalyze") {
+        const analyze =
+          action.payload.data && typeof action.payload.data === "object"
+            ? (action.payload.data as { download?: unknown }).download
+            : undefined;
+        applyPrototypeDownloadSourcesToResults(state.results, analyze);
+      }
     },
     mergeResults(state, action: PayloadAction<InspectResults>) {
       Object.assign(state.results, action.payload);
@@ -67,6 +77,8 @@ const inspectSlice = createSlice({
       delete state.results.prototypeParams;
       delete state.results.prototypeList;
       delete state.results.prototypeDocuments;
+      delete state.results.prototypeMappingSource;
+      delete state.results.prototypePageSources;
       delete state.results.prototypeDownload;
       delete state.results.prototypeAnalyze;
       delete state.results.prototypePageText;

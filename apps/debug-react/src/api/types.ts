@@ -34,6 +34,31 @@ export interface ProductDocumentsListResult {
   documents?: ProductDocumentItem[];
 }
 
+export interface PrototypePageSourceEntry {
+  html_filename: string;
+  html_sign_md5: string;
+  html_cdn_url: string;
+  mapping_md5?: string;
+  mapping_cdn_url?: string;
+}
+
+export interface PrototypeDownloadSources {
+  document_id: string;
+  document_name: string;
+  version_id: string;
+  json_url: string;
+  pages: PrototypePageSourceEntry[];
+}
+
+export interface PrototypeDownloadResult {
+  ok?: boolean;
+  status?: string;
+  version_id?: string;
+  reason?: string;
+  output_dir?: string;
+  sources?: PrototypeDownloadSources;
+}
+
 export interface PrototypeAnalyzeResultItem {
   page_name: string;
   success: boolean;
@@ -56,12 +81,7 @@ export interface PrototypeAnalyzeResult {
   successful?: number;
   failed?: number;
   document?: PrototypeListResult;
-  download?: {
-    status?: string;
-    version_id?: string;
-    reason?: string;
-    output_dir?: string;
-  };
+  download?: PrototypeDownloadResult;
   results?: PrototypeAnalyzeResultItem[];
 }
 
@@ -139,6 +159,8 @@ export type InspectResultKey =
   | "prototypeParams"
   | "prototypeList"
   | "prototypeDocuments"
+  | "prototypeMappingSource"
+  | "prototypePageSources"
   | "prototypeDownload"
   | "prototypeAnalyze"
   | "prototypePageText"

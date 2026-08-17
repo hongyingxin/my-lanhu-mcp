@@ -107,7 +107,7 @@ flowchart TD
   D --> E[getPrototypeDocumentInfo]
   E --> F[versions 0.json_url → mapping]
   F --> G[listPages: sitemap.rootNodes]
-  F --> H[downloadResources: mapping.pages 全部 HTML]
+  F --> H[downloadResources: CDN HTML + 资源落盘]
   H --> I[fixHtmlFiles]
   I --> J[renderPrototypePages Playwright]
   J --> K[screenshots / txt / styles.json]
@@ -127,8 +127,9 @@ flowchart TD
 
 **`downloadResources(fetch, url, outputDir)`**
 
-- 下载 mapping 中 **全部** HTML 及关联资源（整包）
-- 版本号取 API `versions[0].id`，写入 `.lanhu-page-cache.json`
+- 按 §3.4 从 CDN 拉取 mapping 中 **全部** HTML 及关联资源（整包）
+- 版本号取 API `versions[0].id`，写入 `.lanhu-page-cache.json`；响应含 `sources`（json_url / 每页 CDN URL）
+- 同时落盘 mapping 索引：`.lanhu-project-mapping.json`、`.lanhu-download-sources.json`、`.lanhu-page-mappings/{stem}.json`
 - 与 `pageId` 无关
 
 **`analyzePrototypePages(fetch, url, outputDir, pageNames, options)`**
@@ -142,7 +143,85 @@ flowchart TD
 - `resolvePrototypeParams` 会返回 `pageId`
 - **`pages.ts` 下载/列页/分析流程不使用 URL 中的 pageId**；定位具体页靠 `pageNames` 或 MCP/调试台映射
 
-### 3.4 分析引擎（Playwright full）
+### 3.4 Axure HTML 获取过程（CDN 路径）
+
+本地落盘的 HTML **不是**根据 `listPages` 的 sitemap 在本地拼接，而是从蓝湖 CDN **按 sign_md5 拉取原包**后再 `fixHtmlFiles` 修补路径。实现集中在 `packages/lanhu-core/src/lanhu/pages.ts` 的 `downloadResources`（列页 `listPages` 只读 sitemap，**不含** CDN 字段）。
+
+#### 3.4.1 三步链路
+
+```text
+步骤 1 · 文档版本
+  GET https://lanhuapp.com/api/project/image
+      ?pid={projectId}&image_id={docId}
+  → data.versions[0].id          （version_id，写缓存）
+  → data.versions[0].json_url    （项目级 mapping JSON，常在 OSS）
+
+步骤 2 · 项目 Mapping
+  GET {json_url}                 （无 JSON 信封，直接是 mapping 对象）
+  → pages["劳动节.html"].html.sign_md5
+  → pages["劳动节.html"].mapping_md5   （可选，页级 styles/scripts/images）
+
+步骤 3 · Axure CDN
+  html_cdn_url = normalizeAssetUrl(sign_md5)
+    若 sign_md5 已是 http(s) → 原样使用
+    否则 → https://axure-file.lanhuapp.com/{sign_md5}
+  GET html_cdn_url → HTML 正文 → 写入 {output_dir}/{htmlFilename}
+```
+
+对应 core 函数：
+
+| 步骤 | 函数 |
+|------|------|
+| 1 | `getPrototypeDocumentInfo` |
+| 2 | `fetchJson(fetchImpl, jsonUrl)` |
+| 3 | `normalizeAssetUrl` + `fetchText` |
+
+若存在 `mapping_md5`，还会 `GET normalizeAssetUrl(mapping_md5)` 得到页级 mapping，再经 `downloadPageResources` 批量下载 `styles` / `scripts` / `images` 下的资源（同样走 `sign_md5` → CDN）。
+
+#### 3.4.2 与「列页」的差异
+
+| 能力 | 数据来源 | 是否含 `sign_md5` / CDN URL |
+|------|----------|------------------------------|
+| `listPages` | mapping 的 `sitemap.rootNodes` | ❌ 只有展示名、filename、pageId |
+| `downloadResources` | mapping 的 `pages[*].html` | ✅ 拉 CDN 并落盘 |
+
+因此要看 **CDN 上的 HTML 路径**，必须走下载（或调试台「2. 下载资源」触发的同一套解析），不能只看页面列表 Tab。
+
+#### 3.4.3 响应中的 `sources`（调试台可见）
+
+`downloadResources` 返回值 `DownloadResourcesResult` 含 `sources` 字段（**不返回 HTML 正文**，只返回解析出的 URL）：
+
+```json
+{
+  "status": "downloaded",
+  "version_id": "...",
+  "output_dir": ".../lanhu_prototypes/{pid}/{docId}_{文档名}/",
+  "sources": {
+    "document_id": "...",
+    "document_name": "劳动节",
+    "version_id": "...",
+    "json_url": "https://lanhu-axure-file.oss-cn-beijing.aliyuncs.com/....json",
+    "pages": [
+      {
+        "html_filename": "劳动节.html",
+        "html_sign_md5": "f30c9cac-..._md5__21896a0b....html",
+        "html_cdn_url": "https://axure-file.lanhuapp.com/f30c9cac-..._md5__21896a0b....html",
+        "mapping_md5": "...",
+        "mapping_cdn_url": "https://axure-file.lanhuapp.com/..."
+      }
+    ]
+  }
+}
+```
+
+- REST：`POST /api/pages/download` / `analyze` 的 `download.sources` 透传上述结构
+- MCP `lanhu_page`：structuredContent 含 `download`，可同样查看 `sources`（仍无 HTML 正文）
+- 调试台 Tab：**Mapping 源**（json_url）、**页面 CDN**（每页 sign_md5 / cdn_url）见 §5.3
+- 本地目录：同上结构写入 `.lanhu-download-sources.json` 等 sidecar，见 §4.1
+
+更细的蓝湖 API 字段说明见 [`LANHU_API.md`](./LANHU_API.md) §4.2–4.4。
+
+### 3.5 分析引擎（Playwright full）
 
 使用 Playwright 在本地 HTTP 服务中打开 HTML 并截图、提取文本/样式，不再以静态 HTML 解析为默认路径。
 
@@ -157,7 +236,7 @@ flowchart TD
 
 截图/文本缓存见 `.screenshot_cache.json`（按 `version_id` + `cached_pages` 校验）。
 
-### 3.5 截图文件命名
+### 3.6 截图文件命名
 
 早期 `safePageFileName` 将中文替换为 `_`，导致多页冲突。现已改为 **与 HTML stem 一致**（仅去掉文件系统非法字符），例如：
 
@@ -188,7 +267,12 @@ faha-首充活动_styles.json
 
 ```text
 {LANHU_DATA_DIR}/lanhu_prototypes/{pid}/{docId}_{文档名}/
-  ├── *.html, files/, resources/, .lanhu-page-cache.json
+  ├── *.html, files/, resources/, data/, images/
+  ├── .lanhu-page-cache.json           # 下载缓存判定（version_id / 页列表）
+  ├── .lanhu-project-mapping.json      # GET json_url 的完整项目 mapping
+  ├── .lanhu-download-sources.json     # json_url + 每页 sign_md5 / CDN URL
+  ├── .lanhu-page-mappings/            # 各页 GET mapping_md5 的页级 mapping
+  │   └── {页面stem}.json
   └── screenshots/
       ├── .screenshot_cache.json
       └── {页面stem}.png / .txt / _styles.json
@@ -208,6 +292,11 @@ data/
     └── f30c9cac-fc1c-42c6-ae01-592938226141/
         └── ced3943d-2af7-47b4-837f-5a31773d3ba8_【FAHA】首充活动/
             ├── .lanhu-page-cache.json
+            ├── .lanhu-project-mapping.json
+            ├── .lanhu-download-sources.json
+            ├── .lanhu-page-mappings/
+            │   ├── faha-首充活动A.json
+            │   └── ...
             ├── faha-首充活动A.html
             ├── faha-首充活动B.html
             ├── faha-首充活动C.html
@@ -237,7 +326,7 @@ data/
 |------|------|
 | `POST /api/pages/list-documents` | 项目 PRD 列表（无 docId） |
 | `POST /api/pages/list` | 文档内页面列表 |
-| `POST /api/pages/download` | 下载 Axure 包 |
+| `POST /api/pages/download` | 下载 Axure 包（响应含 `sources`：json_url、每页 sign_md5 / CDN URL） |
 | `POST /api/pages/analyze` | 下载 + 分析（需 `page_names`；可 `"all"`） |
 | `POST /api/pages/analyze-local` | 对已下载目录内单页重跑 Playwright 分析（不访问蓝湖） |
 | `GET /api/pages/screenshot?path=...` | 截图预览（路径须在 `LANHU_DATA_DIR` 下） |
@@ -250,6 +339,16 @@ data/
 | 有 docId | 手动选页 → 分析 **单页** | 无 pageId → **全部分析**；有 pageId → **单页** |
 | 入参 | URL + body 可选 `doc_id` | **仅 `url`** |
 | 「分析全部」按钮 | 已移除 | 无 pageId 时等价于 analyze all |
+
+### 5.3 结果 Tab（元信息）
+
+| Tab | 内容 |
+|-----|------|
+| Mapping 源 | `GET /api/project/image` → `json_url`、`version_id` |
+| 页面 CDN | 每页 `html.sign_md5`、`html_cdn_url`、`mapping_cdn_url` |
+| 下载结果 | `status` / `output_dir` / `reason` |
+
+点「2. 下载资源」或「3. 分析选中页面」时会自动解析并填充上述 Tab（分析内部也会走 `downloadResources`）。
 
 ---
 

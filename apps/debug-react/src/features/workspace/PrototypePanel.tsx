@@ -13,11 +13,12 @@ import type {
   ProductDocumentItem,
   ProductDocumentsListResult,
   PrototypeAnalyzeResult,
+  PrototypeDownloadResult,
   PrototypeListResult,
 } from "@/api/types";
 import { parseLanhuUrl } from "@/api/parse-url";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setResult } from "@/store/inspectSlice";
+import { setResult, resetPrototypeInspectArtifacts } from "@/store/inspectSlice";
 import { prependLog } from "@/store/logsSlice";
 import { persistToStorage } from "@/store/settingsSlice";
 import {
@@ -32,6 +33,7 @@ import { setPrototypeActiveTab, setPrototypeResultGroup, setLoading } from "@/st
 import { API_BASE } from "@/api/client";
 import { selectHasCookie } from "./selectors";
 import { changePrototypeUrl, showToast } from "./workspaceActions";
+import { storePrototypeDownloadSources } from "./prototypeResultUtils";
 
 function isPrototypeProjectUrl(url: string): boolean {
   try {
@@ -79,7 +81,10 @@ export function PrototypePanel() {
   }, [url]);
 
   const urlReady = Boolean(parsedPrototype) && url.includes("/product");
-  const docId = prototypeParams?.doc_id ?? parsedPrototype?.doc_id ?? selectedDocId ?? null;
+  const urlDocId = prototypeParams?.doc_id ?? parsedPrototype?.doc_id ?? null;
+  /** 文档列表中的手动选择优先于 URL 内 docId（避免 URL 指向 A 文档却想查看 B） */
+  const docId = selectedDocId ?? urlDocId;
+  const docIdOverridden = Boolean(selectedDocId && urlDocId && selectedDocId !== urlDocId);
   const pageId = prototypeParams?.page_id ?? parsedPrototype?.page_id ?? null;
   const hasDocId = Boolean(docId);
 
@@ -175,17 +180,14 @@ export function PrototypePanel() {
   const downloadPages = (forceUpdate = false) => {
     const actionId = forceUpdate ? "prototype-download-force" : "prototype-download";
     return runAction(actionId, "/api/pages/download", "下载 Axure 资源", async () => {
-      const data = (await apiDownloadPages({ url, docId, forceUpdate })) as {
-        ok?: boolean;
-        status?: string;
-        output_dir?: string;
-      };
+      const data = (await apiDownloadPages({ url, docId, forceUpdate })) as PrototypeDownloadResult;
       if (!data.ok) throw new Error("下载失败");
 
       dispatch(setPrototypeOutputDir(data.output_dir ?? null));
+      storePrototypeDownloadSources(dispatch, data.sources);
       dispatch(setResult({ key: "prototypeDownload", data }));
       dispatch(setPrototypeResultGroup("meta"));
-      dispatch(setPrototypeActiveTab("prototypeDownload"));
+      dispatch(setPrototypeActiveTab("prototypeMappingSource"));
       showToast(dispatch, `下载完成：${data.status ?? "done"}`);
     });
   };
@@ -205,6 +207,10 @@ export function PrototypePanel() {
       if (!data.ok) throw new Error("页面分析失败");
 
       dispatch(setPrototypeOutputDir(data.output_dir ?? null));
+      storePrototypeDownloadSources(dispatch, data.download?.sources);
+      if (data.download) {
+        dispatch(setResult({ key: "prototypeDownload", data: { ok: true, ...data.download } }));
+      }
       if (data.document?.pages?.length) {
         dispatch(setPrototypePages(data.document.pages));
         dispatch(setPrototypeDocumentName(data.document.document_name ?? null));
@@ -245,6 +251,7 @@ export function PrototypePanel() {
     dispatch(setPrototypePages([]));
     dispatch(setSelectedPrototypePageName(null));
     dispatch(setPrototypeOutputDir(null));
+    dispatch(resetPrototypeInspectArtifacts());
     showToast(dispatch, `已选文档：${document.name}`);
   };
 
@@ -293,6 +300,11 @@ export function PrototypePanel() {
             <div className="text-muted-foreground grid gap-1 text-xs sm:grid-cols-2">
               <span>文档：{documentName ?? "—"}</span>
               <span>docId：{docId ?? "（待选文档）"}</span>
+              {docIdOverridden ? (
+                <span className="text-amber-700 dark:text-amber-300 sm:col-span-2">
+                  当前使用选中文档（URL 内 docId：{urlDocId} 已忽略）
+                </span>
+              ) : null}
               {pageId ? <span className="sm:col-span-2">pageId：{pageId}</span> : null}
               <span className="sm:col-span-2">缓存目录：{outputDir ?? "（下载/分析后显示）"}</span>
             </div>
