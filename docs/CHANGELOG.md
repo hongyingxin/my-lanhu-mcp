@@ -6,41 +6,60 @@
 
 ## [Unreleased]
 
-### 设计稿 analyze 落盘（MCP + REST 对齐）
+---
 
-#### 概述
+## [0.1.4] — 2026-08-17
 
-`lanhu_design(mode=analyze)` 与 `POST /api/designs/analyze` 共用 `persistAnalyzeArtifacts`，MCP 侧**默认落盘**（此前 MCP 仅返回 content）。
+### 概述
 
-#### `@lanhu/core`
+统一 MCP / REST **落盘行为**：设计稿 `analyze` 默认落盘并扩展产物文件；新增 env **`LANHU_PERSIST_ARTIFACTS`** 全局开关；原型目录改为 **`lanhu_prototypes/{pid}/{docId}_{文档名}/`** 规范路径（替代旧 `axure_extract_*`）。
 
-- **`persistAnalyzeArtifacts` 扩展**（`analyze-artifacts.ts`）  
-  新增落盘：`{slug}.warnings.json`、`{slug}.slices.json`（B 套元数据，非 PNG）、Schema 路径的 `{slug}.css` / `{slug}.body.html`、并存的 `{slug}.sketch-fallback.html`
-- **`{slug}.analyze-meta.json` 扩展**：`projectName`、`projectId`、`teamId`、`include`、`withSlices`、`versionId`、`schemaUrl`、`documentInfo` 摘要、`warnings` 全文
-- **`analyzeDesign`**：落盘时传入 `include` / `withSlices` 写入 meta
-- 新增测试 `packages/lanhu-core/tests/analyze-artifacts.test.ts`
+### `@lanhu/core`
 
-#### `@lanhu/mcp`
+#### 设计稿 analyze 落盘
 
-- **`lanhu_design` · `mode=analyze`**：分析成功后调用 `persistAnalyzeArtifacts`；摘要提示落盘目录；`structuredContent.designs[].artifacts` 返回各文件路径
+- **`persistAnalyzeArtifacts` 扩展**（`analyze-artifacts.ts`）：`{slug}.warnings.json`、`{slug}.slices.json`（B 套元数据）、Schema 路径 `{slug}.css` / `{slug}.body.html`、并存的 `{slug}.sketch-fallback.html`
+- **`{slug}.analyze-meta.json` 扩展**：`projectName`、`projectId`、`teamId`、`include`、`withSlices`、`versionId`、`schemaUrl`、`documentInfo`、`warnings` 全文
+- **`analyzeDesign`**：落盘时写入 `include` / `withSlices`
+- 测试：`analyze-artifacts.test.ts`
 
-#### 文档
+#### 落盘开关
 
-- 新增 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md)（设计稿 + 原型落盘目录树）
-- 更新 `GITIGNORE.md`、`CURSOR_MCP.md`、`MCP_DESIGN.md`、`MCP_IMPLEMENTATION.md`、`MCP_SLICES.md`、`DEVELOPMENT.md`、`TROUBLESHOOTING.md`、`BACKLOG.md`、`README.md`、`PROTOTYPE_AND_MCP.md`、`lanhu-core/README.md`
+- **`resolveLanhuPersistArtifacts`**、**`createLanhuEphemeralWorkDir`** / **`removeLanhuEphemeralWorkDir`**（`persist-config.ts`）
+- **`fetchPrototypeDownloadSources`**：`LANHU_PERSIST_ARTIFACTS=false` 时 `download` 仅返回 CDN 源，不写磁盘
+- 测试：`persist-config.test.ts`
 
-#### 升级注意
+#### 原型路径
 
-1. `npm run build:mcp` 后重启 MCP
-2. 已有 analyze 目录需**重新 analyze** 才会生成 warnings/css/body 等新文件
+- 默认输出由 `data/axure_extract_{docId8}/` + `*_screenshots/` 改为  
+  `{LANHU_DATA_DIR}/lanhu_prototypes/{pid}/{docId}_{文档名}/screenshots/`
+- 与 `lanhu_designs/{pid}/{designId}_{slug}/` 同族分层；自定义 `output_dir` 时截图默认 `{output_dir}/screenshots/`
+
+### `@lanhu/mcp`
+
+- **`lanhu_design` · `mode=analyze`**：分析成功后按 env 调用 `persistAnalyzeArtifacts`；摘要提示落盘目录；`structuredContent.designs[].artifacts` 返回路径
+- **`lanhu_design` · `mode=slices`**：`LANHU_PERSIST_ARTIFACTS=false` 时退回 B 套元数据 JSON，不下载 PNG
+- **`lanhu_page`**：`persist=false` 时用系统 temp 跑 Playwright，返回后清理；`persist=true` 时走 `lanhu_prototypes/` 规范路径
+- **`loadConfig`**：读取 `LANHU_PERSIST_ARTIFACTS`
+
+### `server-nest`
+
+- **`resolveLanhuPersistArtifacts`** 与 MCP 共用 env
+- **`POST /api/pages/analyze`**：`persist=false` 时允许 `tmpdir` 下截图路径供调试台读取
+- **`POST /api/pages/download`**：`persist=false` 时仅返回 `sources`
+
+### 文档
+
+- 新增 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md)
+- 更新 `GITIGNORE.md`、`CURSOR_MCP.md`、`MCP_DESIGN.md`、`MCP_IMPLEMENTATION.md`、`MCP_SLICES.md`、`DEVELOPMENT.md`、`TROUBLESHOOTING.md`、`MCP_INSPECTOR.md`、`BACKLOG.md`、`README.md`、`PROTOTYPE_AND_MCP.md`、`lanhu-core/README.md`
+
+### 升级注意
+
+1. `npm run build:mcp`（及 `server-nest` 若在用）后重启 MCP / HTTP 服务
+2. 已有 analyze 目录需**重新 analyze** 才会生成 warnings / css / body 等新文件
 3. B 套切图 **PNG** 仍走 `mode=slices`，不在 analyze 落盘范围内
-
-### 原型落盘路径
-
-- **变更**：由 `data/axure_extract_{docId8}/` + `*_screenshots/` 改为  
-  `{LANHU_DATA_DIR}/lanhu_prototypes/{pid}/{docId}_{文档名}/` + 子目录 `screenshots/`
-- **对齐**：与 `lanhu_designs/{pid}/{designId}_{slug}/` 同族分层规则
-- **影响**：MCP `lanhu_page`、`POST /api/pages/*` 默认路径；自定义 `output_dir` 时截图默认 `{output_dir}/screenshots/`
+4. 原型旧目录 `axure_extract_*` 不会自动迁移；新请求写入 `lanhu_prototypes/`
+5. Inspector 调试见 [`MCP_INSPECTOR.md`](./MCP_INSPECTOR.md)（本机终端启动、`unset PLAYWRIGHT_BROWSERS_PATH`）
 
 ---
 

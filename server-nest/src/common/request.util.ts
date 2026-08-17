@@ -1,3 +1,5 @@
+import { resolveLanhuPersistArtifacts } from "@lanhu/core";
+
 export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -38,8 +40,11 @@ export function getBooleanField(body: unknown, key: string): boolean {
   return isRecord(body) && body[key] === true;
 }
 
-/** analyze 落盘默认开启，仅 `persistArtifacts: false` 时关闭 */
+/** analyze 落盘默认开启；`LANHU_PERSIST_ARTIFACTS=false` 或 body `persistArtifacts: false` 时关闭 */
 export function resolvePersistArtifacts(body: unknown): boolean {
+  if (!resolveLanhuPersistArtifacts()) {
+    return false;
+  }
   if (!isRecord(body)) {
     return true;
   }

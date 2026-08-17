@@ -117,7 +117,8 @@ server-nest / debug-react   ← 独立，MCP 不依赖
 | 变量 | 必填 | 说明 |
 |------|------|------|
 | `LANHU_COOKIE` | 是 | 蓝湖 Cookie（读仓库根 `.env` 或 `mcp.json` env） |
-| `LANHU_DATA_DIR` | 否 | 落盘根目录，默认 `./data` |
+| `LANHU_DATA_DIR` | 否 | 落盘根目录，默认 `{repoRoot}/data`（相对路径锚定仓库根） |
+| `LANHU_PERSIST_ARTIFACTS` | 否 | 是否写入 `LANHU_DATA_DIR`，默认 `true` |
 
 DDS 请求复用 `LANHU_COOKIE`。`.env.example` 中的 `LANHU_DDS_COOKIE` 为预留项，MCP 当前不读取。
 
@@ -244,7 +245,7 @@ export interface AnalyzeDesignOptions {
 }
 ```
 
-`analyze-design.ts`：`analyzeDesign` → `analyzeDesignWithInclude` → 可选 `persistAnalyzeArtifacts`（REST 默认开；MCP analyze **始终**调用）。
+`analyze-design.ts`：`analyzeDesign` → `analyzeDesignWithInclude` → 按 `LANHU_PERSIST_ARTIFACTS` / body `persistArtifacts` 决定是否调用 `persistAnalyzeArtifacts`。
 
 落盘文件集见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §1、[`CURSOR_MCP.md`](./CURSOR_MCP.md) §10.1。
 

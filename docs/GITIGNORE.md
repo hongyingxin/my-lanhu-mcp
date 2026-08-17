@@ -38,7 +38,7 @@
 | `data/lanhu_designs/**` | ❌ 忽略 | 设计稿 analyze / slices 写入 |
 | `data/lanhu_prototypes/**` | ❌ 忽略 | 原型 Axure 包、截图、mapping sidecar |
 
-可通过 `LANHU_DATA_DIR` 把根目录指到仓库外（内容同样不应提交）。
+可通过 `LANHU_DATA_DIR` 把根目录指到仓库外（如 `/Users/hong/my-text-data`；内容同样不应提交）。
 
 ### 2.1 设计稿 `lanhu_designs/`（摘要）
 

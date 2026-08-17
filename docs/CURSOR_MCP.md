@@ -11,7 +11,8 @@
 | 变量 | 必填 | 说明 |
 |------|------|------|
 | `LANHU_COOKIE` | 是 | 蓝湖登录 Cookie（浏览器 DevTools → Network 复制） |
-| `LANHU_DATA_DIR` | 否 | 本地落盘根目录，默认 `{repoRoot}/data` |
+| `LANHU_DATA_DIR` | 否 | 本地落盘根目录，默认 `{repoRoot}/data`；相对路径锚定仓库根（如 `hong/my-data`）；绝对路径如 `/Users/hong/my-text-data`（**勿用** `~`，Node 不展开） |
+| `LANHU_PERSIST_ARTIFACTS` | 否 | 是否写入 `LANHU_DATA_DIR`，默认 `true`；`false` 时见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §0 |
 | Playwright Chromium | 原型必填 | 首次在仓库根执行 `npx playwright install chromium`（见 [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md) §3） |
 
 与 **server-nest**、**debug 页面**共用同一份 Cookie：在仓库根目录 `.env` 中填写 `LANHU_COOKIE` 即可。
@@ -225,7 +226,7 @@ Cursor 里 Agent 可通过 Tool / Resource / Prompt 访问蓝湖资源：
 
 ### 5.3 落盘与缓存
 
-`lanhu_page` 与 `lanhu_design(mode=analyze)` **均默认落盘**。差异：REST `POST /api/designs/analyze` 可用 `persistArtifacts: false` 关闭；**MCP analyze 无此开关**，始终写入磁盘。
+`lanhu_page` 与 `lanhu_design(mode=analyze)` 默认落盘到 `LANHU_DATA_DIR`。`LANHU_PERSIST_ARTIFACTS=false` 时不写 `data/`；REST 仍可用 body `persistArtifacts: false` 在 env 为 `true` 时单次关闭 analyze。
 
 | 目录 | 内容 |
 |------|------|
@@ -411,7 +412,7 @@ lanhu_page
 
 **Resource `design`**：返回 JSON（含 `html_code`、`design_tokens` 等），不含 MCP image 块与 workflow 长文。详见 `mcp/src/tools/lanhu-design.ts`。
 
-**MCP analyze 落盘**：`lanhu_design(mode=analyze)` 与 REST 相同，默认调用 `persistAnalyzeArtifacts` 写入 `data/lanhu_designs/{pid}/{designId}_{slug}/`。除 HTML、mapping、schema/sketch、各类摘要外，还包含：
+**MCP analyze 落盘**：`LANHU_PERSIST_ARTIFACTS=true`（默认）时，`lanhu_design(mode=analyze)` 与 REST 相同，调用 `persistAnalyzeArtifacts` 写入 `{LANHU_DATA_DIR}/lanhu_designs/{pid}/{designId}_{slug}/`。除 HTML、mapping、schema/sketch、各类摘要外，还包含：
 
 | 文件 | 条件 |
 |------|------|

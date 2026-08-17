@@ -111,7 +111,7 @@ lanhu_design(url, mode, design_names?, include?)
 - 显式 `design_names` 优先于 URL `image_id`（允许 override）。
 - 主路径：Schema → HTML；失败或 `detailDetach` → Sketch fallback。
 - 支持 `design_names: "all"` 多稿并发（建议上限 5）。
-- **落盘**：与 REST `POST /api/designs/analyze` 共用 `persistAnalyzeArtifacts`（MCP **默认始终落盘**）；产物路径见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §1。
+- **落盘**：与 REST 共用 env `LANHU_PERSIST_ARTIFACTS`（默认 `true`）及 `persistAnalyzeArtifacts`；产物路径见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §1。
 
 ### 4.3 `slices`
 
@@ -284,7 +284,7 @@ flowchart LR
 | 项 | HTTP analyze | MCP |
 |----|--------------|-----|
 | 未传画板 | 默认 `designs[0]` | stage 多稿：**报错**；URL 含 `image_id` 或仅 1 张：**自动选** |
-| 落盘 | 默认开启；`persistArtifacts: false` 可关 | **始终落盘**（无关闭开关） |
+| 落盘 | 默认开启；body `persistArtifacts: false` 可关（env 为 `false` 时强制不落盘） | 读 env `LANHU_PERSIST_ARTIFACTS`（默认 `true`）；与 REST 共用 |
 | 响应 | `artifacts` 路径 + 分析字段 | 文本 summary（含落盘目录）+ `structuredContent.designs[].artifacts` |
 
 ---

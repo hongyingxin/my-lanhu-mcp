@@ -1,4 +1,5 @@
 import { join, resolve } from "node:path";
+import { tmpdir } from "node:os";
 import {
   BadGatewayException,
   BadRequestException,
@@ -9,8 +10,10 @@ import {
 import {
   analyzeLocalPage,
   analyzePrototypePages,
+  createLanhuEphemeralWorkDir,
   createLanhuFetch,
   downloadResources,
+  fetchPrototypeDownloadSources,
   getPrototypeDocumentInfo,
   listPages,
   listProductDocuments,
@@ -26,7 +29,7 @@ import {
   resolveRequestDdsCookie,
   toErrorMessage,
 } from "../common/request.util.js";
-import { getLanhuDataDir } from "../env.js";
+import { getLanhuDataDir, getLanhuPersistArtifacts } from "../env.js";
 
 @Injectable()
 export class PagesService {
@@ -90,6 +93,18 @@ export class PagesService {
     return typeof name === "string" && name.trim() ? name.trim() : "Unknown";
   }
 
+  private getCustomPackageDir(body: unknown): string | undefined {
+    const custom = getStringField(body, "outputDir") ?? getStringField(body, "output_dir");
+    return custom?.trim() || undefined;
+  }
+
+  private shouldPersistToDataDir(body: unknown): boolean {
+    if (this.getCustomPackageDir(body)) {
+      return true;
+    }
+    return getLanhuPersistArtifacts();
+  }
+
   private async resolveDefaultPackageDir(
     fetchImpl: ReturnType<typeof createLanhuFetch>,
     url: string,
@@ -126,9 +141,12 @@ export class PagesService {
     url: string,
     docId: string,
   ): Promise<string> {
-    const custom = getStringField(body, "outputDir") ?? getStringField(body, "output_dir");
-    if (custom?.trim()) {
-      return custom.trim();
+    const custom = this.getCustomPackageDir(body);
+    if (custom) {
+      return custom;
+    }
+    if (!getLanhuPersistArtifacts()) {
+      return createLanhuEphemeralWorkDir(`lanhu-prototype-${docId}-`);
     }
     return this.wrap(() => this.resolveDefaultPackageDir(fetchImpl, url, docId));
   }
@@ -146,9 +164,13 @@ export class PagesService {
       return custom.trim();
     }
 
-    const customPackage = getStringField(body, "outputDir") ?? getStringField(body, "output_dir");
-    if (customPackage?.trim()) {
-      return join(customPackage.trim(), "screenshots");
+    const customPackage = this.getCustomPackageDir(body);
+    if (customPackage) {
+      return join(customPackage, "screenshots");
+    }
+
+    if (!getLanhuPersistArtifacts()) {
+      return join(packageDir, "screenshots");
     }
 
     return this.wrap(() => this.resolveDefaultScreenshotDir(fetchImpl, url, docId));
@@ -174,10 +196,16 @@ export class PagesService {
   async download(body: unknown) {
     const { url, docId } = this.resolveDocumentContext(body);
     const fetchImpl = this.createFetch(body);
+
+    if (!this.shouldPersistToDataDir(body)) {
+      const result = await this.wrap(() => fetchPrototypeDownloadSources(fetchImpl, url));
+      return { ok: true, persist_artifacts: false, ...result };
+    }
+
     const outputDir = await this.resolvePackageOutputDir(body, fetchImpl, url, docId);
     const forceUpdate = getBooleanField(body, "forceUpdate") ?? getBooleanField(body, "force_update") ?? false;
     const result = await this.wrap(() => downloadResources(fetchImpl, url, outputDir, forceUpdate));
-    return { ok: true, ...result };
+    return { ok: true, persist_artifacts: true, ...result };
   }
 
   async analyze(body: unknown) {
@@ -209,6 +237,7 @@ export class PagesService {
 
     return {
       ok: true,
+      persist_artifacts: this.shouldPersistToDataDir(body),
       output_dir: outputDir,
       screenshot_output_dir: result.screenshot_output_dir,
       total_requested: result.results.length,
@@ -222,11 +251,12 @@ export class PagesService {
 
   resolveScreenshotFile(absPath: string): string {
     const dataRoot = resolve(getLanhuDataDir());
+    const tmpRoot = resolve(tmpdir());
     const normalized = resolve(absPath);
-    if (!normalized.startsWith(dataRoot)) {
-      throw new ForbiddenException("Screenshot path is outside LANHU_DATA_DIR");
+    if (normalized.startsWith(dataRoot) || normalized.startsWith(tmpRoot)) {
+      return normalized;
     }
-    return normalized;
+    throw new ForbiddenException("Screenshot path is outside LANHU_DATA_DIR or system temp");
   }
 
   async analyzeLocal(body: unknown) {

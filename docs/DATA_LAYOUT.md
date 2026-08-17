@@ -3,11 +3,21 @@
 > `{LANHU_DATA_DIR}` 默认 `{repoRoot}/data`（MCP 锚定仓库根，见 [`CHANGELOG.md`](./CHANGELOG.md) §0.1.3）。  
 > Git 忽略规则见 [`GITIGNORE.md`](./GITIGNORE.md)。设计稿 MCP 用法见 [`CURSOR_MCP.md`](./CURSOR_MCP.md) §10.1；原型见 [`PROTOTYPE_AND_MCP.md`](./PROTOTYPE_AND_MCP.md) §4。
 
+## 0. 落盘开关 `LANHU_PERSIST_ARTIFACTS`
+
+| 值 | 含义 |
+|----|------|
+| 未设置 / `true` | 写入 `{LANHU_DATA_DIR}/lanhu_designs/`、`lanhu_prototypes/` |
+| `false` | **不写 `data/`**；设计稿 analyze 仅返回内存结果；`mode=slices` 仅 B 套元数据 JSON；原型 analyze 用系统临时目录跑 Playwright（MCP 返回后清理 temp，REST 截图路径在 `tmpdir` 下供调试台读取） |
+
+REST `POST /api/designs/analyze` 在 env 为 `false` 时忽略 body `persistArtifacts: true`；body `persistArtifacts: false` 在 env 为 `true` 时仍可单次关闭。
+
 ---
 
 ## 1. 设计稿 `lanhu_designs/`
 
-触发：`POST /api/designs/analyze`（默认 `persistArtifacts: true`）、MCP `lanhu_design(mode=analyze)`（**始终落盘**）、MCP `mode=slices`（切图 PNG 子目录）。
+触发：`POST /api/designs/analyze`（默认 `persistArtifacts: true`）、MCP `lanhu_design(mode=analyze)`、`mode=slices`（切图 PNG 子目录）。  
+当 `LANHU_PERSIST_ARTIFACTS=false` 时，analyze 与 slices **PNG 下载**均跳过落盘（slices 仅返回 B 套元数据 JSON）。
 
 ```text
 {LANHU_DATA_DIR}/lanhu_designs/{projectId}/{designId}_{画板名}/
@@ -37,7 +47,7 @@
 - `{slug}` = `safeDesignFilename(画板名)`，与目录段 `{designId}_{画板名}` 中的画板名一致。
 - `include` 缺哪项，对应文件可能不存在（例如未跑 layout 则无 `.layout-summary.txt`）。
 - B 套 **PNG** 不在 analyze 里批量下载；走 `mode=slices` 或 [`MCP_SLICES.md`](./MCP_SLICES.md)。
-- REST 可用 `persistArtifacts: false` 关闭落盘；MCP analyze **无此开关**。
+- 落盘由 env `LANHU_PERSIST_ARTIFACTS` 控制（MCP + REST 共用，默认 `true`）。REST 还可用 body `persistArtifacts: false` 在 env 为 `true` 时单次关闭 analyze。
 
 ---
 
@@ -61,7 +71,7 @@
     {页面stem}_styles.json
 ```
 
-> **旧路径（已废弃）**：`data/axure_extract_{docId前8位}/` + 并列 `*_screenshots/`（v0.1.3 以前）。
+> **旧路径（已废弃）**：`data/axure_extract_{docId前8位}/` + 并列 `*_screenshots/`（v0.1.4 以前）。
 
 ---
 

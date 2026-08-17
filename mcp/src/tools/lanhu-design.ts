@@ -1,18 +1,21 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { resolve } from "node:path";
+import { join, resolve } from "node:path";
 import * as z from "zod/v4";
 import {
   LanhuClient,
   analyzeDesignWithInclude,
+  createLanhuEphemeralWorkDir,
   DEFAULT_ANALYZE_INCLUDE,
   downloadDesignSlices,
   extractDesignTokens,
   getSketchJson,
+  getSlices,
   listDesigns,
   mapConcurrent,
   parseLanhuUrl,
   persistAnalyzeArtifacts,
   pickDesigns,
+  removeLanhuEphemeralWorkDir,
   resolveDesignOutputDir,
   SliceNamesNotFoundError,
   type AnalyzeDesignResult,
@@ -390,6 +393,25 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
               ? `slices mode uses only the first design: ${target.name}`
               : undefined;
 
+          if (!config.persistArtifacts) {
+            const slicesResult = await getSlices(client, target.id, teamId, projectId, true);
+            const structured = {
+              status: "success" as const,
+              mode: "slices" as const,
+              persist_artifacts: false,
+              design_names_resolved_from: selection.resolvedFrom,
+              warning,
+              ...slicesResult,
+            };
+            const summary = [
+              `Loaded ${slicesResult.totalSlices} slice(s) for ${target.name} (metadata only; LANHU_PERSIST_ARTIFACTS=false).`,
+              warning,
+            ]
+              .filter(Boolean)
+              .join("\n");
+            return createToolResult(summary, structured, false, LANHU_DESIGN_SLICES_MIRROR_KEY);
+          }
+
           const outputRoot = output_dir?.trim()
             ? resolve(output_dir)
             : resolveDesignOutputDir(config.dataDir, projectId, target.id, target.name);
@@ -426,6 +448,7 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
           const structured = {
             status: "success",
             mode: "slices",
+            persist_artifacts: true,
             design_names_resolved_from: selection.resolvedFrom,
             warning,
             output_root: downloadResult.outputRoot,
@@ -529,15 +552,17 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
           const entry = analyzed[i]!;
           if (entry.status === "fulfilled") {
             const slice = entry.value;
-            const artifacts = await persistAnalyzeSliceArtifacts(
-              client,
-              config,
-              projectId,
-              parsed,
-              listResult.projectName,
-              slice,
-              { include: includeList, withSlices: Boolean(with_slices) },
-            );
+            const artifacts = config.persistArtifacts
+              ? await persistAnalyzeSliceArtifacts(
+                  client,
+                  config,
+                  projectId,
+                  parsed,
+                  listResult.projectName,
+                  slice,
+                  { include: includeList, withSlices: Boolean(with_slices) },
+                )
+              : undefined;
             artifactPaths.push(artifacts);
             slices.push(slice);
           } else {
@@ -595,6 +620,7 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
           structuredContent: {
             status: "success",
             mode: "analyze",
+            persist_artifacts: config.persistArtifacts,
             project_name: listResult.projectName ?? null,
             total_designs: targetDesigns.length,
             design_names_resolved_from: selection.resolvedFrom,

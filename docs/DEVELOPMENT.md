@@ -34,7 +34,7 @@ npm run build
 
 - 调试台：http://localhost:5174 · 请求走 **前端 → server → @lanhu/core**
 - Mock 模式读 `apps/debug-react/src/mock/`
-- 设计稿 analyze 默认落盘 [`data/lanhu_designs/`](./DATA_LAYOUT.md)（REST 可用 `persistArtifacts: false` 关闭；MCP `mode=analyze` **始终落盘**）
+- 设计稿 analyze 默认落盘 [`data/lanhu_designs/`](./DATA_LAYOUT.md)；`LANHU_PERSIST_ARTIFACTS=false` 时不写磁盘（MCP + REST 共用）
 
 Cookie、Playwright、503 等排错 → [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md)
 

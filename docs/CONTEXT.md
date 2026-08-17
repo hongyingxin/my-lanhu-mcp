@@ -181,7 +181,8 @@ npm run check                 # core 类型检查
 | 变量 | 说明 |
 |------|------|
 | `LANHU_COOKIE` | 蓝湖登录 Cookie（必填；server / MCP 均读取） |
-| `LANHU_DATA_DIR` | 落盘目录，默认 `./data`（目录树见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md)） |
+| `LANHU_DATA_DIR` | 落盘目录，默认 `{repoRoot}/data`（相对路径锚定仓库根；绝对路径如 `/Users/hong/my-text-data`；见 [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md) §3） |
+| `LANHU_PERSIST_ARTIFACTS` | 是否写入 `LANHU_DATA_DIR`，默认 `true`；`false` 见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §0 |
 
 DDS 请求默认复用 `LANHU_COOKIE`。HTTP 请求 body 可传 `ddsCookie` / `dds_cookie` 覆盖；`.env.example` 中的 `LANHU_DDS_COOKIE` 为预留项，**当前 server / MCP 不读取**。
 

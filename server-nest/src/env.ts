@@ -1,4 +1,4 @@
-import { loadRepoEnvFile, resolveLanhuDataDirAnchored } from "@lanhu/core";
+import { loadRepoEnvFile, resolveLanhuDataDirAnchored, resolveLanhuPersistArtifacts } from "@lanhu/core";
 
 loadRepoEnvFile();
 
@@ -14,4 +14,9 @@ export function getLanhuCookie(): string | undefined {
 /** 本地数据目录，默认仓库根目录 `data/` */
 export function getLanhuDataDir(): string {
   return resolveLanhuDataDirAnchored();
+}
+
+/** 是否落盘到 `LANHU_DATA_DIR`；默认 true */
+export function getLanhuPersistArtifacts(): boolean {
+  return resolveLanhuPersistArtifacts();
 }

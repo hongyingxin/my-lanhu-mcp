@@ -1,12 +1,15 @@
+import { join } from "node:path";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import * as z from "zod/v4";
 
 import {
   analyzePrototypePages,
+  createLanhuEphemeralWorkDir,
   createLanhuFetch,
   listPages,
   listProductDocuments,
   parseLanhuUrl,
+  removeLanhuEphemeralWorkDir,
   resolveAxureOutputDir,
   resolveAxureScreenshotDir,
   resolvePrototypeDocumentUrl,
@@ -117,65 +120,82 @@ export function registerLanhuPageTool(server: McpServer, config: McpConfig): voi
         const document = await listPages(fetchImpl, documentUrl);
         const { pageNames, pageSelection } = resolvePageNamesForAnalyze(document, parsed.pageId);
 
-        const outputDir = resolveAxureOutputDir(
-          config.dataDir,
-          parsed.projectId!,
-          parsed.docId,
-          document.document_name,
-        );
-        const screenshotOutputDir = resolveAxureScreenshotDir(
-          config.dataDir,
-          parsed.projectId!,
-          parsed.docId,
-          document.document_name,
-        );
+        let ephemeralDir: string | undefined;
+        let outputDir: string;
+        let screenshotOutputDir: string;
 
-        const analyzed = await analyzePrototypePages(fetchImpl, documentUrl, outputDir, pageNames, {
-          screenshotOutputDir,
-        });
+        if (config.persistArtifacts) {
+          outputDir = resolveAxureOutputDir(
+            config.dataDir,
+            parsed.projectId!,
+            parsed.docId,
+            document.document_name,
+          );
+          screenshotOutputDir = resolveAxureScreenshotDir(
+            config.dataDir,
+            parsed.projectId!,
+            parsed.docId,
+            document.document_name,
+          );
+        } else {
+          ephemeralDir = await createLanhuEphemeralWorkDir(`lanhu-prototype-${parsed.docId}-`);
+          outputDir = ephemeralDir;
+          screenshotOutputDir = join(ephemeralDir, "screenshots");
+        }
 
-        const summaryText = formatPageAnalyzeSummary({
-          document: analyzed.document,
-          results: analyzed.results,
-          pageSelection,
-        });
+        try {
+          const analyzed = await analyzePrototypePages(fetchImpl, documentUrl, outputDir, pageNames, {
+            screenshotOutputDir,
+          });
 
-        const images = await buildPageAnalyzeContent(analyzed.results);
-        const content: ToolContent[] = [{ type: "text", text: summaryText }, ...images];
+          const summaryText = formatPageAnalyzeSummary({
+            document: analyzed.document,
+            results: analyzed.results,
+            pageSelection,
+          });
 
-        const successful = analyzed.results.filter((item) => item.success).length;
+          const images = await buildPageAnalyzeContent(analyzed.results);
+          const content: ToolContent[] = [{ type: "text", text: summaryText }, ...images];
 
-        return {
-          content,
-          structuredContent: {
-            status: "success",
-            document_id: parsed.docId,
-            document_name: analyzed.document.document_name,
-            page_selection: pageSelection,
-            page_id: parsed.pageId ?? null,
-            total_pages: analyzed.document.total_pages,
-            total_requested: analyzed.results.length,
-            successful,
-            failed: analyzed.results.length - successful,
-            output_dir: outputDir,
-            screenshot_output_dir: analyzed.screenshot_output_dir,
-            download: analyzed.download,
-            pages: analyzed.document.pages.map((page) => ({
-              id: page.id,
-              name: page.name,
-              filename: page.filename,
-            })),
-            results: analyzed.results.map((item) => ({
-              page_name: item.page_name,
-              success: item.success,
-              page_text: item.page_text ?? null,
-              page_design_info_text: item.page_design_info_text ?? null,
-              screenshot_path: item.screenshot_path ?? null,
-              from_cache: item.from_cache ?? false,
-              error: item.error ?? null,
-            })),
-          },
-        };
+          const successful = analyzed.results.filter((item) => item.success).length;
+
+          return {
+            content,
+            structuredContent: {
+              status: "success",
+              persist_artifacts: config.persistArtifacts,
+              document_id: parsed.docId,
+              document_name: analyzed.document.document_name,
+              page_selection: pageSelection,
+              page_id: parsed.pageId ?? null,
+              total_pages: analyzed.document.total_pages,
+              total_requested: analyzed.results.length,
+              successful,
+              failed: analyzed.results.length - successful,
+              output_dir: config.persistArtifacts ? outputDir : null,
+              screenshot_output_dir: config.persistArtifacts ? analyzed.screenshot_output_dir : null,
+              download: analyzed.download,
+              pages: analyzed.document.pages.map((page) => ({
+                id: page.id,
+                name: page.name,
+                filename: page.filename,
+              })),
+              results: analyzed.results.map((item) => ({
+                page_name: item.page_name,
+                success: item.success,
+                page_text: item.page_text ?? null,
+                page_design_info_text: item.page_design_info_text ?? null,
+                screenshot_path: config.persistArtifacts ? (item.screenshot_path ?? null) : null,
+                from_cache: item.from_cache ?? false,
+                error: item.error ?? null,
+              })),
+            },
+          };
+        } finally {
+          if (ephemeralDir) {
+            await removeLanhuEphemeralWorkDir(ephemeralDir);
+          }
+        }
       } catch (error) {
         if (error instanceof Error && error.message.startsWith("Invalid pageId:")) {
           const availableMatch = error.message.match(/Available pages: (.+)$/);

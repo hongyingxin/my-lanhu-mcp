@@ -1,4 +1,4 @@
-import { loadRepoEnvFile, resolveLanhuDataDirAnchored } from "@lanhu/core";
+import { loadRepoEnvFile, resolveLanhuDataDirAnchored, resolveLanhuPersistArtifacts } from "@lanhu/core";
 
 loadRepoEnvFile();
 
@@ -7,6 +7,7 @@ export interface McpConfig {
   serverVersion: string;
   lanhuCookie?: string;
   dataDir: string;
+  persistArtifacts: boolean;
 }
 
 export class ConfigurationError extends Error {
@@ -24,6 +25,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): McpConfig {
     serverVersion: env["MCP_SERVER_VERSION"]?.trim() || "0.1.0",
     lanhuCookie,
     dataDir: resolveLanhuDataDirAnchored(env),
+    persistArtifacts: resolveLanhuPersistArtifacts(env),
   };
 }
 

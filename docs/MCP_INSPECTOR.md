@@ -8,6 +8,7 @@
 
 1. 已在仓库根目录配置 `.env`，并填入 `LANHU_COOKIE`（与 HTTP 服务相同）。
 2. 已执行 `npm install`。
+3. 若需测 **`lanhu_page`（原型）**：在仓库根执行 `npx playwright install chromium`（见 [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md) §3）。
 
 `LANHU_COOKIE` 也可通过 Inspector 的 `-e` 参数或 UI 中的 Env 字段传入。
 
@@ -21,51 +22,55 @@ npx @modelcontextprotocol/inspector
 
 浏览器打开：**http://localhost:6274**
 
-## 调试本仓库 MCP Server
+## 调试本仓库 MCP Server（推荐）
 
-在**仓库根目录**执行以下任一方式。
+在**本机普通终端**（Terminal.app / iTerm 等）的**仓库根目录**执行，**不要**在 Cursor 内置 Agent 终端里启动——后者会注入 sandbox 的 `PLAYWRIGHT_BROWSERS_PATH`，导致原型 Playwright 找不到浏览器。
 
-### 方式 1：开发模式（推荐）
-
-无需先 `build`，改代码后重启即可：
+### 一键启动（加载 `.env`）
 
 ```bash
-npx @modelcontextprotocol/inspector -- npx tsx mcp/src/server.ts
+cd /path/to/lanhu-node
+set -a && source .env && set +a
+unset PLAYWRIGHT_BROWSERS_PATH
+
+npx @modelcontextprotocol/inspector \
+  -e "LANHU_DATA_DIR=${LANHU_DATA_DIR}" \
+  -e "LANHU_PERSIST_ARTIFACTS=${LANHU_PERSIST_ARTIFACTS}" \
+  -e "LANHU_COOKIE=${LANHU_COOKIE}" \
+  -- npx tsx mcp/src/server.ts
 ```
 
-若 `.env` 未生效，可显式传入 Cookie：
+终端会打印带 `MCP_PROXY_AUTH_TOKEN` 的 UI 地址，浏览器打开即可。
+
+### 开发模式（仅 Cookie）
+
+无需先 `build`，改代码后重启 Inspector 即可：
 
 ```bash
+unset PLAYWRIGHT_BROWSERS_PATH
 npx @modelcontextprotocol/inspector -e LANHU_COOKIE="你的cookie" -- npx tsx mcp/src/server.ts
 ```
 
-### 方式 2：使用 npm scripts
+### 使用 npm scripts
 
 ```bash
 # 等价于 tsx mcp/src/server.ts（会先 build @lanhu/core）
 npm run dev:mcp
 ```
 
-另开终端启动 Inspector 并连接：
+另开终端启动 Inspector 并连接（同样 `unset PLAYWRIGHT_BROWSERS_PATH`）：
 
 ```bash
+unset PLAYWRIGHT_BROWSERS_PATH
 npx @modelcontextprotocol/inspector -- npx tsx mcp/src/server.ts
 ```
 
-### 方式 3：构建后运行
+### 构建后运行
 
 ```bash
 npm run build:mcp
-
+unset PLAYWRIGHT_BROWSERS_PATH
 npx @modelcontextprotocol/inspector -- node mcp/dist/server.js
-```
-
-### 方式 4：在 mcp 目录下
-
-```bash
-cd mcp
-npm run build
-npx @modelcontextprotocol/inspector -- node dist/server.js
 ```
 
 ## 常用参数
@@ -79,10 +84,13 @@ npx @modelcontextprotocol/inspector -- node dist/server.js
 示例：
 
 ```bash
+unset PLAYWRIGHT_BROWSERS_PATH
 npx @modelcontextprotocol/inspector \
   -e LANHU_COOKIE="xxx" \
+  -e LANHU_DATA_DIR=/Users/hong/my-text-data \
+  -e LANHU_PERSIST_ARTIFACTS=false \
   -e MCP_SERVER_NAME="lanhu-mcp-node" \
-  -- node mcp/dist/server.js
+  -- npx tsx mcp/src/server.ts
 ```
 
 ## 在 Inspector UI 中手动配置
@@ -94,11 +102,11 @@ npx @modelcontextprotocol/inspector \
 | Transport | `stdio` |
 | Command | `node` 或 `npx` |
 | Args | `mcp/dist/server.js` 或 `tsx mcp/src/server.ts` |
-| Env | `LANHU_COOKIE`（必填） |
+| Env | `LANHU_COOKIE`（必填）；可选 `LANHU_DATA_DIR`、`LANHU_PERSIST_ARTIFACTS` |
 
 点击 **Connect** 后，在左侧可测试：
 
-- **Tools** — 如 `lanhu_design`（`list` / `analyze` / `slices` / `tokens`）
+- **Tools** — 如 `lanhu_design`（`list` / `analyze` / `slices` / `tokens`）、`lanhu_page`
 - **Resources** — 如 `project-designs`、`design`
 - **Prompts** — 设计稿还原相关提示词
 
@@ -107,10 +115,12 @@ npx @modelcontextprotocol/inspector \
 | 变量 | 必填 | 说明 |
 |------|------|------|
 | `LANHU_COOKIE` | 是 | 蓝湖登录 Cookie |
+| `LANHU_DATA_DIR` | 否 | 落盘根目录，默认 `{repoRoot}/data`；相对路径锚定仓库根；绝对路径如 `/Users/hong/my-text-data`（`~` 不展开） |
+| `LANHU_PERSIST_ARTIFACTS` | 否 | 是否写入 `LANHU_DATA_DIR`，默认 `true`；`false` 见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §0 |
 | `MCP_SERVER_NAME` | 否 | 服务名，默认 `lanhu-mcp-node` |
 | `MCP_SERVER_VERSION` | 否 | 版本号，默认 `0.1.0` |
 
-配置加载逻辑见 `mcp/src/config.ts`：优先读取仓库根目录 `.env`。
+配置加载逻辑见 `mcp/src/config.ts`：优先读取仓库根目录 `.env`（不覆盖已有 env）。
 
 ## 常见问题
 
@@ -118,13 +128,21 @@ npx @modelcontextprotocol/inspector \
 
 在 `.env` 中配置，或通过 `-e LANHU_COOKIE=...` 传入。
 
+**`browserType.launch: Executable doesn't exist`（路径含 `cursor-sandbox-cache`）**
+
+在 Cursor 内置终端启动了 Inspector。改在**本机普通终端**执行，并 `unset PLAYWRIGHT_BROWSERS_PATH`（见上文「一键启动」）。
+
 **`node mcp/dist/server.js` 报错找不到文件**
 
 先执行 `npm run build:mcp`。
 
 **只开 Inspector、不传 server 命令**
 
-UI 能打开，但不会自动连上本仓库 MCP；需在 UI 中手动填写 Command / Args / Env，或使用上文「调试本仓库 MCP Server」中带 `--` 的一键命令。
+UI 能打开，但不会自动连上本仓库 MCP；需在 UI 中手动填写 Command / Args / Env，或使用上文「一键启动」命令。
+
+**改了 `.env` 不生效**
+
+重启 Inspector；`-e` 传入的值会覆盖 shell 里未 export 的变量。
 
 **首次 `npx` 较慢**
 
@@ -137,10 +155,17 @@ UI 能打开，但不会自动连上本仓库 MCP；需在 UI 中手动填写 Co
 npm run dev:mcp      # 直接跑 MCP（stdio，供 Cursor 等客户端使用）
 npm run build:mcp    # 构建 mcp → dist/
 
-# Inspector + 本仓库 MCP（开发）
-npx @modelcontextprotocol/inspector -- npx tsx mcp/src/server.ts
+# Inspector + 本仓库 MCP（开发，本机终端）
+unset PLAYWRIGHT_BROWSERS_PATH
+set -a && source .env && set +a
+npx @modelcontextprotocol/inspector \
+  -e "LANHU_DATA_DIR=${LANHU_DATA_DIR}" \
+  -e "LANHU_PERSIST_ARTIFACTS=${LANHU_PERSIST_ARTIFACTS}" \
+  -e "LANHU_COOKIE=${LANHU_COOKIE}" \
+  -- npx tsx mcp/src/server.ts
 
 # Inspector + 本仓库 MCP（生产构建）
 npm run build:mcp
+unset PLAYWRIGHT_BROWSERS_PATH
 npx @modelcontextprotocol/inspector -- node mcp/dist/server.js
 ```

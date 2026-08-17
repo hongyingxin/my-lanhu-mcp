@@ -278,7 +278,7 @@ faha-首充活动_styles.json
       └── {页面stem}.png / .txt / _styles.json
 ```
 
-与 UI 设计稿对比：**原型 MCP 调用即落盘**；`lanhu_design(mode=analyze)` **同样默认落盘**（与 REST `persistArtifacts` 一致），含 warnings、slices 元数据、Schema css/body 及扩展 meta。目录命名与 `lanhu_designs/{pid}/{designId}_{slug}/` 同族。
+与 UI 设计稿对比：**原型 MCP 调用即落盘**（`LANHU_PERSIST_ARTIFACTS=false` 时用 temp 目录，不写 `LANHU_DATA_DIR`）；`lanhu_design(mode=analyze)` 同样受 env 控制。目录命名与 `lanhu_designs/{pid}/{designId}_{slug}/` 同族。
 
 MCP 不支持自定义 `output_dir`；REST analyze 可在 body 传 `output_dir`（包根）与 `screenshot_output_dir`（未传时默认为 `{output_dir}/screenshots/`）。
 
@@ -314,7 +314,7 @@ data/
 - 一次 `page_names: "all"`，或
 - 多次单页分析，文件追加到同一 `screenshots/` 目录
 
-> **旧路径**：v0.1.3 及以前为 `data/axure_extract_{docId前8位}/` 与 `*_screenshots/` 两个并列目录，已废弃。
+> **旧路径**：v0.1.4 及以前为 `data/axure_extract_{docId前8位}/` 与 `*_screenshots/` 两个并列目录，已废弃。
 
 ---
 
@@ -425,14 +425,19 @@ cd mcp && npm run build
 
 # 环境变量（repo 根 .env 或 MCP 配置）
 LANHU_COOKIE=...
-LANHU_DATA_DIR=./data   # 可选，默认 data
+LANHU_DATA_DIR=/Users/hong/my-text-data   # 可选；相对路径锚定 repo 根；~ 不展开
+LANHU_PERSIST_ARTIFACTS=false             # 可选；默认 true
 ```
 
-MCP Inspector 示例：
+MCP Inspector 示例（**本机普通终端**，见 [`MCP_INSPECTOR.md`](./MCP_INSPECTOR.md)）：
 
 ```bash
+set -a && source .env && set +a
+unset PLAYWRIGHT_BROWSERS_PATH
 npx @modelcontextprotocol/inspector \
-  -e LANHU_COOKIE="..." \
+  -e "LANHU_DATA_DIR=${LANHU_DATA_DIR}" \
+  -e "LANHU_PERSIST_ARTIFACTS=${LANHU_PERSIST_ARTIFACTS}" \
+  -e "LANHU_COOKIE=${LANHU_COOKIE}" \
   -- npx tsx mcp/src/server.ts
 ```
 

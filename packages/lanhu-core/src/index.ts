@@ -31,6 +31,7 @@ export {
   analyzeLocalPage,
   analyzePrototypePages,
   downloadResources,
+  fetchPrototypeDownloadSources,
   getPrototypeDocumentInfo,
   listPages,
   listProductDocuments,
@@ -39,6 +40,7 @@ export {
 export type {
   AnalyzeLocalPageResult,
   DownloadResourcesResult,
+  FetchPrototypeDownloadSourcesResult,
   LanhuPageEntry,
   LanhuPagesListResult,
   ProductDocumentEntry,
@@ -80,6 +82,11 @@ export type { ConvertLanhuSchemaResult } from "./transform/convert-schema.js";
 export type { ConvertSketchResult } from "./transform/convert-sketch.js";
 export type { SketchLayerAnnotation } from "./transform/sketch-to-html.js";
 export { persistAnalyzeArtifacts } from "./persist/analyze-artifacts.js";
+export {
+  createLanhuEphemeralWorkDir,
+  removeLanhuEphemeralWorkDir,
+  resolveLanhuPersistArtifacts,
+} from "./persist/persist-config.js";
 export {
   resolveLanhuDataDir,
   resolveLanhuDataDirAnchored,

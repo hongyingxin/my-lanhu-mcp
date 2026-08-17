@@ -66,6 +66,12 @@ export interface DownloadResourcesResult {
   sources: PrototypeDownloadSources;
 }
 
+export interface FetchPrototypeDownloadSourcesResult {
+  status: "sources_only";
+  version_id: string;
+  sources: PrototypeDownloadSources;
+}
+
 export interface AnalyzeLocalPageResult {
   page_name: string;
   success: boolean;
@@ -644,6 +650,41 @@ async function downloadPageResources(
   scheduleGroup("images");
 
   await Promise.all(tasks);
+}
+
+export async function fetchPrototypeDownloadSources(
+  fetchImpl: FetchLike,
+  url: string,
+): Promise<FetchPrototypeDownloadSourcesResult> {
+  const params = resolvePrototypeParams(url);
+  const docInfo = await getPrototypeDocumentInfo(fetchImpl, params.projectId, params.docId);
+  const versions = Array.isArray(docInfo["versions"]) ? docInfo["versions"] : [];
+
+  if (versions.length === 0) {
+    throw new Error("Document version info not found");
+  }
+
+  const versionInfo = toRecord(versions[0]);
+  const versionId = toStringValue(versionInfo["id"]);
+  const jsonUrl = toStringValue(versionInfo["json_url"]);
+  if (!jsonUrl) {
+    throw new Error("Mapping JSON URL not found");
+  }
+
+  const projectMapping = await fetchJson(fetchImpl, jsonUrl);
+  const sources = buildPrototypeDownloadSources(
+    params.docId,
+    docInfo,
+    versionId,
+    jsonUrl,
+    projectMapping,
+  );
+
+  return {
+    status: "sources_only",
+    version_id: versionId,
+    sources,
+  };
 }
 
 export async function downloadResources(

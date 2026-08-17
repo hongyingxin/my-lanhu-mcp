@@ -51,11 +51,22 @@ npx playwright install chromium
 | 现象 | 可能原因 | 处理 |
 |------|----------|------|
 | 报错找不到 browser / executable | 未安装浏览器二进制 | 运行上方 `playwright install` |
-| analyze 超时 / `networkidle` 卡住 | Axure 页外链或脚本慢 | 重试；检查 `data/lanhu_prototypes/...` 是否完整下载 |
+| 路径含 `cursor-sandbox-cache` | 在 Cursor 内置终端启动了 Inspector / MCP | 改在**本机普通终端**启动，并 `unset PLAYWRIGHT_BROWSERS_PATH`（见 [`MCP_INSPECTOR.md`](./MCP_INSPECTOR.md)） |
+| analyze 超时 / `networkidle` 卡住 | Axure 页外链或脚本慢 | 重试；检查 `lanhu_prototypes/...` 是否完整下载（`LANHU_PERSIST_ARTIFACTS=false` 时为 temp 目录） |
 | `analyze-local` 失败 | `outputDir` 路径错误或 HTML 不存在 | 先 `POST /api/pages/download`，再对同目录 analyze-local |
-| 截图 403 / path outside | 截图路径不在 `LANHU_DATA_DIR` 下 | 使用 analyze 返回的路径，勿手改到仓库外 |
+| 截图 403 / path outside | 截图路径不在 `LANHU_DATA_DIR` 或系统 temp 下 | 使用 analyze 返回的路径；`LANHU_PERSIST_ARTIFACTS=false` 时路径在 `tmpdir` |
 
 落盘目录说明：[`DATA_LAYOUT.md`](./DATA_LAYOUT.md)、[`PROTOTYPE_AND_MCP.md`](./PROTOTYPE_AND_MCP.md) §4。
+
+### `LANHU_DATA_DIR` 写法
+
+| 目标 | `.env` 示例 |
+|------|-------------|
+| 仓库根下 `data/`（默认） | `LANHU_DATA_DIR=./data` 或省略 |
+| 仓库根下自定义子目录 | `LANHU_DATA_DIR=hong/my-text-data` |
+| 用户主目录等绝对路径 | `LANHU_DATA_DIR=/Users/hong/my-text-data` |
+
+相对路径锚定 monorepo 仓库根（MCP / server 用 `resolveLanhuDataDirAnchored`）。**勿写** `~/my-text-data`（Node 不展开 `~`）。
 
 ---
 
@@ -76,6 +87,6 @@ npx playwright install chromium
 |------|------|
 | Cursor 看不到 tool | 检查 `mcp.json` 路径是否为 **`mcp/dist/server.js`** 或 dev 用 `tsx mcp/src/server.ts`；改代码后需重启 MCP |
 | list 正常 analyze 报 `design_names` | stage 多稿 URL 须传 `design_names` 或先 list；detailDetach 含 `image_id` 可省略 |
-| Inspector 无 env | 使用 `-e LANHU_COOKIE="..."` 或在 UI Env 填写 |
+| Inspector 无 env / Playwright 报错 | 本机终端 `source .env` + `unset PLAYWRIGHT_BROWSERS_PATH` 后启动；见 [`MCP_INSPECTOR.md`](./MCP_INSPECTOR.md) |
 
 本地调试步骤：[`MCP_INSPECTOR.md`](./MCP_INSPECTOR.md)。
