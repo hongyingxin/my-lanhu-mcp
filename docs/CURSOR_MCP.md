@@ -1,6 +1,6 @@
 # Cursor 如何调用 Lanhu MCP
 
-本文说明在 Cursor 里如何使用 `@lanhu/mcp`：有哪些入口、参数怎么传、常见场景怎么组合。
+本文说明在 Cursor 里如何使用 `@lanhu/mcp`：有哪些入口、**设计稿 `lanhu_design` 与原型 `lanhu_page`** 参数怎么传、常见场景怎么组合。
 
 ---
 
@@ -11,6 +11,8 @@
 | 变量 | 必填 | 说明 |
 |------|------|------|
 | `LANHU_COOKIE` | 是 | 蓝湖登录 Cookie（浏览器 DevTools → Network 复制） |
+| `LANHU_DATA_DIR` | 否 | 本地落盘根目录，默认 `{repoRoot}/data` |
+| Playwright Chromium | 原型必填 | 首次在仓库根执行 `npx playwright install chromium`（见 [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md) §3） |
 
 与 **server-nest**、**debug 页面**共用同一份 Cookie：在仓库根目录 `.env` 中填写 `LANHU_COOKIE` 即可。
 
@@ -28,30 +30,44 @@ Cursor 里也可在 `mcp.json` 的 `env` 中配置，无需改 `.env` 文件。
 
 ## 2. MCP 提供什么
 
-Cursor 里 Agent 可通过三类能力访问蓝湖设计稿：
+Cursor 里 Agent 可通过 Tool / Resource / Prompt 访问蓝湖资源：
 
 | 类型 | 名称 | 作用 |
 |------|------|------|
-| **Tool** | `lanhu_design` | 主工具：列画板、分析、切图、tokens |
+| **Tool** | `lanhu_design` | UI 设计稿：列画板、分析、切图、tokens（路由 `stage` / `detailDetach`） |
+| **Tool** | `lanhu_page` | 原型 / PRD / Axure：列文档、下载、Playwright 截图与文本（路由 `product`） |
 | **Resource** | `project-designs` | 只读资源：`lanhu://project/{pid}/designs?tid={tid}` 列画板 |
 | **Resource** | `design` | 只读资源：`lanhu://project/{pid}/design/{design_id}?tid={tid}` 单张设计稿 JSON 分析 |
-| **Prompt** | `frontend-dev` | 预置任务：像素级前端还原 |
-| **Prompt** | `design-review` | 预置任务：设计一致性与可实现性审查（正文含推荐 `lanhu_design` 参数） |
+| **Prompt** | `frontend-dev` | 预置任务：像素级前端还原（设计稿） |
+| **Prompt** | `design-review` | 预置任务：设计一致性与可实现性审查（设计稿） |
 
-**重要**：Prompt 只生成一段「用户指令」，**不会自动拉数据**；真正取数仍靠 `lanhu_design`（或 Resource）。
+**重要**：Prompt 只生成一段「用户指令」，**不会自动拉数据**；设计稿取数靠 `lanhu_design`（或 Resource），原型取数靠 `lanhu_page`。详见 [`prototype-and-mcp.md`](./prototype-and-mcp.md)。
 
 ---
 
 ## 3. 推荐工作流
 
+### 3.1 UI 设计稿（`lanhu_design`）
+
 ```text
 1. list 或读 Resource project-designs  → 看清画板名 / 序号 / id
 2. lanhu_design(mode=analyze, design_names=...)  → 拿 HTML、预览图、tokens 等
-3. （可选）mode=slices 或 with_slices=true  → 补 B 套切图元数据
+3. （可选）mode=slices 或 with_slices=true  → 下载 B 套切图到本地（见 MCP_SLICES.md）
 4. Agent 在项目里写代码 / 做审查
 ```
 
 单张 `detailDetach` URL 可直接 `mode=analyze`（可省略 `design_names`）；`stage` 全项目须 `design_names` 或先 list。
+
+### 3.2 原型 / PRD（`lanhu_page`）
+
+```text
+1. url 仅含 tid+pid（无 docId）→ lanhu_page 返回 documents[].doc_url
+2. 用户/Agent 选一份 PRD，用 doc_url 再调 lanhu_page
+3. 有 docId + pageId → 只分析当前页；无 pageId → 分析文档内全部页面
+4. 读返回文本 + 截图（需支持图像的模型），磁盘产物在 `data/lanhu_prototypes/{pid}/{docId}_{文档名}/`
+```
+
+从蓝湖复制链接时：**需求/交互/PRD 用 `lanhu_page`**，**视觉 UI 稿用 `lanhu_design`**，勿混用。
 
 ---
 
@@ -106,7 +122,7 @@ Cursor 里 Agent 可通过三类能力访问蓝湖设计稿：
 
 ---
 
-### 4.2 ` `（仅 `mode=analyze`）
+### 4.2 `include`（仅 `mode=analyze`）
 
 控制 analyze **返回哪些数据产物**（不是换 mode）。
 
@@ -156,9 +172,85 @@ Cursor 里 Agent 可通过三类能力访问蓝湖设计稿：
 
 ---
 
-## 5. 在 Cursor 里怎么「控制」参数
+## 5. Tool：`lanhu_page`
 
-Cursor **没有** `mode` / `include` / `workflow_guide` 的单独 UI 开关，由 **对话意图 → Agent 构造 tool 参数**。
+原型 / PRD / Axure 专用。**仅一个入参 `url`**，无 `mode` / `page_names` 等字段；行为完全由 URL 中的 query 决定。
+
+### 5.1 URL 要求
+
+| 约束 | 说明 |
+|------|------|
+| 协议与域名 | 必须以 `https://lanhuapp.com/` 开头 |
+| Hash 路由 | `#/item/project/product`（不是 `stage` / `detailDetach`） |
+| 必填 query | `tid`（团队）、`pid`（项目） |
+| 文档 | 列页 / 下载 / 分析须含 `docId` 或同义 `image_id` |
+| 单页 | 可选 `pageId`，表示蓝湖 UI 当前选中的页面 |
+
+**不支持**：邀请链 `/invite`、纯 hash 片段、MCP 侧自定义 `output_dir`（落盘路径固定，见 §5.3）。
+
+### 5.2 URL 驱动分支
+
+| URL 状态 | 行为 | structuredContent.status |
+|----------|------|----------------------------|
+| 无 `docId` | 返回项目下 PRD/原型文档列表 | `need_document_selection` |
+| 有 `docId` + 有效 `pageId` | 只分析该页（截图 + 文本 + 样式） | `success` |
+| 有 `docId`、无 `pageId` | 分析文档内**全部**页面 | `success` |
+| 有 `docId` + 无效 `pageId` | 报错并返回 `available_pages` | `error` |
+
+**示例（Agent 调用 JSON）：**
+
+```json
+{
+  "url": "https://lanhuapp.com/web/#/item/project/product?tid=xxx&pid=xxx"
+}
+```
+
+→ 返回 `documents[]`，每项含 `doc_url`，选一份后再调。
+
+```json
+{
+  "url": "https://lanhuapp.com/web/#/item/project/product?tid=xxx&pid=xxx&docId=yyy&pageId=zzz"
+}
+```
+
+→ 只分析 `pageId` 对应页面。
+
+```json
+{
+  "url": "https://lanhuapp.com/web/#/item/project/product?tid=xxx&pid=xxx&docId=yyy"
+}
+```
+
+→ 分析该 PRD 内全部页面（多页时依次 Playwright，耗时较长）。
+
+### 5.3 落盘与缓存
+
+与 `lanhu_design(mode=analyze)` 不同：**MCP `lanhu_page` 调用即落盘**，无 `persistArtifacts` 开关。
+
+| 目录 | 内容 |
+|------|------|
+| `{LANHU_DATA_DIR}/lanhu_prototypes/{pid}/{docId}_{文档名}/` | Axure HTML + 静态资源 + `.lanhu-page-cache.json` |
+| `…/screenshots/` | 每页 `.png` / `.txt` / `_styles.json` + `.screenshot_cache.json` |
+
+默认 `{LANHU_DATA_DIR}` 为仓库根 `data/`（MCP 相对路径锚定 repo root）。同 `version_id` 且文件齐全时会跳过重复下载 / 截图。管线细节见 [`prototype-and-mcp.md`](./prototype-and-mcp.md) §3–§4。
+
+### 5.4 返回结构
+
+- **content[0]**：文本摘要（每页正文 +「设计样式参考」）
+- **content[1..n]**：成功页的 PNG（MCP `image` 块，base64）
+- **structuredContent**（分析成功时）含 `output_dir`、`screenshot_output_dir`、`download`、`pages[]`、`results[]`
+
+**模型要求**：截图在 content 的 image 块中，Agent 需使用**支持图像分析**的模型（Claude、GPT-4o、Gemini 等）。
+
+与调试台 REST 的差异 → [`prototype-and-mcp.md`](./prototype-and-mcp.md) §5.2。
+
+---
+
+## 6. 在 Cursor 里怎么「控制」参数
+
+Cursor **没有**单独 UI 开关，由 **对话意图 → Agent 构造 tool 参数**。
+
+### 6.1 设计稿（`lanhu_design`）
 
 | 你想做的事 | 对话示例 | Agent 应传参 |
 |------------|----------|--------------|
@@ -167,7 +259,7 @@ Cursor **没有** `mode` / `include` / `workflow_guide` 的单独 UI 开关，�
 | 轻量分析 | 「只要 HTML 和预览图」 | `include: ["html", "image"]` |
 | 不要布局摘要 | 「不要 layout summary」 | `include` 里去掉 `"layout"` |
 | 不要 STEP 1~5 | 「不要工作流说明」 | `workflow_guide: false` |
-| 只要切图元数据 | 「拉首页的 B 套切图」 | `mode: "slices"`, `design_names: "首页"` |
+| 下载 B 套切图 | 「下载首页切图到项目里」 | `mode: "slices"`, `design_names: "首页"`, 可选 `output_dir` |
 | 只要 tokens | 「提取首页 design tokens」 | `mode: "tokens"`, `design_names: "首页"` |
 | 设计审查 | 「审查这个设计稿的一致性」 | 可用 Prompt `design-review`；或 `include` 去掉 `html`，`workflow_guide: false` |
 
@@ -175,9 +267,20 @@ Cursor **没有** `mode` / `include` / `workflow_guide` 的单独 UI 开关，�
 
 单张稿结构化 JSON（无长文本/HTML 块）可读 `lanhu://project/{pid}/design/{design_id}?tid={tid}`；完整还原仍推荐 `lanhu_design(mode=analyze)`。
 
+### 6.2 原型（`lanhu_page`）
+
+| 你想做的事 | 对话示例 | Agent 应传参 |
+|------------|----------|--------------|
+| 列项目 PRD | 「这个项目有哪些需求文档」 | `url` 仅含 `tid`+`pid`（无 docId） |
+| 分析当前页 | 「分析这个 PRD 当前页」 | 从蓝湖复制含 `docId`+`pageId` 的 product 链接 |
+| 扫描整份 PRD | 「把这个 PRD 所有页面都分析一遍」 | `url` 含 `docId`，**去掉** `pageId` |
+| 换一份 PRD | 「分析【xxx】这份 PRD」 | 用上一轮返回的 `documents[].doc_url` 作为 `url` |
+
+**注意**：`lanhu_page` 只有 `url`，不能传 `page_names`；选页靠 URL 里的 `pageId`，或省略以分析全部。
+
 ---
 
-## 6. Prompt 入口
+## 7. Prompt 入口
 
 ### `frontend-dev`
 
@@ -200,7 +303,9 @@ Cursor **没有** `mode` / `include` / `workflow_guide` 的单独 UI 开关，�
 
 ---
 
-## 7. 常见组合示例
+## 8. 常见组合示例
+
+### 8.1 设计稿
 
 ```json
 {
@@ -247,9 +352,35 @@ Cursor **没有** `mode` / `include` / `workflow_guide` 的单独 UI 开关，�
 
 analyze 同时带 B 套切图元数据。
 
+### 8.2 原型
+
+```json
+{
+  "url": "https://lanhuapp.com/web/#/item/project/product?tid=xxx&pid=xxx"
+}
+```
+
+列 PRD → 从返回的 `doc_url` 再调。
+
+```json
+{
+  "url": "https://lanhuapp.com/web/#/item/project/product?tid=xxx&pid=xxx&docId=yyy&pageId=zzz"
+}
+```
+
+只分析蓝湖当前选中的一页（快）。
+
+```json
+{
+  "url": "https://lanhuapp.com/web/#/item/project/product?tid=xxx&pid=xxx&docId=yyy"
+}
+```
+
+整份 PRD 全页扫描（慢，页数多时可分批带不同 `pageId` 调）。
+
 ---
 
-## 8. 参数总览
+## 9. 参数总览
 
 ```text
 lanhu_design
@@ -258,16 +389,34 @@ lanhu_design
 ├── design_names           analyze/slices/tokens：URL 含 image_id 或仅 1 张时可省略；stage 多稿必填
 ├── include                仅 analyze；控制返回数据类型
 ├── workflow_guide         仅 analyze；默认 true；需 include 含 html 才插入 STEP 1~5
-└── with_slices            仅 analyze；是否额外挂 B 套 getSlices 元数据
+├── with_slices            仅 analyze；是否额外挂 B 套 getSlices 元数据
+└── output_dir             仅 slices；B 套切图落盘业务根目录（可选）
+
+lanhu_page
+└── url                    必填，蓝湖原型 URL（#/item/project/product）
+                           无 docId → 列文档；有 docId → 下载+分析并落盘
+                           pageId 可选：有则单页，无则全部
 ```
 
 ---
 
-## 9. 返回结构简述
+## 10. 返回结构简述
+
+### 10.1 `lanhu_design`
 
 - **文本 content**：`formatAnalyzeSummary` 拼装的说明 + 各画板 HTML / layout / mapping 等  
   摘要标题为中文，例如：`设计稿分析结果`、`--- 布局摘要 ---`、`--- 图层结构 ---`、`--- 设计令牌（Design Tokens）---`
 - **图片 content**：`include` 含 `image` 时，每画板预览图 base64（多稿时文本顶部有顺序说明）
 - **structuredContent**：JSON，含 `mode`、`include`、`workflow_guide`、各 `designs[]` 字段（`html_code`、`image_url_mapping` 等）
 
-**Resource `design`**：返回 JSON（含 `html_code`、`design_tokens` 等），不含 MCP image 块与 workflow 长文。详见 `mcp/src/tools/lanhu-design.ts` 的 `formatAnalyzeSummary` 输出。
+**Resource `design`**：返回 JSON（含 `html_code`、`design_tokens` 等），不含 MCP image 块与 workflow 长文。详见 `mcp/src/tools/lanhu-design.ts`。
+
+**MCP analyze 落盘**：`lanhu_design(mode=analyze)` **默认不落盘**；落盘走 `server-nest` `POST /api/designs/analyze`（`persistArtifacts: true`）。B 套切图落盘见 [`MCP_SLICES.md`](./MCP_SLICES.md)。
+
+### 10.2 `lanhu_page`
+
+- **文本 content**：每页 `--- 页面名 ---`、正文、`--- 设计样式参考 ---`（颜色/字体统计）
+- **图片 content**：每成功页一张 PNG（从 `_screenshots` 目录读取）
+- **structuredContent**：`output_dir`、`screenshot_output_dir`、`download`、`results[]` 等
+
+**落盘**：每次分析成功调用都会写入 `data/lanhu_prototypes/...`（见 §5.3）。格式化逻辑见 `mcp/src/format/page-result.ts`。

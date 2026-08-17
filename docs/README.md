@@ -1,6 +1,6 @@
 # 文档索引
 
-> 最后更新：2026-08-13
+> 最后更新：2026-08-17
 
 本仓库采用 **「docs 手册 + 包旁 README」**，不把所有 `.md` 搬进 `docs/`。
 
@@ -31,8 +31,8 @@
 | 文档 | 用途 |
 |------|------|
 | [**DEVELOPMENT.md**](./DEVELOPMENT.md) | **开发上手**：架构、npm 命令、包一览 |
-| [**CURSOR_MCP.md**](./CURSOR_MCP.md) | Cursor 配置与 `lanhu_design` / `lanhu_page` 参数 |
-| [**prototype-and-mcp.md**](./prototype-and-mcp.md) | 原型 URL 语义、Playwright 管线、HTTP §5 / MCP `lanhu_page` |
+| [**CURSOR_MCP.md**](./CURSOR_MCP.md) | Cursor 配置；`lanhu_design` 参数与 **`lanhu_page` 用法（§5）** |
+| [**prototype-and-mcp.md**](./prototype-and-mcp.md) | 原型 URL 语义、Playwright 管线、HTTP §5 / MCP 实现细节 |
 | [**CONTEXT.md**](./CONTEXT.md) | **项目总览**：能力边界、链路、技术选型（**新对话先读**） |
 | [**TROUBLESHOOTING.md**](./TROUBLESHOOTING.md) | Cookie、Playwright 安装、503 / MCP 常见错误 |
 | [**CHANGELOG.md**](./CHANGELOG.md) | **版本迭代记录**（功能变更、升级注意） |

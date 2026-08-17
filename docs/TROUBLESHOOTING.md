@@ -51,7 +51,7 @@ npx playwright install chromium
 | 现象 | 可能原因 | 处理 |
 |------|----------|------|
 | 报错找不到 browser / executable | 未安装浏览器二进制 | 运行上方 `playwright install` |
-| analyze 超时 / `networkidle` 卡住 | Axure 页外链或脚本慢 | 重试；检查 `data/axure_extract_*` 是否完整下载 |
+| analyze 超时 / `networkidle` 卡住 | Axure 页外链或脚本慢 | 重试；检查 `data/lanhu_prototypes/...` 是否完整下载 |
 | `analyze-local` 失败 | `outputDir` 路径错误或 HTML 不存在 | 先 `POST /api/pages/download`，再对同目录 analyze-local |
 | 截图 403 / path outside | 截图路径不在 `LANHU_DATA_DIR` 下 | 使用 analyze 返回的路径，勿手改到仓库外 |
 

@@ -4,6 +4,17 @@
 
 ---
 
+## [Unreleased]
+
+### 原型落盘路径
+
+- **变更**：由 `data/axure_extract_{docId8}/` + `*_screenshots/` 改为  
+  `{LANHU_DATA_DIR}/lanhu_prototypes/{pid}/{docId}_{文档名}/` + 子目录 `screenshots/`
+- **对齐**：与 `lanhu_designs/{pid}/{designId}_{slug}/` 同族分层规则
+- **影响**：MCP `lanhu_page`、`POST /api/pages/*` 默认路径；自定义 `output_dir` 时截图默认 `{output_dir}/screenshots/`
+
+---
+
 ## [0.1.3] — 2026-08-14
 
 ### 概述

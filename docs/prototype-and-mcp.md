@@ -95,7 +95,7 @@ Core 层 `parseLanhuUrl` 仍兼容多种输入格式；MCP 在工具入口额外
 | HTML 修复 | `packages/lanhu-core/src/transform/fix-html-files.ts` | 修复 Axure 导出 HTML 路径与脚本引用 |
 | 浏览器分析 | `packages/lanhu-core/src/transform/page-browser-analyzer.ts` | Playwright 截图 + 浏览器内提取文本/样式 |
 | 样式格式化 | `packages/lanhu-core/src/transform/page-design-info-format.ts` | 样式摘要文本 |
-| 目录解析 | `packages/lanhu-core/src/persist/data-dir.ts` | `axure_extract_{docId前8位}` 路径 |
+| 目录解析 | `packages/lanhu-core/src/persist/data-dir.ts` | `lanhu_prototypes/{pid}/{docId}_{slug}/` + `screenshots/` |
 
 ### 3.2 数据流
 
@@ -175,29 +175,57 @@ faha-首充活动_styles.json
 
 目录按 **docId 前 8 位** 命名，与页面数量无关：**一份文档固定两个顶层目录**。
 
-示例：`docId = ced3943d-2af7-47b4-837f-5a31773d3ba8`，文档内三页「首充活动 A/B/C」：
+### 4.1 谁写入、何时写入
+
+| 入口 | 文档根目录（Axure 包） | 分析产物 `screenshots/` |
+|------|------------------------|-------------------------|
+| MCP `lanhu_page`（有 `docId`） | ✅ 每次分析前（可缓存跳过） | ✅ Playwright 截图/文本/样式 |
+| `POST /api/pages/download` | ✅ | ❌ |
+| `POST /api/pages/analyze` | ✅ | ✅ |
+| `POST /api/pages/analyze-local` | ❌（须已下载） | ✅ 单页重跑 |
+
+默认路径（未传 `output_dir`）：
+
+```text
+{LANHU_DATA_DIR}/lanhu_prototypes/{pid}/{docId}_{文档名}/
+  ├── *.html, files/, resources/, .lanhu-page-cache.json
+  └── screenshots/
+      ├── .screenshot_cache.json
+      └── {页面stem}.png / .txt / _styles.json
+```
+
+与 UI 设计稿对比：**原型 MCP 调用即落盘**；`lanhu_design(mode=analyze)` 在 MCP 侧**默认只返回 content**。目录命名与 `lanhu_designs/{pid}/{designId}_{slug}/` 同族（完整 UUID + 文档名，不再截 docId 前 8 位）。
+
+MCP 不支持自定义 `output_dir`；REST analyze 可在 body 传 `output_dir`（包根）与 `screenshot_output_dir`（未传时默认为 `{output_dir}/screenshots/`）。
+
+### 4.2 目录示例
+
+示例：`pid = f30c9cac-...`，`docId = ced3943d-2af7-47b4-837f-5a31773d3ba8`，文档名「【FAHA】首充活动」，内含三页：
 
 ```text
 data/
-├── axure_extract_ced3943d/                 # Axure 下载包（整份文档）
-│   ├── .lanhu-page-cache.json
-│   ├── faha-首充活动A.html
-│   ├── faha-首充活动B.html
-│   ├── faha-首充活动C.html
-│   ├── files/
-│   └── resources/
-│
-└── axure_extract_ced3943d_screenshots/    # 分析产物（可多页并存）
-    ├── .screenshot_cache.json
-    ├── faha-首充活动A.png / .txt / _styles.json
-    ├── faha-首充活动B.png / .txt / _styles.json
-    └── faha-首充活动C.png / .txt / _styles.json
+└── lanhu_prototypes/
+    └── f30c9cac-fc1c-42c6-ae01-592938226141/
+        └── ced3943d-2af7-47b4-837f-5a31773d3ba8_【FAHA】首充活动/
+            ├── .lanhu-page-cache.json
+            ├── faha-首充活动A.html
+            ├── faha-首充活动B.html
+            ├── faha-首充活动C.html
+            ├── files/
+            ├── resources/
+            └── screenshots/
+                ├── .screenshot_cache.json
+                ├── faha-首充活动A.png / .txt / _styles.json
+                ├── faha-首充活动B.png / .txt / _styles.json
+                └── faha-首充活动C.png / .txt / _styles.json
 ```
 
 多页分析方式：
 
 - 一次 `page_names: "all"`，或
-- 多次单页分析，文件追加到同一 `_screenshots` 目录
+- 多次单页分析，文件追加到同一 `screenshots/` 目录
+
+> **旧路径**：v0.1.3 及以前为 `data/axure_extract_{docId前8位}/` 与 `*_screenshots/` 两个并列目录，已废弃。
 
 ---
 
@@ -309,6 +337,8 @@ npx @modelcontextprotocol/inspector \
   -- npx tsx mcp/src/server.ts
 ```
 
+**Cursor 用法**（URL 分支、对话示例、落盘说明）→ [`CURSOR_MCP.md`](./CURSOR_MCP.md) §3.2、§5–§6、§8.2。
+
 ---
 
 ## 7. 典型使用场景
@@ -344,7 +374,7 @@ url = ...&docId=077bbf6d-...
 | Core URL 格式 | 仍兼容 hash-only 等；可与 MCP 对齐，在 `parseLanhuUrl` 统一收紧 |
 | 双 parser | 调试台 `apps/debug-react/src/api/parse-url.ts` 与 core 不完全一致，建议统一 |
 | `versionId` in URL | 未用于跳过下载；始终以 API 最新版本 + 本地缓存为准 |
-| docId 目录前缀 8 位 | 极端情况下 UUID 前缀碰撞可能冲突 |
+| docId 目录前缀 8 位 | ~~极端情况下 UUID 前缀碰撞~~ | **已改为** 完整 docId + 文档名分层 |
 | 未实现能力 | 邀请链、`lanhu_say` 留言板、多阶段 AI prompt |
 | 调试台 | 可考虑 URL 带 pageId 时默认选中/分析该页，与 MCP 行为对齐 |
 
@@ -373,3 +403,6 @@ mcp/src/tools/lanhu-design.ts                         # 设计稿 MCP（对照�
 | `lanhu_page` | `product` | 需求、PRD、原型、Axure、交互稿 |
 
 两者共用 `LANHU_COOKIE` 与 monorepo 中的 `@lanhu/core`，但数据目录与 API 链路相互独立。
+
+- Cursor 调用方式 → [`CURSOR_MCP.md`](./CURSOR_MCP.md)（设计稿 §4，原型 §5）
+- 本地落盘目录 → [`../data/README.md`](../data/README.md) §原型落盘

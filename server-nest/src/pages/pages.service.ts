@@ -1,4 +1,4 @@
-import { resolve } from "node:path";
+import { join, resolve } from "node:path";
 import {
   BadGatewayException,
   BadRequestException,
@@ -11,6 +11,7 @@ import {
   analyzePrototypePages,
   createLanhuFetch,
   downloadResources,
+  getPrototypeDocumentInfo,
   listPages,
   listProductDocuments,
   parseLanhuUrl,
@@ -84,9 +85,73 @@ export class PagesService {
     };
   }
 
-  private resolveOutputDir(body: unknown, docId: string): string {
+  private documentNameFromInfo(docInfo: Record<string, unknown>): string {
+    const name = docInfo["name"];
+    return typeof name === "string" && name.trim() ? name.trim() : "Unknown";
+  }
+
+  private async resolveDefaultPackageDir(
+    fetchImpl: ReturnType<typeof createLanhuFetch>,
+    url: string,
+    docId: string,
+  ): Promise<string> {
+    const parsed = parseLanhuUrl(url);
+    const docInfo = await getPrototypeDocumentInfo(fetchImpl, parsed.projectId, docId);
+    return resolveAxureOutputDir(
+      getLanhuDataDir(),
+      parsed.projectId,
+      docId,
+      this.documentNameFromInfo(docInfo),
+    );
+  }
+
+  private async resolveDefaultScreenshotDir(
+    fetchImpl: ReturnType<typeof createLanhuFetch>,
+    url: string,
+    docId: string,
+  ): Promise<string> {
+    const parsed = parseLanhuUrl(url);
+    const docInfo = await getPrototypeDocumentInfo(fetchImpl, parsed.projectId, docId);
+    return resolveAxureScreenshotDir(
+      getLanhuDataDir(),
+      parsed.projectId,
+      docId,
+      this.documentNameFromInfo(docInfo),
+    );
+  }
+
+  private async resolvePackageOutputDir(
+    body: unknown,
+    fetchImpl: ReturnType<typeof createLanhuFetch>,
+    url: string,
+    docId: string,
+  ): Promise<string> {
     const custom = getStringField(body, "outputDir") ?? getStringField(body, "output_dir");
-    return custom?.trim() || resolveAxureOutputDir(getLanhuDataDir(), docId);
+    if (custom?.trim()) {
+      return custom.trim();
+    }
+    return this.wrap(() => this.resolveDefaultPackageDir(fetchImpl, url, docId));
+  }
+
+  private async resolveScreenshotOutputDir(
+    body: unknown,
+    fetchImpl: ReturnType<typeof createLanhuFetch>,
+    url: string,
+    docId: string,
+    packageDir: string,
+  ): Promise<string> {
+    const custom =
+      getStringField(body, "screenshotOutputDir") ?? getStringField(body, "screenshot_output_dir");
+    if (custom?.trim()) {
+      return custom.trim();
+    }
+
+    const customPackage = getStringField(body, "outputDir") ?? getStringField(body, "output_dir");
+    if (customPackage?.trim()) {
+      return join(customPackage.trim(), "screenshots");
+    }
+
+    return this.wrap(() => this.resolveDefaultScreenshotDir(fetchImpl, url, docId));
   }
 
   async listDocuments(body: unknown) {
@@ -109,7 +174,7 @@ export class PagesService {
   async download(body: unknown) {
     const { url, docId } = this.resolveDocumentContext(body);
     const fetchImpl = this.createFetch(body);
-    const outputDir = this.resolveOutputDir(body, docId);
+    const outputDir = await this.resolvePackageOutputDir(body, fetchImpl, url, docId);
     const forceUpdate = getBooleanField(body, "forceUpdate") ?? getBooleanField(body, "force_update") ?? false;
     const result = await this.wrap(() => downloadResources(fetchImpl, url, outputDir, forceUpdate));
     return { ok: true, ...result };
@@ -118,11 +183,14 @@ export class PagesService {
   async analyze(body: unknown) {
     const { url, docId } = this.resolveDocumentContext(body);
     const fetchImpl = this.createFetch(body);
-    const outputDir = this.resolveOutputDir(body, docId);
-    const screenshotOutputDir =
-      getStringField(body, "screenshotOutputDir")
-      ?? getStringField(body, "screenshot_output_dir")
-      ?? resolveAxureScreenshotDir(getLanhuDataDir(), docId);
+    const outputDir = await this.resolvePackageOutputDir(body, fetchImpl, url, docId);
+    const screenshotOutputDir = await this.resolveScreenshotOutputDir(
+      body,
+      fetchImpl,
+      url,
+      docId,
+      outputDir,
+    );
     const pageNames = getStringField(body, "pageName")
       ?? getStringField(body, "page_name")
       ?? getStringField(body, "pageNames")

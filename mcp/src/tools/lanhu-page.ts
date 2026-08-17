@@ -117,8 +117,18 @@ export function registerLanhuPageTool(server: McpServer, config: McpConfig): voi
         const document = await listPages(fetchImpl, documentUrl);
         const { pageNames, pageSelection } = resolvePageNamesForAnalyze(document, parsed.pageId);
 
-        const outputDir = resolveAxureOutputDir(config.dataDir, parsed.docId);
-        const screenshotOutputDir = resolveAxureScreenshotDir(config.dataDir, parsed.docId);
+        const outputDir = resolveAxureOutputDir(
+          config.dataDir,
+          parsed.projectId!,
+          parsed.docId,
+          document.document_name,
+        );
+        const screenshotOutputDir = resolveAxureScreenshotDir(
+          config.dataDir,
+          parsed.projectId!,
+          parsed.docId,
+          document.document_name,
+        );
 
         const analyzed = await analyzePrototypePages(fetchImpl, documentUrl, outputDir, pageNames, {
           screenshotOutputDir,

@@ -458,7 +458,7 @@ GET /api/project/image (pid+image_id) → 1 条 design
 GET /api/project/product_documents   → 选 doc（或无 docId 时）
 GET /api/project/image (pid+docId)   → versions[0]
 GET {mapping json_url}               → pages + sitemap
-GET axure CDN (html + assets)        → 落盘 axure_extract_*
+GET axure CDN (html + assets)        → 落盘 lanhu_prototypes/{pid}/{docId}_{slug}/
   → fixHtmlFiles → renderPrototypePages (Playwright，非 HTTP)
 ```
 

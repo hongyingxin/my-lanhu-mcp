@@ -5,6 +5,9 @@ import {
   resolveDesignOutputDir,
   resolveLanhuDataDir,
   resolveLanhuDataDirAnchored,
+  resolvePrototypeDirSegment,
+  resolvePrototypeOutputDir,
+  resolvePrototypeScreenshotDir,
   safeDesignFilename,
 } from "../src/persist/data-dir.js";
 import { getRepoRoot } from "../src/env/repo-env.js";
@@ -22,6 +25,22 @@ describe("data-dir", () => {
     expect(resolveDesignOutputDir("/tmp/data", "pid-1", "id-1", "首页")).toBe(
       "/tmp/data/lanhu_designs/pid-1/id-1_首页",
     );
+  });
+
+  it("resolvePrototypeOutputDir nests under lanhu_prototypes/{pid}/{docId}_{slug}", () => {
+    expect(
+      resolvePrototypeOutputDir("/tmp/data", "pid-1", "doc-uuid", "名人礼物"),
+    ).toBe("/tmp/data/lanhu_prototypes/pid-1/doc-uuid_名人礼物");
+  });
+
+  it("resolvePrototypeScreenshotDir uses screenshots subfolder", () => {
+    expect(
+      resolvePrototypeScreenshotDir("/tmp/data", "pid-1", "doc-uuid", "名人礼物"),
+    ).toBe("/tmp/data/lanhu_prototypes/pid-1/doc-uuid_名人礼物/screenshots");
+  });
+
+  it("resolvePrototypeDirSegment combines docId and slug", () => {
+    expect(resolvePrototypeDirSegment("doc-uuid", "PRD v1")).toBe("doc-uuid_PRD v1");
   });
 
   it("resolveLanhuDataDir prefers explicit path", () => {

@@ -169,7 +169,8 @@ packages/lanhu-core/
 | `renderPrototypePages(...)` | Playwright 渲染引擎（低层） |
 | `extractPageContentFromFile` / `extractPageContentFromHtml` | 静态 HTML 提取（辅助） |
 | `formatPageDesignInfo` | 样式摘要文本 |
-| `resolveAxureOutputDir` / `resolveAxureScreenshotDir` | `data/axure_extract_{docId8}/` 路径 |
+| `resolvePrototypeOutputDir` / `resolvePrototypeScreenshotDir` | `data/lanhu_prototypes/{pid}/{docId}_{slug}/` + `screenshots/` |
+| `resolveAxureOutputDir` / `resolveAxureScreenshotDir` | 上述函数别名（保留旧导出名） |
 
 原型管线与 MCP 行为详见 [`../../docs/prototype-and-mcp.md`](../../docs/prototype-and-mcp.md)。HTTP 路由见 [`../../server-nest/README.md`](../../server-nest/README.md) §原型接口。
 
@@ -324,7 +325,7 @@ const url = "https://lanhuapp.com/web/#/item/project/product?tid=...&pid=...&doc
 const proto = await analyzePrototypePages(
   fetch,
   url,
-  "./data/axure_extract_xxx",
+  "./data/lanhu_prototypes/{pid}/{docId}_{slug}",
   "all",
 );
 ```

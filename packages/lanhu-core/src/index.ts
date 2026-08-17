@@ -85,6 +85,9 @@ export {
   resolveAxureScreenshotDir,
   resolveDesignDirSegment,
   resolveDesignOutputDir,
+  resolvePrototypeDirSegment,
+  resolvePrototypeOutputDir,
+  resolvePrototypeScreenshotDir,
   safeDesignFilename,
 } from "./persist/data-dir.js";
 export {

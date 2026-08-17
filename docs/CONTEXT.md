@@ -97,7 +97,7 @@ lanhu-node/
 | Resource | `project-designs`、单稿 design |
 | Prompt | `frontend-dev`、`design-review` |
 
-使用说明：[`CURSOR_MCP.md`](./CURSOR_MCP.md) · 本地调试：[`MCP_INSPECTOR.md`](./MCP_INSPECTOR.md)
+使用说明：[`CURSOR_MCP.md`](./CURSOR_MCP.md)（`lanhu_design` §4 · `lanhu_page` §5） · 本地调试：[`MCP_INSPECTOR.md`](./MCP_INSPECTOR.md)
 
 ### 3.4 尚未实现（低优先级）
 

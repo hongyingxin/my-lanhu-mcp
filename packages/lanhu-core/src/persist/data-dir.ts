@@ -50,16 +50,58 @@ export function resolveDesignOutputDir(
   );
 }
 
-/** `data/axure_extract_{docId前8位}` */
-export function resolveAxureOutputDir(dataDir: string, docId: string): string {
-  const safeId = docId.trim().slice(0, 8) || "unknown";
-  return join(resolveLanhuDataDir(dataDir), `axure_extract_${safeId}`);
+/** `{docId}_{slug}`，如 `077bbf6d-..._【FAHA】首充活动` */
+export function resolvePrototypeDirSegment(docId: string, documentName: string): string {
+  const id = docId.trim();
+  if (!id) {
+    throw new Error("docId is required for prototype output directory");
+  }
+  return `${id}_${safeDesignFilename(documentName)}`;
 }
 
-/** `data/axure_extract_{docId前8位}_screenshots` */
-export function resolveAxureScreenshotDir(dataDir: string, docId: string): string {
-  const safeId = docId.trim().slice(0, 8) || "unknown";
-  return join(resolveLanhuDataDir(dataDir), `axure_extract_${safeId}_screenshots`);
+/** `data/lanhu_prototypes/{projectId}/{docId}_{slug}/` — Axure 下载包根目录 */
+export function resolvePrototypeOutputDir(
+  dataDir: string,
+  projectId: string,
+  docId: string,
+  documentName: string,
+): string {
+  return join(
+    resolveLanhuDataDir(dataDir),
+    "lanhu_prototypes",
+    projectId,
+    resolvePrototypeDirSegment(docId, documentName),
+  );
+}
+
+/** `data/lanhu_prototypes/{projectId}/{docId}_{slug}/screenshots/` */
+export function resolvePrototypeScreenshotDir(
+  dataDir: string,
+  projectId: string,
+  docId: string,
+  documentName: string,
+): string {
+  return join(resolvePrototypeOutputDir(dataDir, projectId, docId, documentName), "screenshots");
+}
+
+/** Axure 下载包根目录（`resolvePrototypeOutputDir` 别名，保留旧导出名） */
+export function resolveAxureOutputDir(
+  dataDir: string,
+  projectId: string,
+  docId: string,
+  documentName: string,
+): string {
+  return resolvePrototypeOutputDir(dataDir, projectId, docId, documentName);
+}
+
+/** Playwright 分析产物目录（`resolvePrototypeScreenshotDir` 别名） */
+export function resolveAxureScreenshotDir(
+  dataDir: string,
+  projectId: string,
+  docId: string,
+  documentName: string,
+): string {
+  return resolvePrototypeScreenshotDir(dataDir, projectId, docId, documentName);
 }
 
 export function safeDesignFilename(name: string): string {
