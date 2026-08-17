@@ -117,6 +117,7 @@ lanhu_design(url, mode, design_names?, include?)
 - **`design_names` 可省略**条件同 analyze（单稿为主；传 `"all"` 时 slices 模式仅处理第一张）。
 - 调用 `getSlices()`，返回切图列表、`scale_urls`、位置等。
 - **不能**用 `analyze` + `include: slices` 代替（`include` 中的 `slices` 指 A 套 mapping，与 B 套 `mode=slices` 不同）。
+- **下载行为（定稿，已实现）**：见 [`MCP_SLICES.md`](./MCP_SLICES.md)——B 套切图落盘、`slice_format` / `slice_scale` / `slice_names` / `output_dir`。
 
 ### 4.4 `tokens`
 

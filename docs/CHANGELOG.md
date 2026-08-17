@@ -4,6 +4,63 @@
 
 ---
 
+## [0.1.3] — 2026-08-14
+
+### 概述
+
+`lanhu_design` **`mode=slices`** 由「仅返回 B 套切图元数据」升级为 **默认下载落盘**：一次调用完成 URL 解析、fetch 与写入 `{outputRoot}/assets/slices/`。
+
+### `@lanhu/core`
+
+#### 新增
+
+- **`downloadDesignSlices`**（`packages/lanhu-core/src/lanhu/download-slices.ts`）  
+  B 套切图：拉元数据 → 按 `slice_format` / `slice_scale` 解析 URL → `fetchBinaryUrl` → 落盘
+- 辅助导出：`sanitizeSliceFilename`、`resolveSliceDownloadUrl`、`filterSlicesByNames`、`resolveSlicesOutputPaths`、`SliceNamesNotFoundError`
+- 导出 **`applyFormatToScaleUrl`**（`slice-scale-urls.ts`）
+
+#### 参数默认值
+
+| 参数 | 默认 |
+|------|------|
+| `slice_format` | `png` |
+| `slice_scale` | `2x` |
+| `outputRoot`（MCP 未传 `output_dir` 时） | `{LANHU_DATA_DIR}/lanhu_designs/{pid}/{designId}_{slug}/` |
+
+#### 测试
+
+- 新增 `packages/lanhu-core/tests/download-slices.test.ts`（URL 解析、文件名、过滤）
+
+### `@lanhu/mcp`
+
+#### 变更
+
+- **`lanhu_design` · `mode=slices`**：改调 `downloadDesignSlices`；新增 Zod 参数 `slice_format`、`slice_scale`、`slice_names`、`output_dir`
+- 响应摘要 + **切图清单 Markdown 表**（蓝湖文件名 / 尺寸 / 说明 / 修改后名称）+ C-JSON mirror（含 `inventory[]` 映射字段）
+- Tool description 更新：说明 slices 为下载模式，Agent 读表补全后 mv，无需再次调用 MCP
+
+### 升级注意
+
+1. `npm run build:mcp` 后重启 MCP
+2. 未传 `output_dir` 时文件落在 **`{repoRoot}/data/lanhu_designs/{pid}/{designId}_{slug}/assets/slices/`**（传 `output_dir` 时不追加 designId 层）
+3. 要写入前端业务仓库，**必须**传绝对或相对 `output_dir`
+
+#### 修复（路径）
+
+- MCP `loadConfig` 改用 `resolveLanhuDataDirAnchored`：默认 `{repoRoot}/data`，不再随 Cursor MCP 进程 cwd（如 `~/`）漂移到 `~/data/`
+- **落盘目录加 `{designId}_{slug}` 层**：analyze + slices 默认写入 `lanhu_designs/{pid}/{designId}_{slug}/`；用户传 `output_dir` 时保持扁平
+- `server-nest` 同步复用 core 同一函数，避免双份逻辑
+
+### 未包含（后续迭代）
+
+> 完整待办见 [`BACKLOG.md`](./BACKLOG.md)。
+
+- `lanhu_design:selection_error` 加入镜像名单（P0 剩余）
+- A 套 mapping 下载、`slice_source=mapping`（P2）
+- HTTP `download-assets`、CLI（P2）
+
+---
+
 ## [0.1.2] — 2026-08-14
 
 ### 概述
@@ -44,6 +101,7 @@
 > 完整待办见 [`BACKLOG.md`](./BACKLOG.md)。
 
 - `lanhu_design:selection_error` 加入镜像名单（P0 剩余）
+- **`mode=slices` B 套切图下载**（默认 png@2x 落盘、`output_dir` 等，见 [`MCP_SLICES.md`](./MCP_SLICES.md)） — **已发布** §0.1.3
 - structuredContent 中返回完整 `resolved_design` 元数据（P1）
 - stage URL 自动从浏览器上下文推断当前画板（P1）
 - `list` 分页 / sector 过滤（P1）

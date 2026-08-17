@@ -1,4 +1,4 @@
-import { loadRepoEnvFile, resolveLanhuDataDir } from "@lanhu/core";
+import { loadRepoEnvFile, resolveLanhuDataDirAnchored } from "@lanhu/core";
 
 loadRepoEnvFile();
 
@@ -23,7 +23,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): McpConfig {
     serverName: env["MCP_SERVER_NAME"]?.trim() || "lanhu-mcp-node",
     serverVersion: env["MCP_SERVER_VERSION"]?.trim() || "0.1.0",
     lanhuCookie,
-    dataDir: resolveLanhuDataDir(env["LANHU_DATA_DIR"]),
+    dataDir: resolveLanhuDataDirAnchored(env),
   };
 }
 

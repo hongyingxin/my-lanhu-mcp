@@ -57,14 +57,19 @@ async function writeJson(path: string, value: unknown): Promise<void> {
   await writeFile(path, JSON.stringify(value, null, 2), "utf8");
 }
 
-/** 将 analyze 结果落盘到 `DATA_DIR/lanhu_designs/{pid}/` */
+/** 将 analyze 结果落盘到 `DATA_DIR/lanhu_designs/{pid}/{designId}_{slug}/` */
 export async function persistAnalyzeArtifacts(
   client: LanhuClient,
   design: LanhuDesignSummary,
   result: AnalyzeDesignResult,
   options: PersistAnalyzeArtifactsOptions,
 ): Promise<AnalyzeArtifactsPaths> {
-  const outputDir = resolveDesignOutputDir(options.dataDir, options.projectId);
+  const outputDir = resolveDesignOutputDir(
+    options.dataDir,
+    options.projectId,
+    design.id,
+    design.name,
+  );
   await ensureDir(outputDir);
 
   const slug = safeDesignFilename(design.name);

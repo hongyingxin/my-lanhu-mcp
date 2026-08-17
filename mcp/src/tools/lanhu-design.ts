@@ -1,16 +1,19 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { resolve } from "node:path";
 import * as z from "zod/v4";
 import {
   LanhuClient,
   analyzeDesignWithInclude,
   DEFAULT_ANALYZE_INCLUDE,
+  downloadDesignSlices,
   extractDesignTokens,
   getSketchJson,
-  getSlices,
   listDesigns,
   mapConcurrent,
   parseLanhuUrl,
   pickDesigns,
+  resolveDesignOutputDir,
+  SliceNamesNotFoundError,
   type AnalyzeInclude,
   type ConvertSketchResult,
   type ConvertLanhuSchemaResult,
@@ -26,6 +29,7 @@ import {
   LANHU_DESIGN_SLICES_MIRROR_KEY,
 } from "../structured-content-mirror.js";
 import { resolveDesignSelector } from "./resolve-design-selector.js";
+import { buildSliceInventoryRows, formatSliceInventorySection } from "../slices-inventory-table.js";
 
 const IncludeOption = z.enum(["html", "image", "tokens", "layout", "layers", "slices"]);
 
@@ -175,9 +179,11 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
         "模式说明：\n" +
         "  - list：列出项目内全部设计图\n" +
         "  - analyze：分析设计稿，输出 HTML/CSS、tokens、图层等（默认）\n" +
-        "  - slices：提取切图/资源信息（B 套方案，多稿时仅取第一张）\n" +
+        "  - slices：下载 B 套切图到 `{output_dir}/assets/slices/`，并输出切图清单表（蓝湖文件名/尺寸/说明/修改后名称）\n" +
         "  - tokens：仅提取设计令牌\n\n" +
         "design_names：URL 含 image_id 或 list 仅 1 张时可省略；stage 多稿时必填（名称/序号/id/all）。\n\n" +
+        "slices：下载后请读清单表补全「说明」「修改后名称」，再 mv 重命名并改引用（无需再次调用 MCP）。\n" +
+        "slices 参数：slice_format（默认 png）、slice_scale（默认 2x）、slice_names（默认全部）、output_dir（业务项目路径须显式传入）。\n\n" +
         "analyze 选项：workflow_guide 默认为 true，且 include 含 html 时会在文本中附带 STEP 1~5 还原指引。",
       inputSchema: {
         url: z.string().min(1).describe("蓝湖项目链接（stage 或 detailDetach 页面 URL）。"),
@@ -210,9 +216,39 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
             "仅 analyze：在文本回复中附带 STEP 1~5 设计稿还原工作流。" +
               "默认 true；仅当 include 含 html 时展示。设为 false 可节省 token。",
           ),
+        slice_format: z
+          .enum(["png", "webp", "svg"])
+          .optional()
+          .describe("仅 slices：下载格式，默认 png。"),
+        slice_scale: z
+          .string()
+          .optional()
+          .describe('仅 slices：倍率键名，默认 "2x"（对应 scaleUrls["2x"]）。'),
+        slice_names: z
+          .union([z.string(), z.array(z.string())])
+          .optional()
+          .describe("仅 slices：指定切图 name 或 id；默认下载全部。"),
+        output_dir: z
+          .string()
+          .optional()
+          .describe(
+            "仅 slices：落盘根目录；文件写入 {output_dir}/assets/slices/。" +
+              "未传时使用 LANHU_DATA_DIR/lanhu_designs/{pid}/{designId}_{slug}/；传 output_dir 时不追加 designId 层。",
+          ),
       },
     },
-    async ({ url, mode, design_names, include, with_slices, workflow_guide }) => {
+    async ({
+      url,
+      mode,
+      design_names,
+      include,
+      with_slices,
+      workflow_guide,
+      slice_format,
+      slice_scale,
+      slice_names,
+      output_dir,
+    }) => {
       try {
         const client = createClient(config);
         const parsed = parseLanhuUrl(url);
@@ -290,16 +326,71 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
               ? `slices mode uses only the first design: ${target.name}`
               : undefined;
 
-          const slicesResult = await getSlices(client, target.id, teamId, projectId, true);
+          const outputRoot = output_dir?.trim()
+            ? resolve(output_dir)
+            : resolveDesignOutputDir(config.dataDir, projectId, target.id, target.name);
+
+          let downloadResult;
+          try {
+            downloadResult = await downloadDesignSlices(
+              client,
+              { teamId, projectId },
+              target,
+              {
+                sliceFormat: slice_format,
+                sliceScale: slice_scale,
+                sliceNames: slice_names,
+                outputRoot,
+              },
+            );
+          } catch (error) {
+            if (error instanceof SliceNamesNotFoundError) {
+              return createToolResult(
+                error.message,
+                {
+                  status: "error",
+                  available_slices: error.availableSlices,
+                  missing: error.missing,
+                },
+                true,
+              );
+            }
+            throw error;
+          }
+
+          const inventory = buildSliceInventoryRows(downloadResult.files);
           const structured = {
             status: "success",
             mode: "slices",
             design_names_resolved_from: selection.resolvedFrom,
             warning,
-            ...slicesResult,
+            output_root: downloadResult.outputRoot,
+            output_dir: downloadResult.outputDir,
+            slice_format: downloadResult.sliceFormat,
+            slice_scale: downloadResult.sliceScale,
+            total_slices: downloadResult.totalSlices,
+            downloaded: downloadResult.downloaded,
+            failed: downloadResult.failed,
+            inventory,
+            files: downloadResult.files,
+            warnings: downloadResult.warnings.length ? downloadResult.warnings : undefined,
+            slices: downloadResult.slices,
           };
+
+          const summaryLines = [
+            `Downloaded ${downloadResult.downloaded} slice(s) to ${downloadResult.outputDir} (${downloadResult.sliceFormat}@${downloadResult.sliceScale}).`,
+          ];
+          if (downloadResult.failed > 0) {
+            summaryLines.push(`${downloadResult.failed} slice(s) failed.`);
+          }
+          if (warning) {
+            summaryLines.push(warning);
+          }
+          summaryLines.push("");
+          summaryLines.push(formatSliceInventorySection(downloadResult.files));
+
           return createToolResult(
-            `Loaded ${slicesResult.totalSlices} slice(s) for ${target.name}.`,
+            summaryLines.join("\n"),
             structured,
             false,
             LANHU_DESIGN_SLICES_MIRROR_KEY,

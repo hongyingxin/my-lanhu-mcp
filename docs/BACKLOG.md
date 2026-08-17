@@ -52,7 +52,7 @@ MCP 工具结果有两个通道（见 `mcp/src/result.ts`）：
 | mode | `content` | 计划 |
 |------|-----------|------|
 | `list` | 摘要 + JSON 镜像 | ✅ 已实现 |
-| `slices` | 摘要 + JSON 镜像 | ✅ 已实现 |
+| `slices` | 摘要 + JSON 镜像（含 `files[]` 落盘结果） | ✅ 已实现（含下载，见 [`MCP_SLICES.md`](./MCP_SLICES.md)） |
 | 选稿失败 | 错误文案 | 加入名单后 mirror |
 | `tokens` / `analyze` | 已有足够文本 | 不 mirror |
 
@@ -60,6 +60,12 @@ MCP 工具结果有两个通道（见 `mcp/src/result.ts`）：
 
 - 等待 Cursor 官方修复后再移除 `content` 冗余（无时间表，不依赖）。
 - `lanhu_page` 若存在「仅 Structured 有数据」的模式，按同样原则单独立项排查。
+
+---
+
+## P1 — `mode=slices` B 套切图下载
+
+> **已实现** — [`CHANGELOG.md`](./CHANGELOG.md) §0.1.3；设计书 [`MCP_SLICES.md`](./MCP_SLICES.md)
 
 ---
 
@@ -89,6 +95,9 @@ MCP 工具结果有两个通道（见 `mcp/src/result.ts`）：
 
 | 项 | 说明 | 参考 |
 |----|------|------|
+| A 套切图下载（`slice_source=mapping`） | 需 convert；与 B 套统一下载 API | [`MCP_SLICES.md` §10](./MCP_SLICES.md#10-后续非-v1) |
+| HTTP `download-assets` | 与 MCP 共用 core 下载函数 | 同上 |
+| CLI 切图下载 | 薄封装 core | 同上 |
 | 邀请链接解析 | `resolve_invite_link` | [`CONTEXT.md`](./CONTEXT.md) §3.4 |
 | 团队留言板 | say 系列 | 同上 |
 | 飞书集成 | — | 同上 |
@@ -100,4 +109,4 @@ MCP 工具结果有两个通道（见 `mcp/src/result.ts`）：
 ## 维护约定
 
 - 实现完成后：条目移至 [`CHANGELOG.md`](./CHANGELOG.md) 对应版本，并从本文删除或标为已完成。
-- 新计划：按 P0 / P1 / P2 追加，写清**背景、范围、验收**，避免与 CHANGELOG 重复大段说明。
+- 新计划：按 P0 / P1 / P2 追加，写清**背景、范围、验收**；复杂功能另立设计书（如 [`MCP_SLICES.md`](./MCP_SLICES.md)），BACKLOG 只保留摘要与链接。

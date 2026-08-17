@@ -39,7 +39,7 @@
 落盘路径与文件命名：
 
 ```text
-data/lanhu_designs/{projectId}/
+data/lanhu_designs/{projectId}/{designId}_{画板名}/
   {设计名}.png
   {设计名}.html
   {设计名}.image-mapping.json

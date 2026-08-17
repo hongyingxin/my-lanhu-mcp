@@ -13,6 +13,21 @@ export {
   listDesigns,
 } from "./lanhu/designs.js";
 export {
+  downloadDesignSlices,
+  extForSliceFormat,
+  filterSlicesByNames,
+  resolveSliceDownloadUrl,
+  resolveSlicesOutputPaths,
+  sanitizeSliceFilename,
+  SliceNamesNotFoundError,
+} from "./lanhu/download-slices.js";
+export type {
+  DownloadDesignSlicesOptions,
+  DownloadDesignSlicesResult,
+  DownloadedSliceFile,
+  SliceDownloadFormat,
+} from "./lanhu/download-slices.js";
+export {
   analyzeLocalPage,
   analyzePrototypePages,
   downloadResources,
@@ -54,6 +69,8 @@ export {
   resolveDesignImageUrl,
   resolveDesignScale,
 } from "./transform/convert-sketch.js";
+export { applyFormatToScaleUrl } from "./transform/slice-scale-urls.js";
+export type { SliceImageFormat as ScaleUrlSliceFormat } from "./transform/slice-scale-urls.js";
 export { extractLayoutSummary } from "./transform/layout-summary.js";
 export { extractLayerTree } from "./transform/layer-tree.js";
 export { extractFullAnnotationsFromSketch } from "./transform/sketch-annotations.js";
@@ -63,8 +80,10 @@ export type { SketchLayerAnnotation } from "./transform/sketch-to-html.js";
 export { persistAnalyzeArtifacts } from "./persist/analyze-artifacts.js";
 export {
   resolveLanhuDataDir,
+  resolveLanhuDataDirAnchored,
   resolveAxureOutputDir,
   resolveAxureScreenshotDir,
+  resolveDesignDirSegment,
   resolveDesignOutputDir,
   safeDesignFilename,
 } from "./persist/data-dir.js";

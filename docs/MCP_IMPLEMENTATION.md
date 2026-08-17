@@ -408,7 +408,7 @@ export function createToolError(error: unknown, context?: object);
 
 ### Phase C — 抛光
 
-- [ ] `slice_format` / `slice_scale` 后处理
+- [x] `slice_format` / `slice_scale` + B 套落盘（**定稿** [`MCP_SLICES.md`](./MCP_SLICES.md)；默认 **png** + **2x**）
 - [x] Prompt `frontend-dev` / `design-review`
 - [x] Tool `lanhu_page`
 - [x] 单测 `resolveAnalyzeInclude` 默认（`packages/lanhu-core/tests/analyze-include.test.ts`）
