@@ -504,4 +504,4 @@ mcp/src/tools/lanhu-design.ts                         # 设计稿 MCP（对照�
 两者共用 `LANHU_COOKIE` 与 monorepo 中的 `@lanhu/core`，但数据目录与 API 链路相互独立。
 
 - Cursor 调用方式 → [`CURSOR_MCP.md`](./CURSOR_MCP.md)（设计稿 §4，原型 §5）
-- 本地落盘目录 → [`../data/README.md`](../data/README.md) §原型落盘
+- 本地落盘目录 → [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §2

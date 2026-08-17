@@ -1,6 +1,7 @@
 # Git 忽略说明
 
-> 规则以仓库根目录 [`.gitignore`](../.gitignore) 为准。
+> 规则以仓库根目录 [`.gitignore`](../.gitignore) 为准。  
+> 落盘目录树详见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md)。
 
 ---
 
@@ -24,29 +25,48 @@
 | `docs/**/*.md` | 路线图、本说明等 |
 | 各包 / 应用 `README.md` | `packages/lanhu-core/README.md`、`apps/debug-react/README.md` 等 |
 
-**不提交**的 Markdown 示例：`data/README.md`、将来 `tests/fixtures/**/NOTES.md` 等。
+**不提交**的 Markdown 示例：`data/README.md`（本地备忘）、将来 `tests/fixtures/**/NOTES.md` 等。
 
 ---
 
-## 2. analyze 落盘目录 `data/`
+## 2. 落盘目录 `data/`
 
 | 路径 | Git | 说明 |
 |------|-----|------|
 | `data/.gitkeep` | ❌ 忽略 | 仅占位，本地自建即可 |
-| `data/README.md` | ❌ 忽略 | 说明见本文 §2，勿依赖仓库内副本 |
-| `data/lanhu_designs/**` | ❌ 忽略 | analyze 写入的 HTML、mapping、schema、预览图等 |
+| `data/README.md` | ❌ 忽略 | 可选本地备忘；权威结构见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) |
+| `data/lanhu_designs/**` | ❌ 忽略 | 设计稿 analyze / slices 写入 |
+| `data/lanhu_prototypes/**` | ❌ 忽略 | 原型 Axure 包、截图、mapping sidecar |
 
-落盘路径与文件命名：
+可通过 `LANHU_DATA_DIR` 把根目录指到仓库外（内容同样不应提交）。
+
+### 2.1 设计稿 `lanhu_designs/`（摘要）
+
+完整列表见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §1。
 
 ```text
 data/lanhu_designs/{projectId}/{designId}_{画板名}/
-  {设计名}.png
-  {设计名}.html
-  {设计名}.image-mapping.json
-  {设计名}.schema.json / .sketch.json / .tokens.txt …
+  {slug}.png / .html / .css / .body.html / .sketch-fallback.html
+  {slug}.image-mapping.json / .schema.json / .sketch.json
+  {slug}.tokens.txt / .layout-summary.txt / .layer-tree.txt
+  {slug}.sketch-annotations.txt / .layer-annotations.json
+  {slug}.warnings.json / .slices.json / .analyze-meta.json
+  assets/slices/                     # B 套切图 PNG（mode=slices）
 ```
 
-可通过 `LANHU_DATA_DIR` 把根目录指到仓库外。
+### 2.2 原型 `lanhu_prototypes/`（摘要）
+
+完整列表见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §2。
+
+```text
+data/lanhu_prototypes/{projectId}/{docId}_{文档名}/
+  *.html, files/, resources/, …
+  .lanhu-page-cache.json
+  .lanhu-project-mapping.json
+  .lanhu-download-sources.json
+  .lanhu-page-mappings/
+  screenshots/
+```
 
 ---
 
@@ -64,7 +84,7 @@ data/lanhu_designs/{projectId}/{designId}_{画板名}/
 ## 4. 修改忽略规则时
 
 1. 改根目录 `.gitignore`  
-2. 同步更新本文  
+2. 同步更新本文与 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md)（若目录结构变化）  
 3. 误提交敏感文件：从 git 移除跟踪并轮换 Cookie  
 
 ---
@@ -75,3 +95,4 @@ data/lanhu_designs/{projectId}/{designId}_{画板名}/
 |------|------|
 | 2026-06-03 | 初版 |
 | 2026-06-03 | 增加全局忽略 `.gitkeep`、`*.md`（`docs/` 与各 `README.md` 除外）；`data/` 不再提交 `.gitkeep` / `README.md` |
+| 2026-08-17 | 补全 `lanhu_designs` / `lanhu_prototypes` 落盘摘要；链到 `DATA_LAYOUT.md` |

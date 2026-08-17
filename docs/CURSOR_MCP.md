@@ -41,7 +41,7 @@ Cursor 里 Agent 可通过 Tool / Resource / Prompt 访问蓝湖资源：
 | **Prompt** | `frontend-dev` | 预置任务：像素级前端还原（设计稿） |
 | **Prompt** | `design-review` | 预置任务：设计一致性与可实现性审查（设计稿） |
 
-**重要**：Prompt 只生成一段「用户指令」，**不会自动拉数据**；设计稿取数靠 `lanhu_design`（或 Resource），原型取数靠 `lanhu_page`。详见 [`prototype-and-mcp.md`](./prototype-and-mcp.md)。
+**重要**：Prompt 只生成一段「用户指令」，**不会自动拉数据**；设计稿取数靠 `lanhu_design`（或 Resource），原型取数靠 `lanhu_page`。详见 [`PROTOTYPE_AND_MCP.md`](./PROTOTYPE_AND_MCP.md)。
 
 ---
 
@@ -51,7 +51,7 @@ Cursor 里 Agent 可通过 Tool / Resource / Prompt 访问蓝湖资源：
 
 ```text
 1. list 或读 Resource project-designs  → 看清画板名 / 序号 / id
-2. lanhu_design(mode=analyze, design_names=...)  → 拿 HTML、预览图、tokens 等
+2. lanhu_design(mode=analyze, design_names=...)  → 拿 HTML、预览图、tokens 等，并落盘到 data/lanhu_designs/{pid}/{designId}_{slug}/
 3. （可选）mode=slices 或 with_slices=true  → 下载 B 套切图到本地（见 MCP_SLICES.md）
 4. Agent 在项目里写代码 / 做审查
 ```
@@ -225,14 +225,14 @@ Cursor 里 Agent 可通过 Tool / Resource / Prompt 访问蓝湖资源：
 
 ### 5.3 落盘与缓存
 
-与 `lanhu_design(mode=analyze)` 不同：**MCP `lanhu_page` 调用即落盘**，无 `persistArtifacts` 开关。
+`lanhu_page` 与 `lanhu_design(mode=analyze)` **均默认落盘**。差异：REST `POST /api/designs/analyze` 可用 `persistArtifacts: false` 关闭；**MCP analyze 无此开关**，始终写入磁盘。
 
 | 目录 | 内容 |
 |------|------|
-| `{LANHU_DATA_DIR}/lanhu_prototypes/{pid}/{docId}_{文档名}/` | Axure HTML + 静态资源 + `.lanhu-page-cache.json` |
+| `{LANHU_DATA_DIR}/lanhu_prototypes/{pid}/{docId}_{文档名}/` | Axure HTML + 静态资源 + mapping sidecar（见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §2） |
 | `…/screenshots/` | 每页 `.png` / `.txt` / `_styles.json` + `.screenshot_cache.json` |
 
-默认 `{LANHU_DATA_DIR}` 为仓库根 `data/`（MCP 相对路径锚定 repo root）。同 `version_id` 且文件齐全时会跳过重复下载 / 截图。管线细节见 [`prototype-and-mcp.md`](./prototype-and-mcp.md) §3–§4。
+默认 `{LANHU_DATA_DIR}` 为仓库根 `data/`（MCP 相对路径锚定 repo root）。同 `version_id` 且文件齐全时会跳过重复下载 / 截图。管线细节见 [`PROTOTYPE_AND_MCP.md`](./PROTOTYPE_AND_MCP.md) §3–§4。
 
 ### 5.4 返回结构
 
@@ -242,7 +242,7 @@ Cursor 里 Agent 可通过 Tool / Resource / Prompt 访问蓝湖资源：
 
 **模型要求**：截图在 content 的 image 块中，Agent 需使用**支持图像分析**的模型（Claude、GPT-4o、Gemini 等）。
 
-与调试台 REST 的差异 → [`prototype-and-mcp.md`](./prototype-and-mcp.md) §5.2。
+与调试台 REST 的差异 → [`PROTOTYPE_AND_MCP.md`](./PROTOTYPE_AND_MCP.md) §5.2。
 
 ---
 

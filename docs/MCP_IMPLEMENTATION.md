@@ -244,7 +244,9 @@ export interface AnalyzeDesignOptions {
 }
 ```
 
-`analyze-design.ts`：`analyzeDesign` → `analyzeDesignWithInclude` → 可选 `persistAnalyzeArtifacts`。
+`analyze-design.ts`：`analyzeDesign` → `analyzeDesignWithInclude` → 可选 `persistAnalyzeArtifacts`（REST 默认开；MCP analyze **始终**调用）。
+
+落盘文件集见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §1、[`CURSOR_MCP.md`](./CURSOR_MCP.md) §10.1。
 
 | include | 当前 core | 补强后 |
 |---------|-----------|--------|
@@ -275,13 +277,14 @@ interface LanhuDesignAnalyzeStructured {
     designTokens?: string;
     warnings: string[];
     slices?: LanhuSlicesResult;  // with_slices 时
+    artifacts?: AnalyzeArtifactsPaths;  // 落盘各文件路径
   }>;
 }
 ```
 
 **content 数组**：
 
-1. `text`：人类可读 summary（HTML 成功数、Sketch fallback 数、warnings）
+1. `text`：人类可读 summary（HTML 成功数、Sketch fallback 数、warnings、**落盘目录**）
 2. `image`（可选）：`include` 含 image 时 base64 封面（每张稿一条）
 
 **体积控制**：`htmlCode` 可截断 preview 字段 + 全量在 structuredContent；或提供 `html_max_chars`（后续可选）。
@@ -289,6 +292,8 @@ interface LanhuDesignAnalyzeStructured {
 ---
 
 ## 6. `mode=slices`（B 套）
+
+**已实现下载落盘**（见 [`MCP_SLICES.md`](./MCP_SLICES.md) §0.1.3）。以下为元数据拉取与 format 后处理参考：
 
 ```typescript
 // 流程
@@ -404,6 +409,7 @@ export function createToolError(error: unknown, context?: object);
 
 - [x] core：`analyze-include.ts` + `include` + image 不依赖 persist
 - [x] `lanhu_design`：`mode=analyze` + `include` + 多稿 batch
+- [x] MCP analyze 默认落盘 + `persistAnalyzeArtifacts` B/C 扩展（warnings、slices 元数据、css/body 等）
 - [x] content 含 image 块
 
 ### Phase C — 抛光

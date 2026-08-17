@@ -86,7 +86,7 @@ lanhu-node/
 | HTML 修复、Playwright 渲染 | `fix-html-files.ts`、`page-browser-analyzer.ts` |
 | 文本 / 样式 / 截图提取 | analyze 原型页 |
 
-详见 [`prototype-and-mcp.md`](./prototype-and-mcp.md)。HTTP：`/api/pages/*`；MCP：`lanhu_page`。
+详见 [`PROTOTYPE_AND_MCP.md`](./PROTOTYPE_AND_MCP.md)。HTTP：`/api/pages/*`；MCP：`lanhu_page`。
 
 ### 3.3 MCP（`@lanhu/mcp`）
 
@@ -181,7 +181,7 @@ npm run check                 # core 类型检查
 | 变量 | 说明 |
 |------|------|
 | `LANHU_COOKIE` | 蓝湖登录 Cookie（必填；server / MCP 均读取） |
-| `LANHU_DATA_DIR` | 落盘目录，默认 `./data` |
+| `LANHU_DATA_DIR` | 落盘目录，默认 `./data`（目录树见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md)） |
 
 DDS 请求默认复用 `LANHU_COOKIE`。HTTP 请求 body 可传 `ddsCookie` / `dds_cookie` 覆盖；`.env.example` 中的 `LANHU_DDS_COOKIE` 为预留项，**当前 server / MCP 不读取**。
 
@@ -221,7 +221,7 @@ Cookie 获取、503、Playwright 安装失败等见 [`TROUBLESHOOTING.md`](./TRO
 | 主题 | 追加文档 |
 |------|----------|
 | Cursor 调 MCP | `@docs/CURSOR_MCP.md` |
-| 原型 / lanhu_page | `@docs/prototype-and-mcp.md` |
+| 原型 / lanhu_page | `@docs/PROTOTYPE_AND_MCP.md` |
 | MCP 方案细节 | `@docs/MCP_DESIGN.md` |
 | Cookie / Playwright 排错 | `@docs/TROUBLESHOOTING.md` |
 | 蓝湖外网 API | `@docs/LANHU_API.md` |

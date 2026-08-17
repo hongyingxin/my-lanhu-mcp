@@ -22,7 +22,7 @@
 - 改 core 导出 / 流水线 → 优先改 `packages/lanhu-core/README.md`。
 - 改蓝湖外网入参/回参 → 优先改 `docs/LANHU_API.md`。
 - 改 MCP 参数 / Agent 工作流 → 优先改 `docs/CURSOR_MCP.md`。
-- `data/README.md` 为本地落盘备忘（`data/` 被 gitignore）；权威说明见下文「落盘与 Git」。
+- `data/` 本地落盘（gitignore）；权威目录树见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md)，Git 规则见 [`GITIGNORE.md`](./GITIGNORE.md)。
 
 ---
 
@@ -32,7 +32,7 @@
 |------|------|
 | [**DEVELOPMENT.md**](./DEVELOPMENT.md) | **开发上手**：架构、npm 命令、包一览 |
 | [**CURSOR_MCP.md**](./CURSOR_MCP.md) | Cursor 配置；`lanhu_design` 参数与 **`lanhu_page` 用法（§5）** |
-| [**prototype-and-mcp.md**](./prototype-and-mcp.md) | 原型 URL 语义、Playwright 管线、HTTP §5 / MCP 实现细节 |
+| [**PROTOTYPE_AND_MCP.md**](./PROTOTYPE_AND_MCP.md) | 原型 URL 语义、Playwright 管线、HTTP §5 / MCP 实现细节 |
 | [**CONTEXT.md**](./CONTEXT.md) | **项目总览**：能力边界、链路、技术选型（**新对话先读**） |
 | [**TROUBLESHOOTING.md**](./TROUBLESHOOTING.md) | Cookie、Playwright 安装、503 / MCP 常见错误 |
 | [**CHANGELOG.md**](./CHANGELOG.md) | **版本迭代记录**（功能变更、升级注意） |
@@ -48,7 +48,8 @@
 | [MCP_DESIGN.md](./MCP_DESIGN.md) | MCP 方案定稿（1 Tool + 4 mode、list vs analyze） |
 | [MCP_IMPLEMENTATION.md](./MCP_IMPLEMENTATION.md) | `@lanhu/mcp` 工程蓝图；对照 `mcp/` 源码 |
 | [LANHU_API.md](./LANHU_API.md) | 蓝湖外网端点：入参 / 回参（`@lanhu/core` 已用） |
-| [GITIGNORE.md](./GITIGNORE.md) | `.gitignore` 与 `data/` 落盘规则 |
+| [**DATA_LAYOUT.md**](./DATA_LAYOUT.md) | **`data/` 落盘目录树**（设计稿 + 原型） |
+| [**GITIGNORE.md**](./GITIGNORE.md) | `.gitignore` 与 `data/` 忽略规则 |
 
 ---
 
@@ -61,7 +62,7 @@
 | [`../server-nest/README.md`](../server-nest/README.md) | **HTTP 路由表**（designs + pages）、Service 映射 | Cookie 排错 → `TROUBLESHOOTING.md` |
 | [`../mcp/README.md`](../mcp/README.md) | `npm run dev:mcp`、`mcp.json` 路径示例 | Tool 参数与工作流 → `CURSOR_MCP.md` |
 | [`../apps/debug-react/README.md`](../apps/debug-react/README.md) | 调试台 Tab、目录结构、本 app 环境变量 | list vs analyze 说明 → `MCP_DESIGN.md` §6 |
-| [`../data/README.md`](../data/README.md) | 本地 `data/` 目录结构备忘（可选） | Git 规则 → `GITIGNORE.md` §2 |
+| [`../data/`](../data/) | 本地 analyze / 原型缓存（gitignore） | 目录树 → [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) |
 
 ---
 
@@ -73,7 +74,7 @@
 3. docs/CONTEXT.md       → 能力边界与链路
 4. 按任务跳转：
    · 调 MCP     → CURSOR_MCP.md
-   · 原型/PRD   → prototype-and-mcp.md
+   · 原型/PRD   → PROTOTYPE_AND_MCP.md
    · HTTP 联调  → server-nest/README.md
    · 蓝湖外网 API → LANHU_API.md
    · core 开发  → packages/lanhu-core/README.md
@@ -89,4 +90,4 @@
 @docs/README.md
 ```
 
-按任务追加：`@docs/CURSOR_MCP.md` · `@docs/prototype-and-mcp.md` · `@docs/LANHU_API.md` · `@docs/TROUBLESHOOTING.md`
+按任务追加：`@docs/CURSOR_MCP.md` · `@docs/PROTOTYPE_AND_MCP.md` · `@docs/LANHU_API.md` · `@docs/TROUBLESHOOTING.md`

@@ -2,7 +2,7 @@
 
 蓝湖调试台 **React** 版（Vite + shadcn/ui + Redux Toolkit）。仅 HTTP 调 `server-nest`，无浏览器内转换。
 
-项目架构、Cookie、MCP → [`docs/CONTEXT.md`](../../docs/CONTEXT.md) · HTTP 路由 → [`server-nest/README.md`](../../server-nest/README.md) · 原型 Tab → [`docs/prototype-and-mcp.md`](../../docs/prototype-and-mcp.md) §5
+项目架构、Cookie、MCP → [`docs/CONTEXT.md`](../../docs/CONTEXT.md) · HTTP 路由 → [`server-nest/README.md`](../../server-nest/README.md) · 原型 Tab → [`docs/PROTOTYPE_AND_MCP.md`](../../docs/PROTOTYPE_AND_MCP.md) §5
 
 ## 开发
 

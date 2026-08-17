@@ -8,11 +8,11 @@
 
 ## 1. 背景与目标
 
-### 1.1 问题
+### 1.1 问题（立项背景，已于 0.1.3 解决）
 
-当前 `mode=slices` 仅调用 `getSlices()` 返回 **元数据 + URL 目录**（含 C-JSON 镜像）。Agent 仍需自行 fetch 或写脚本落盘，与原始设计「**直接下载指定切图**」不符。
+立项前 `mode=slices` 仅调用 `getSlices()` 返回 **元数据 + URL 目录**（含 C-JSON 镜像）。Agent 需自行 fetch 或写脚本落盘，与「**直接下载指定切图**」不符。
 
-调试台（`SliceDownloadPanel`）已在浏览器内实现 B 套下载（format / scale / 选图），但 **MCP 与 core 未复用**。
+**现状**：`downloadDesignSlices` 已实现；见 [`CHANGELOG.md`](./CHANGELOG.md) §0.1.3。
 
 ### 1.2 目标（v1）
 
@@ -145,8 +145,8 @@ root = {LANHU_DATA_DIR}/lanhu_designs/{pid}/{designId}_{slug}/
 
 | 能力 | 目录 |
 |------|------|
-| analyze 落盘（HTML、预览、mapping JSON） | `{LANHU_DATA_DIR}/lanhu_designs/{pid}/{designId}_{slug}/` 下各 `{画板名}.*` |
-| slices 下载（v1） | 同上根 + **`assets/slices/`** 子目录 |
+| analyze 落盘（HTML、预览、mapping、schema/sketch、摘要、warnings、slices 元数据、css/body 等） | `{LANHU_DATA_DIR}/lanhu_designs/{pid}/{designId}_{slug}/` 下各 `{slug}.*`（见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §1、[`CURSOR_MCP.md`](./CURSOR_MCP.md) §10.1） |
+| slices 下载 | 同上根 + **`assets/slices/`** 子目录 |
 
 共用 `{pid}` 层级，便于同一项目 artifacts 集中。
 

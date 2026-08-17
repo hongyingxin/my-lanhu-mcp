@@ -172,7 +172,7 @@ packages/lanhu-core/
 | `resolvePrototypeOutputDir` / `resolvePrototypeScreenshotDir` | `data/lanhu_prototypes/{pid}/{docId}_{slug}/` + `screenshots/` |
 | `resolveAxureOutputDir` / `resolveAxureScreenshotDir` | 上述函数别名（保留旧导出名） |
 
-原型管线与 MCP 行为详见 [`../../docs/prototype-and-mcp.md`](../../docs/prototype-and-mcp.md)。HTTP 路由见 [`../../server-nest/README.md`](../../server-nest/README.md) §原型接口。
+原型管线与 MCP 行为详见 [`../../docs/PROTOTYPE_AND_MCP.md`](../../docs/PROTOTYPE_AND_MCP.md)。HTTP 路由见 [`../../server-nest/README.md`](../../server-nest/README.md) §原型接口。
 
 ### `pipeline/analyze-design.ts`
 
@@ -227,7 +227,7 @@ parseLanhuUrl（kind=prototype）
   → 截图 + 文本 + 样式 JSON
 ```
 
-- 落盘：`resolveAxureOutputDir` / `resolveAxureScreenshotDir`（见 [`../../data/README.md`](../../data/README.md)）。
+- 落盘：`resolveAxureOutputDir` / `resolveAxureScreenshotDir`（见 [`../../docs/DATA_LAYOUT.md`](../../docs/DATA_LAYOUT.md) §2）。
 - 需本机已执行 `npx playwright install chromium`（见 [`../../docs/TROUBLESHOOTING.md`](../../docs/TROUBLESHOOTING.md) §3）。
 
 ---
@@ -347,5 +347,5 @@ const proto = await analyzePrototypePages(
 - 项目上下文：[`../../docs/CONTEXT.md`](../../docs/CONTEXT.md)
 - **蓝湖外网 API**：[`../../docs/LANHU_API.md`](../../docs/LANHU_API.md)
 - HTTP 路由：[`../../server-nest/README.md`](../../server-nest/README.md)
-- 原型管线：[`../../docs/prototype-and-mcp.md`](../../docs/prototype-and-mcp.md)
+- 原型管线：[`../../docs/PROTOTYPE_AND_MCP.md`](../../docs/PROTOTYPE_AND_MCP.md)
 - 排错：[`../../docs/TROUBLESHOOTING.md`](../../docs/TROUBLESHOOTING.md)

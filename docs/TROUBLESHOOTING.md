@@ -55,7 +55,7 @@ npx playwright install chromium
 | `analyze-local` 失败 | `outputDir` 路径错误或 HTML 不存在 | 先 `POST /api/pages/download`，再对同目录 analyze-local |
 | 截图 403 / path outside | 截图路径不在 `LANHU_DATA_DIR` 下 | 使用 analyze 返回的路径，勿手改到仓库外 |
 
-落盘目录说明：[`data/README.md`](../data/README.md)、[`prototype-and-mcp.md`](./prototype-and-mcp.md) §4。
+落盘目录说明：[`DATA_LAYOUT.md`](./DATA_LAYOUT.md)、[`PROTOTYPE_AND_MCP.md`](./PROTOTYPE_AND_MCP.md) §4。
 
 ---
 
@@ -65,7 +65,7 @@ npx playwright install chromium
 |------|------|
 | list 为空 | 确认 URL 含 `tid` + `pid`；Cookie 有该项目权限 |
 | analyze 只分析一张 | 预期行为；先 `list` 选稿再 analyze（见 [`MCP_DESIGN.md`](./MCP_DESIGN.md) §6） |
-| Schema 失败但有 Sketch fallback | 看响应 `warnings[]`；旧稿或无 DDS 时走 Sketch 正常 |
+| Schema 失败但有 Sketch fallback | 看响应 `warnings[]`，或磁盘 `{slug}.warnings.json` / `.analyze-meta.json`；旧稿或无 DDS 时走 Sketch 正常 |
 | 切图 B 套为空 | 设计师未登记切图；改调 A 套 mapping 或确认稿内有 PS 切图 |
 
 ---

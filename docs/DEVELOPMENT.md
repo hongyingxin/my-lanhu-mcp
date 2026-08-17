@@ -34,7 +34,7 @@ npm run build
 
 - 调试台：http://localhost:5174 · 请求走 **前端 → server → @lanhu/core**
 - Mock 模式读 `apps/debug-react/src/mock/`
-- 设计稿 analyze 默认落盘 [`data/lanhu_designs/`](../data/README.md)（`persistArtifacts: false` 可关闭）
+- 设计稿 analyze 默认落盘 [`data/lanhu_designs/`](./DATA_LAYOUT.md)（REST 可用 `persistArtifacts: false` 关闭；MCP `mode=analyze` **始终落盘**）
 
 Cookie、Playwright、503 等排错 → [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md)
 
@@ -56,7 +56,8 @@ Cookie、Playwright、503 等排错 → [`TROUBLESHOOTING.md`](./TROUBLESHOOTING
 | 主题 | 文档 |
 |------|------|
 | 项目总览 | [`CONTEXT.md`](./CONTEXT.md) |
+| 本地落盘目录 | [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) |
 | Cursor MCP | [`CURSOR_MCP.md`](./CURSOR_MCP.md) |
-| 原型 / PRD | [`prototype-and-mcp.md`](./prototype-and-mcp.md) |
+| 原型 / PRD | [`PROTOTYPE_AND_MCP.md`](./PROTOTYPE_AND_MCP.md) |
 | 蓝湖外网 API | [`LANHU_API.md`](./LANHU_API.md) |
 | MCP Inspector | [`MCP_INSPECTOR.md`](./MCP_INSPECTOR.md) |

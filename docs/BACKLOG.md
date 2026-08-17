@@ -3,7 +3,7 @@
 > 本文件记录**尚未实现**的功能与已知限制下的改进方向。  
 > 已发布变更见 [`CHANGELOG.md`](./CHANGELOG.md)；MCP 方案定稿见 [`MCP_DESIGN.md`](./MCP_DESIGN.md)。
 
-最后更新：2026-08-14
+最后更新：2026-08-17
 
 ---
 
@@ -38,7 +38,7 @@ MCP 工具结果有两个通道（见 `mcp/src/result.ts`）：
 
 - 常量名单：`mcp/src/structured-content-mirror.ts` → `STRUCTURED_CONTENT_MIRROR_KEYS`
 - `lanhu_design:list` ✅：`content` = 摘要 + 紧凑 JSON 镜像
-- `lanhu_design:slices` ✅：`content` = 摘要 + 紧凑 JSON 镜像（B 套切图元数据）
+- `lanhu_design:slices` ✅：`content` = 摘要 + 紧凑 JSON 镜像（B 套切图元数据 + 落盘路径）
 - **不** mirror：`analyze` / `tokens`
 
 **仍待做（在名单中追加 key 后同样走 mirror）**
@@ -54,7 +54,8 @@ MCP 工具结果有两个通道（见 `mcp/src/result.ts`）：
 | `list` | 摘要 + JSON 镜像 | ✅ 已实现 |
 | `slices` | 摘要 + JSON 镜像（含 `files[]` 落盘结果） | ✅ 已实现（含下载，见 [`MCP_SLICES.md`](./MCP_SLICES.md)） |
 | 选稿失败 | 错误文案 | 加入名单后 mirror |
-| `tokens` / `analyze` | 已有足够文本 | 不 mirror |
+| `analyze` | 摘要 + HTML/layout/tokens 等文本；**含落盘目录**；磁盘产物见 `data/lanhu_designs/` | 不 mirror（文本已足够；路径亦在 `structuredContent.designs[].artifacts`） |
+| `tokens` | 已有足够文本 | 不 mirror |
 
 ### 不在此计划内
 

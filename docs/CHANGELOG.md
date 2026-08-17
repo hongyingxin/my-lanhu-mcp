@@ -26,7 +26,8 @@
 
 #### 文档
 
-- 更新 `CURSOR_MCP.md` §10.1、`CONTEXT.md`、`prototype-and-mcp.md`、`lanhu-core/README.md`
+- 新增 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md)（设计稿 + 原型落盘目录树）
+- 更新 `GITIGNORE.md`、`CURSOR_MCP.md`、`MCP_DESIGN.md`、`MCP_IMPLEMENTATION.md`、`MCP_SLICES.md`、`DEVELOPMENT.md`、`TROUBLESHOOTING.md`、`BACKLOG.md`、`README.md`、`PROTOTYPE_AND_MCP.md`、`lanhu-core/README.md`
 
 #### 升级注意
 

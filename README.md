@@ -121,7 +121,7 @@ Agent 应调用 `lanhu_design`，`mode: "slices"`，`design_names: "首页"`。
 https://lanhuapp.com/web/#/item/project/product?tid=xxx&pid=xxx&docId=xxx
 ```
 
-Agent 应调用 `lanhu_page`（非 `lanhu_design`）。详见 [`docs/prototype-and-mcp.md`](./docs/prototype-and-mcp.md)。
+Agent 应调用 `lanhu_page`（非 `lanhu_design`）。详见 [`docs/PROTOTYPE_AND_MCP.md`](./docs/PROTOTYPE_AND_MCP.md)。
 
 ---
 

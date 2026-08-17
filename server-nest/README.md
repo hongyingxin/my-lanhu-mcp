@@ -11,7 +11,7 @@ npm run dev -w @lanhu/server-nest   # 或根目录 npm run dev:server
 
 调试台 `apps/debug-react` 只请求 `http://localhost:3001/api/...`，不直连蓝湖。
 
-**架构与 env** → [`../docs/CONTEXT.md`](../docs/CONTEXT.md) · **排错** → [`../docs/TROUBLESHOOTING.md`](../docs/TROUBLESHOOTING.md) · **原型 HTTP 细节** → [`../docs/prototype-and-mcp.md`](../docs/prototype-and-mcp.md) §5
+**架构与 env** → [`../docs/CONTEXT.md`](../docs/CONTEXT.md) · **排错** → [`../docs/TROUBLESHOOTING.md`](../docs/TROUBLESHOOTING.md) · **原型 HTTP 细节** → [`../docs/PROTOTYPE_AND_MCP.md`](../docs/PROTOTYPE_AND_MCP.md) §5
 
 ---
 
@@ -154,7 +154,7 @@ GET  /api/pages/screenshot
 | `POST /api/pages/analyze-local` | `analyzeLocal` | **`analyzeLocalPage`** | 否 | `outputDir` + `pageName`（已下载目录内重分析） |
 | `GET /api/pages/screenshot` | — | 读 `LANHU_DATA_DIR` 下截图文件 | 否 | query `path` |
 
-参数细节、落盘目录与 MCP `lanhu_page` 差异见 [`../docs/prototype-and-mcp.md`](../docs/prototype-and-mcp.md) §4–§6。
+参数细节、落盘目录与 MCP `lanhu_page` 差异见 [`../docs/PROTOTYPE_AND_MCP.md`](../docs/PROTOTYPE_AND_MCP.md) §4–§6。
 
 ---
 
