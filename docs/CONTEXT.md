@@ -118,7 +118,7 @@ lanhu-node/
 5. getSketchJson()                 → sketch + tokens + 图层
    └→ convertSketchToHtml()        → Sketch fallback
 6. [可选] getSlices()              → B 套切图元数据 + scaleUrls
-7. [可选] persistAnalyzeArtifacts  → data/lanhu_designs/{pid}/
+7. [可选] persistAnalyzeArtifacts  → data/lanhu_designs/{pid}/{designId}_{slug}/（含 warnings/slices 元数据、Schema css/body、扩展 meta）
 ```
 
 ### 关键蓝湖 API

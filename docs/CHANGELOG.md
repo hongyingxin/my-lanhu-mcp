@@ -6,6 +6,34 @@
 
 ## [Unreleased]
 
+### 设计稿 analyze 落盘（MCP + REST 对齐）
+
+#### 概述
+
+`lanhu_design(mode=analyze)` 与 `POST /api/designs/analyze` 共用 `persistAnalyzeArtifacts`，MCP 侧**默认落盘**（此前 MCP 仅返回 content）。
+
+#### `@lanhu/core`
+
+- **`persistAnalyzeArtifacts` 扩展**（`analyze-artifacts.ts`）  
+  新增落盘：`{slug}.warnings.json`、`{slug}.slices.json`（B 套元数据，非 PNG）、Schema 路径的 `{slug}.css` / `{slug}.body.html`、并存的 `{slug}.sketch-fallback.html`
+- **`{slug}.analyze-meta.json` 扩展**：`projectName`、`projectId`、`teamId`、`include`、`withSlices`、`versionId`、`schemaUrl`、`documentInfo` 摘要、`warnings` 全文
+- **`analyzeDesign`**：落盘时传入 `include` / `withSlices` 写入 meta
+- 新增测试 `packages/lanhu-core/tests/analyze-artifacts.test.ts`
+
+#### `@lanhu/mcp`
+
+- **`lanhu_design` · `mode=analyze`**：分析成功后调用 `persistAnalyzeArtifacts`；摘要提示落盘目录；`structuredContent.designs[].artifacts` 返回各文件路径
+
+#### 文档
+
+- 更新 `CURSOR_MCP.md` §10.1、`CONTEXT.md`、`prototype-and-mcp.md`、`lanhu-core/README.md`
+
+#### 升级注意
+
+1. `npm run build:mcp` 后重启 MCP
+2. 已有 analyze 目录需**重新 analyze** 才会生成 warnings/css/body 等新文件
+3. B 套切图 **PNG** 仍走 `mode=slices`，不在 analyze 落盘范围内
+
 ### 原型落盘路径
 
 - **变更**：由 `data/axure_extract_{docId8}/` + `*_screenshots/` 改为  

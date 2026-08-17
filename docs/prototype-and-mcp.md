@@ -278,7 +278,7 @@ faha-首充活动_styles.json
       └── {页面stem}.png / .txt / _styles.json
 ```
 
-与 UI 设计稿对比：**原型 MCP 调用即落盘**；`lanhu_design(mode=analyze)` 在 MCP 侧**默认只返回 content**。目录命名与 `lanhu_designs/{pid}/{designId}_{slug}/` 同族（完整 UUID + 文档名，不再截 docId 前 8 位）。
+与 UI 设计稿对比：**原型 MCP 调用即落盘**；`lanhu_design(mode=analyze)` **同样默认落盘**（与 REST `persistArtifacts` 一致），含 warnings、slices 元数据、Schema css/body 及扩展 meta。目录命名与 `lanhu_designs/{pid}/{designId}_{slug}/` 同族。
 
 MCP 不支持自定义 `output_dir`；REST analyze 可在 body 传 `output_dir`（包根）与 `screenshot_output_dir`（未传时默认为 `{output_dir}/screenshots/`）。
 

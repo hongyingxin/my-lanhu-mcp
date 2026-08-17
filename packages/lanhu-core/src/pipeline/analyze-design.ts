@@ -124,6 +124,8 @@ async function analyzeOneDesign(
       await persistAnalyzeArtifacts(client, design, result, {
         dataDir: persistOptions.dataDir,
         projectId: params.projectId,
+        include: options.include,
+        withSlices: options.withSlices,
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);

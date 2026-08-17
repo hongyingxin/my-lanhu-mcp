@@ -11,9 +11,12 @@ import {
   listDesigns,
   mapConcurrent,
   parseLanhuUrl,
+  persistAnalyzeArtifacts,
   pickDesigns,
   resolveDesignOutputDir,
   SliceNamesNotFoundError,
+  type AnalyzeDesignResult,
+  type AnalyzeArtifactsPaths,
   type AnalyzeInclude,
   type ConvertSketchResult,
   type ConvertLanhuSchemaResult,
@@ -65,6 +68,60 @@ function shouldAttachWorkflowGuide(
   return workflowGuide && includeSet.has("html");
 }
 
+type AnalyzeDesignSlice = Awaited<ReturnType<typeof analyzeDesignWithInclude>>;
+
+function toAnalyzeDesignResult(
+  slice: AnalyzeDesignSlice,
+  params: ReturnType<typeof parseLanhuUrl>,
+  projectName: string | undefined,
+): AnalyzeDesignResult {
+  return {
+    status: "success",
+    params,
+    projectName,
+    design: slice.design,
+    convertSource: slice.convertSource,
+    schema: slice.schema,
+    schemaMeta: slice.schemaMeta,
+    convert: slice.convert,
+    sketch: slice.sketch,
+    sketchMeta: slice.sketchMeta,
+    sketchConvert: slice.sketchConvert,
+    designTokens: slice.designTokens,
+    layerAnnotations: slice.layerAnnotations,
+    layoutSummary: slice.layoutSummary,
+    layerTree: slice.layerTree,
+    sketchAnnotations: slice.sketchAnnotations,
+    slices: slice.slices,
+    previewImage: slice.previewImage,
+    warnings: slice.warnings,
+  };
+}
+
+async function persistAnalyzeSliceArtifacts(
+  client: LanhuClient,
+  config: McpConfig,
+  projectId: string,
+  params: ReturnType<typeof parseLanhuUrl>,
+  projectName: string | undefined,
+  slice: AnalyzeDesignSlice,
+  persistContext: { include?: AnalyzeInclude[]; withSlices?: boolean } = {},
+): Promise<AnalyzeArtifactsPaths | undefined> {
+  const result = toAnalyzeDesignResult(slice, params, projectName);
+  try {
+    return await persistAnalyzeArtifacts(client, slice.design, result, {
+      dataDir: config.dataDir,
+      projectId,
+      include: persistContext.include,
+      withSlices: persistContext.withSlices,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    slice.warnings.push(`analyze 产物落盘失败: ${message}`);
+    return undefined;
+  }
+}
+
 function formatLayerAnnotationsText(annotations: SketchLayerAnnotation[] | undefined): string {
   if (!annotations || annotations.length === 0) {
     return "";
@@ -84,13 +141,20 @@ function formatLayerAnnotationsText(annotations: SketchLayerAnnotation[] | undef
 
 function formatAnalyzeSummary(
   projectName: string | undefined,
-  slices: Awaited<ReturnType<typeof analyzeDesignWithInclude>>[],
+  slices: AnalyzeDesignSlice[],
   includeSet: Set<AnalyzeInclude>,
-  options: { workflowGuide?: boolean } = {},
+  options: { workflowGuide?: boolean; artifactDirs?: string[] } = {},
 ): string {
   const workflowGuide = options.workflowGuide ?? true;
   const lines: string[] = ["设计稿分析结果"];
   lines.push(`项目：${projectName ?? "未知"}`);
+
+  const artifactDirs = [...new Set(options.artifactDirs?.filter(Boolean) ?? [])];
+  if (artifactDirs.length === 1) {
+    lines.push(`落盘目录：${artifactDirs[0]}`);
+  } else if (artifactDirs.length > 1) {
+    lines.push(`落盘目录：${artifactDirs.length} 份（见 structuredContent.designs[].artifacts）`);
+  }
 
   if (includeSet.has("html")) {
     const success = slices.filter((s) => getHtmlFromConvert(s.convert)).length;
@@ -178,7 +242,7 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
         "推荐流程：detailDetach（含 image_id）可直接 analyze；stage 全项目则 mode=list → design_names → analyze。\n\n" +
         "模式说明：\n" +
         "  - list：列出项目内全部设计图\n" +
-        "  - analyze：分析设计稿，输出 HTML/CSS、tokens、图层等（默认）\n" +
+        "  - analyze：分析设计稿，输出 HTML/CSS、tokens、图层等，并落盘到 data/lanhu_designs/（与 REST analyze 一致）\n" +
         "  - slices：下载 B 套切图到 `{output_dir}/assets/slices/`，并输出切图清单表（蓝湖文件名/尺寸/说明/修改后名称）\n" +
         "  - tokens：仅提取设计令牌\n\n" +
         "design_names：URL 含 image_id 或 list 仅 1 张时可省略；stage 多稿时必填（名称/序号/id/all）。\n\n" +
@@ -459,13 +523,26 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
           5,
         );
 
-        const slices: Awaited<ReturnType<typeof analyzeDesignWithInclude>>[] = [];
+        const slices: AnalyzeDesignSlice[] = [];
+        const artifactPaths: Array<AnalyzeArtifactsPaths | undefined> = [];
         for (let i = 0; i < analyzed.length; i++) {
           const entry = analyzed[i]!;
           if (entry.status === "fulfilled") {
-            slices.push(entry.value);
+            const slice = entry.value;
+            const artifacts = await persistAnalyzeSliceArtifacts(
+              client,
+              config,
+              projectId,
+              parsed,
+              listResult.projectName,
+              slice,
+              { include: includeList, withSlices: Boolean(with_slices) },
+            );
+            artifactPaths.push(artifacts);
+            slices.push(slice);
           } else {
             const design = targetDesigns[i]!;
+            artifactPaths.push(undefined);
             slices.push({
               design,
               warnings: [
@@ -489,10 +566,13 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
         const attachWorkflowGuide = shouldAttachWorkflowGuide(includeSet, workflow_guide ?? true);
         const summaryText = formatAnalyzeSummary(listResult.projectName, slices, includeSet, {
           workflowGuide: workflow_guide ?? true,
+          artifactDirs: artifactPaths
+            .map((item) => item?.outputDir)
+            .filter((dir): dir is string => Boolean(dir)),
         });
         content.unshift({ type: "text", text: summaryText });
 
-        const structuredDesigns = slices.map((slice) => ({
+        const structuredDesigns = slices.map((slice, index) => ({
           name: slice.design.name,
           id: slice.design.id,
           convert_source: slice.convertSource ?? null,
@@ -507,6 +587,7 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
             : null,
           slices: slice.slices ?? null,
           warnings: slice.warnings,
+          artifacts: artifactPaths[index] ?? null,
         }));
 
         return {

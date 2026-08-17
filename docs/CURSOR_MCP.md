@@ -411,7 +411,16 @@ lanhu_page
 
 **Resource `design`**：返回 JSON（含 `html_code`、`design_tokens` 等），不含 MCP image 块与 workflow 长文。详见 `mcp/src/tools/lanhu-design.ts`。
 
-**MCP analyze 落盘**：`lanhu_design(mode=analyze)` **默认不落盘**；落盘走 `server-nest` `POST /api/designs/analyze`（`persistArtifacts: true`）。B 套切图落盘见 [`MCP_SLICES.md`](./MCP_SLICES.md)。
+**MCP analyze 落盘**：`lanhu_design(mode=analyze)` 与 REST 相同，默认调用 `persistAnalyzeArtifacts` 写入 `data/lanhu_designs/{pid}/{designId}_{slug}/`。除 HTML、mapping、schema/sketch、各类摘要外，还包含：
+
+| 文件 | 条件 |
+|------|------|
+| `{slug}.warnings.json` | 有 warnings |
+| `{slug}.slices.json` | `with_slices: true` 且拉取到 B 套元数据 |
+| `{slug}.css` / `{slug}.body.html` | Schema 转换路径 |
+| `{slug}.sketch-fallback.html` | Schema 主 HTML + Sketch fallback 并存且内容不同 |
+
+`{slug}.analyze-meta.json` 含 `projectName`、`include`、`versionId`、`documentInfo`、`warnings` 全文及 `files` 索引。`structuredContent.designs[].artifacts` 含各文件路径。B 套切图 **PNG** 仍走 `mode=slices`，见 [`MCP_SLICES.md`](./MCP_SLICES.md)。
 
 ### 10.2 `lanhu_page`
 

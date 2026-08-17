@@ -250,7 +250,7 @@ parseLanhuUrl（kind=prototype）
 | `POST /api/designs/convert` | 仅 A 套 | — |
 | 调试台切图 Tab | 可手动切 `mapping` / `scaleUrls` 两源展示与下载 | 同左 |
 
-`persistAnalyzeArtifacts` 默认只落盘 **整稿预览 PNG** + `image-mapping.json`，**不会**自动把 A 套 mapping 里每张图或 B 套切图全部下载到 `data/`。
+`persistAnalyzeArtifacts` 落盘整稿预览 PNG、HTML/mapping、schema/sketch、各类摘要，以及 **warnings.json**、**slices.json**（B 套元数据）、Schema 路径的 **css/body.html**、并存的 **sketch-fallback.html**；**不会**自动把 A 套 mapping 里每张图或 B 套切图 PNG 全部下载到 `data/`（切图 PNG 走 `mode=slices` / `downloadDesignSlices`）。
 
 ### 计划：统一选择 A 套 / B 套（待做）
 
