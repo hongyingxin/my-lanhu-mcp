@@ -17,6 +17,7 @@ import {
 } from "@lanhu/core";
 
 import { buildPageAnalyzeContent, formatPageAnalyzeSummary } from "../format/page-result.js";
+import { formatPersistLocationBlock, formatPrototypePersistEntries } from "../format/persist-location.js";
 import { type McpConfig, requireLanhuCookie } from "../config.js";
 import { createToolError, createToolResult, type ToolContent } from "../result.js";
 
@@ -152,6 +153,10 @@ export function registerLanhuPageTool(server: McpServer, config: McpConfig): voi
             document: analyzed.document,
             results: analyzed.results,
             pageSelection,
+            persistLocationBlock: formatPersistLocationBlock(
+              config.persistArtifacts,
+              formatPrototypePersistEntries(outputDir, analyzed.screenshot_output_dir),
+            ),
           });
 
           const images = await buildPageAnalyzeContent(analyzed.results);

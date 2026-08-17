@@ -38,7 +38,7 @@ MCP 工具结果有两个通道（见 `mcp/src/result.ts`）：
 
 - 常量名单：`mcp/src/structured-content-mirror.ts` → `STRUCTURED_CONTENT_MIRROR_KEYS`
 - `lanhu_design:list` ✅：`content` = 摘要 + 紧凑 JSON 镜像
-- `lanhu_design:slices` ✅：`content` = 摘要 + 紧凑 JSON 镜像（B 套切图元数据 + 落盘路径）
+- `lanhu_design:slices` ✅：`content` = 摘要 + 紧凑 JSON 镜像（B 套切图元数据 + 落盘路径；`LANHU_PERSIST_ARTIFACTS=false` 时仅元数据、不下载 PNG，见 §0.1.4）
 - **不** mirror：`analyze` / `tokens`
 
 **仍待做（在名单中追加 key 后同样走 mirror）**
@@ -52,21 +52,21 @@ MCP 工具结果有两个通道（见 `mcp/src/result.ts`）：
 | mode | `content` | 计划 |
 |------|-----------|------|
 | `list` | 摘要 + JSON 镜像 | ✅ 已实现 |
-| `slices` | 摘要 + JSON 镜像（含 `files[]` 落盘结果） | ✅ 已实现（含下载，见 [`MCP_SLICES.md`](./MCP_SLICES.md)） |
+| `slices` | 摘要 + JSON 镜像（含 `files[]`；persist=true 时 content 含落盘路径块） | ✅ 已实现（见 [`MCP_SLICES.md`](./MCP_SLICES.md)、[`CHANGELOG.md`](./CHANGELOG.md) §0.1.3–§0.1.4） |
 | 选稿失败 | 错误文案 | 加入名单后 mirror |
-| `analyze` | 摘要 + HTML/layout/tokens 等文本；**含落盘目录**；磁盘产物见 `data/lanhu_designs/` | 不 mirror（文本已足够；路径亦在 `structuredContent.designs[].artifacts`） |
+| `analyze` | 摘要 + HTML/layout/tokens 等文本；落盘时 **content 含 `--- 落盘路径 ---` 块**（按画板名列目录） | 不 mirror（文本已足够；`structuredContent.designs[].artifacts` 供 Inspector） |
 | `tokens` | 已有足够文本 | 不 mirror |
 
 ### 不在此计划内
 
 - 等待 Cursor 官方修复后再移除 `content` 冗余（无时间表，不依赖）。
-- `lanhu_page` 若存在「仅 Structured 有数据」的模式，按同样原则单独立项排查。
+- `lanhu_page` 落盘路径写入 content `--- 落盘路径 ---` 块（包根 + screenshots）；若仍有「仅 Structured 有数据」的模式，按同样原则排查。
 
 ---
 
 ## P1 — `mode=slices` B 套切图下载
 
-> **已实现** — [`CHANGELOG.md`](./CHANGELOG.md) §0.1.3；设计书 [`MCP_SLICES.md`](./MCP_SLICES.md)
+> **已实现** — [`CHANGELOG.md`](./CHANGELOG.md) §0.1.3（下载落盘）；§0.1.4 起受 `LANHU_PERSIST_ARTIFACTS` 控制（`false` 时仅元数据）。设计书 [`MCP_SLICES.md`](./MCP_SLICES.md)
 
 ---
 
@@ -96,6 +96,7 @@ MCP 工具结果有两个通道（见 `mcp/src/result.ts`）：
 
 | 项 | 说明 | 参考 |
 |----|------|------|
+| 原型旧目录迁移 | `axure_extract_*` → `lanhu_prototypes/` 无自动迁移脚本 | [`CHANGELOG.md`](./CHANGELOG.md) §0.1.4 升级注意 |
 | A 套切图下载（`slice_source=mapping`） | 需 convert；与 B 套统一下载 API | [`MCP_SLICES.md` §10](./MCP_SLICES.md#10-后续非-v1) |
 | HTTP `download-assets` | 与 MCP 共用 core 下载函数 | 同上 |
 | CLI 切图下载 | 薄封装 core | 同上 |

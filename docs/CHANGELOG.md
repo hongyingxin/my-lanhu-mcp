@@ -8,7 +8,29 @@
 
 ---
 
-## [0.1.4] — 2026-08-17
+## [0.1.5] — 2026-08-17
+
+### 概述
+
+MCP 落盘时在 **`content` 文本**输出 `--- 落盘路径 ---` 块，Agent 可直接读取目录，无需依赖 `structuredContent`。
+
+### `@lanhu/mcp`
+
+- 新增 `mcp/src/format/persist-location.ts`：`formatPersistLocationBlock` 等共用格式化
+- **`lanhu_design` · `analyze`**：多画板逐行列出落盘目录（修复原先「见 structuredContent」）
+- **`lanhu_design` · `mode=slices`**：落盘路径块统一格式
+- **`lanhu_page`**：落盘时输出 Axure 包根 + `screenshots/` 路径
+- 切图清单文案指向 content 中的落盘路径块
+
+### 文档
+
+- 更新 [`BACKLOG.md`](./BACKLOG.md) §P0 各 mode 说明
+
+### 升级注意
+
+1. `npm run build:mcp` 后重启 MCP / Inspector
+
+---
 
 ### 概述
 

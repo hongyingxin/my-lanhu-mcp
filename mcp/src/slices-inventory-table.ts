@@ -41,7 +41,7 @@ export function formatSliceInventoryTable(rows: SliceInventoryRow[]): string {
     "## 切图清单",
     "",
     "请补全「说明」与「修改后名称」，再按映射将「落盘文件」重命名并更新项目引用。",
-    "落盘目录见上方摘要；当前文件名见 structured JSON 的 `inventory[].disk_file`。",
+    "落盘目录见上方 `--- 落盘路径 ---`；文件名见下方表格「落盘文件」列或 structured JSON 的 `inventory[].disk_file`。",
     "",
     "| 蓝湖文件名 | 尺寸 | 说明 | 修改后名称 |",
     "|------------|------|------|------------|",

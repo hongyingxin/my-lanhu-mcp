@@ -28,6 +28,10 @@ import {
 } from "@lanhu/core";
 
 import { buildDesignWorkflowGuide } from "../analyze/design-workflow-guide.js";
+import {
+  formatAnalyzePersistEntries,
+  formatPersistLocationBlock,
+} from "../format/persist-location.js";
 import { type McpConfig, requireLanhuCookie } from "../config.js";
 import { createToolError, createToolResult, type ToolContent } from "../result.js";
 import {
@@ -146,17 +150,22 @@ function formatAnalyzeSummary(
   projectName: string | undefined,
   slices: AnalyzeDesignSlice[],
   includeSet: Set<AnalyzeInclude>,
-  options: { workflowGuide?: boolean; artifactDirs?: string[] } = {},
+  options: {
+    workflowGuide?: boolean;
+    persistArtifacts?: boolean;
+    artifactPaths?: Array<AnalyzeArtifactsPaths | undefined>;
+  } = {},
 ): string {
   const workflowGuide = options.workflowGuide ?? true;
   const lines: string[] = ["设计稿分析结果"];
   lines.push(`项目：${projectName ?? "未知"}`);
 
-  const artifactDirs = [...new Set(options.artifactDirs?.filter(Boolean) ?? [])];
-  if (artifactDirs.length === 1) {
-    lines.push(`落盘目录：${artifactDirs[0]}`);
-  } else if (artifactDirs.length > 1) {
-    lines.push(`落盘目录：${artifactDirs.length} 份（见 structuredContent.designs[].artifacts）`);
+  const persistBlock = formatPersistLocationBlock(
+    options.persistArtifacts ?? false,
+    formatAnalyzePersistEntries(slices, options.artifactPaths ?? []),
+  );
+  if (persistBlock) {
+    lines.push(persistBlock);
   }
 
   if (includeSet.has("html")) {
@@ -465,7 +474,10 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
           };
 
           const summaryLines = [
-            `Downloaded ${downloadResult.downloaded} slice(s) to ${downloadResult.outputDir} (${downloadResult.sliceFormat}@${downloadResult.sliceScale}).`,
+            `Downloaded ${downloadResult.downloaded} slice(s) (${downloadResult.sliceFormat}@${downloadResult.sliceScale}).`,
+            formatPersistLocationBlock(true, [
+              { label: target.name, dir: downloadResult.outputDir, note: "assets/slices" },
+            ]),
           ];
           if (downloadResult.failed > 0) {
             summaryLines.push(`${downloadResult.failed} slice(s) failed.`);
@@ -591,9 +603,8 @@ export function registerLanhuDesignTool(server: McpServer, config: McpConfig): v
         const attachWorkflowGuide = shouldAttachWorkflowGuide(includeSet, workflow_guide ?? true);
         const summaryText = formatAnalyzeSummary(listResult.projectName, slices, includeSet, {
           workflowGuide: workflow_guide ?? true,
-          artifactDirs: artifactPaths
-            .map((item) => item?.outputDir)
-            .filter((dir): dir is string => Boolean(dir)),
+          persistArtifacts: config.persistArtifacts,
+          artifactPaths,
         });
         content.unshift({ type: "text", text: summaryText });
 

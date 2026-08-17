@@ -34,8 +34,10 @@ export function formatPageAnalyzeSummary(args: {
   document: LanhuPagesListResult;
   results: AnalyzeLocalPageResult[];
   pageSelection: string;
+  /** 落盘时为 content 追加路径块（Agent 可读） */
+  persistLocationBlock?: string;
 }): string {
-  const { document, results, pageSelection } = args;
+  const { document, results, pageSelection, persistLocationBlock } = args;
   const successful = results.filter((item) => item.success).length;
 
   const lines = [
@@ -43,8 +45,13 @@ export function formatPageAnalyzeSummary(args: {
     `文档：${document.document_name}`,
     `页面选择：${pageSelection}`,
     `成功：${successful}/${results.length}`,
-    "",
   ];
+
+  if (persistLocationBlock) {
+    lines.push(persistLocationBlock);
+  }
+
+  lines.push("");
 
   for (const item of results) {
     lines.push(formatSinglePageText(item));
