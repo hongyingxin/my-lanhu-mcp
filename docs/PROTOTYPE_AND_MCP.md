@@ -217,7 +217,7 @@ flowchart TD
 - REST：`POST /api/pages/download` / `analyze` 的 `download.sources` 透传上述结构
 - MCP `lanhu_page`：structuredContent 含 `download`，可同样查看 `sources`（仍无 HTML 正文）
 - 调试台 Tab：**Mapping 源**（json_url）、**页面 CDN**（每页 sign_md5 / cdn_url）见 §5.3
-- 本地目录：同上结构写入 `.lanhu-download-sources.json` 等 sidecar，见 §4.1
+- 本地目录：同上结构写入 `.lanhu-download-sources.json` 等 sidecar，见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §2.2
 
 更细的蓝湖 API 字段说明见 [`LANHU_API.md`](./LANHU_API.md) §4.2–4.4。
 
@@ -229,12 +229,12 @@ flowchart TD
 
 流程：
 
-1. 本地 HTTP 托管 Axure 目录
+1. 本地 HTTP 托管 Axure 包根目录
 2. Chromium 打开目标 HTML，`networkidle` + 短暂等待
-3. `page.evaluate` 提取：红色标注、流程图文本、全文、`getComputedStyle` 样式
-4. 全页截图写入 `_screenshots` 目录
+3. `page.evaluate` 提取：红色标注、流程图短文本、`body.innerText` 全文、`getComputedStyle` 样式统计
+4. 全页截图写入包内 **`screenshots/`**（`{stem}.png` / `{stem}.txt` / `{stem}_styles.json`）
 
-截图/文本缓存见 `.screenshot_cache.json`（按 `version_id` + `cached_pages` 校验）。
+截图/文本缓存见 `screenshots/.screenshot_cache.json`（按 `version_id` + `cached_pages` 校验）。每个文件里有什么见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §2.3。
 
 ### 3.6 截图文件命名
 
@@ -252,33 +252,20 @@ faha-首充活动_styles.json
 
 ## 4. 本地目录结构
 
-目录按 **docId 前 8 位** 命名，与页面数量无关：**一份文档固定两个顶层目录**。
+每个文件是什么、txt 三段如何抽取、sidecar 各自存什么，见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §2。本节只写路径约定和谁写入。
+
+当前路径：`{LANHU_DATA_DIR}/lanhu_prototypes/{pid}/{docId}_{文档名}/`（完整 docId，不是前 8 位）。一份文档一个目录；页数决定有多少个 html，以及 `screenshots/` 里有多少套 png/txt/styles。
+
+`LANHU_PERSIST_ARTIFACTS=false` 时不写 `LANHU_DATA_DIR`，Playwright 用系统临时目录，MCP 返回后清理。
 
 ### 4.1 谁写入、何时写入
 
-| 入口 | 文档根目录（Axure 包） | 分析产物 `screenshots/` |
+| 入口 | 文档根目录（Axure 包 + `.lanhu-*`） | 分析产物 `screenshots/` |
 |------|------------------------|-------------------------|
 | MCP `lanhu_page`（有 `docId`） | ✅ 每次分析前（可缓存跳过） | ✅ Playwright 截图/文本/样式 |
 | `POST /api/pages/download` | ✅ | ❌ |
 | `POST /api/pages/analyze` | ✅ | ✅ |
 | `POST /api/pages/analyze-local` | ❌（须已下载） | ✅ 单页重跑 |
-
-默认路径（未传 `output_dir`）：
-
-```text
-{LANHU_DATA_DIR}/lanhu_prototypes/{pid}/{docId}_{文档名}/
-  ├── *.html, files/, resources/, data/, images/
-  ├── .lanhu-page-cache.json           # 下载缓存判定（version_id / 页列表）
-  ├── .lanhu-project-mapping.json      # GET json_url 的完整项目 mapping
-  ├── .lanhu-download-sources.json     # json_url + 每页 sign_md5 / CDN URL
-  ├── .lanhu-page-mappings/            # 各页 GET mapping_md5 的页级 mapping
-  │   └── {页面stem}.json
-  └── screenshots/
-      ├── .screenshot_cache.json
-      └── {页面stem}.png / .txt / _styles.json
-```
-
-与 UI 设计稿对比：**原型 MCP 调用即落盘**（`LANHU_PERSIST_ARTIFACTS=false` 时用 temp 目录，不写 `LANHU_DATA_DIR`）；`lanhu_design(mode=analyze)` 同样受 env 控制。目录命名与 `lanhu_designs/{pid}/{designId}_{slug}/` 同族。
 
 MCP 不支持自定义 `output_dir`；REST analyze 可在 body 传 `output_dir`（包根）与 `screenshot_output_dir`（未传时默认为 `{output_dir}/screenshots/`）。
 
@@ -509,4 +496,4 @@ mcp/src/tools/lanhu-design.ts                         # 设计稿 MCP（对照�
 两者共用 `LANHU_COOKIE` 与 monorepo 中的 `@lanhu/core`，但数据目录与 API 链路相互独立。
 
 - Cursor 调用方式 → [`CURSOR_MCP.md`](./CURSOR_MCP.md)（设计稿 §4，原型 §5）
-- 本地落盘目录 → [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §2
+- 本地落盘目录与每个文件说明 → [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §2

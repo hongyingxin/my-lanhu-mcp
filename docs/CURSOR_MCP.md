@@ -230,10 +230,10 @@ Cursor 里 Agent 可通过 Tool / Resource / Prompt 访问蓝湖资源：
 
 | 目录 | 内容 |
 |------|------|
-| `{LANHU_DATA_DIR}/lanhu_prototypes/{pid}/{docId}_{文档名}/` | Axure HTML + 静态资源 + mapping sidecar（见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §2） |
+| `{LANHU_DATA_DIR}/lanhu_prototypes/{pid}/{docId}_{文档名}/` | Axure HTML + 静态资源 + mapping sidecar |
 | `…/screenshots/` | 每页 `.png` / `.txt` / `_styles.json` + `.screenshot_cache.json` |
 
-默认 `{LANHU_DATA_DIR}` 为仓库根 `data/`（MCP 相对路径锚定 repo root）。同 `version_id` 且文件齐全时会跳过重复下载 / 截图。管线细节见 [`PROTOTYPE_AND_MCP.md`](./PROTOTYPE_AND_MCP.md) §3–§4。
+每个文件说明见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §2。默认 `{LANHU_DATA_DIR}` 为仓库根 `data/`（MCP 相对路径锚定 repo root）。同 `version_id` 且文件齐全时会跳过重复下载 / 截图。管线细节见 [`PROTOTYPE_AND_MCP.md`](./PROTOTYPE_AND_MCP.md) §3–§4。
 
 ### 5.4 返回结构
 
@@ -419,7 +419,7 @@ lanhu_page
 ### 10.2 `lanhu_page`
 
 - **文本 content**：每页 `--- 页面名 ---`、正文、`--- 设计样式参考 ---`（颜色/字体统计）
-- **图片 content**：每成功页一张 PNG（从 `_screenshots` 目录读取）
+- **图片 content**：每成功页一张 PNG（从包内 `screenshots/` 读取）
 - **structuredContent**：`output_dir`、`screenshot_output_dir`、`download`、`results[]` 等
 
 **落盘**：每次分析成功调用都会写入 `data/lanhu_prototypes/...`（见 §5.3）。格式化逻辑见 `mcp/src/format/page-result.ts`。

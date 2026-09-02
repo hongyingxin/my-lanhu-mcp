@@ -56,7 +56,7 @@ data/lanhu_designs/{projectId}/{designId}_{画板名}/
 
 ### 2.2 原型 `lanhu_prototypes/`（摘要）
 
-完整列表见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §2。
+完整列表与每个文件说明见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §2。
 
 ```text
 data/lanhu_prototypes/{projectId}/{docId}_{文档名}/
