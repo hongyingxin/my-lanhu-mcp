@@ -48,7 +48,7 @@
 | [MCP_DESIGN.md](./MCP_DESIGN.md) | MCP 方案定稿（1 Tool + 4 mode、list vs analyze） |
 | [MCP_IMPLEMENTATION.md](./MCP_IMPLEMENTATION.md) | `@lanhu/mcp` 工程蓝图；对照 `mcp/` 源码 |
 | [LANHU_API.md](./LANHU_API.md) | 蓝湖外网端点：入参 / 回参（`@lanhu/core` 已用） |
-| [**DATA_LAYOUT.md**](./DATA_LAYOUT.md) | **`data/` 落盘目录树**（设计稿 + 原型） |
+| [**DATA_LAYOUT.md**](./DATA_LAYOUT.md) | **`data/` 落盘目录树**（设计稿产物说明 + 原型） |
 | [**GITIGNORE.md**](./GITIGNORE.md) | `.gitignore` 与 `data/` 忽略规则 |
 
 ---

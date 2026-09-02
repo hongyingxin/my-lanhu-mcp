@@ -412,16 +412,9 @@ lanhu_page
 
 **Resource `design`**：返回 JSON（含 `html_code`、`design_tokens` 等），不含 MCP image 块与 workflow 长文。详见 `mcp/src/tools/lanhu-design.ts`。
 
-**MCP analyze 落盘**：`LANHU_PERSIST_ARTIFACTS=true`（默认）时，`lanhu_design(mode=analyze)` 与 REST 相同，调用 `persistAnalyzeArtifacts` 写入 `{LANHU_DATA_DIR}/lanhu_designs/{pid}/{designId}_{slug}/`。除 HTML、mapping、schema/sketch、各类摘要外，还包含：
+**MCP analyze 落盘**：`LANHU_PERSIST_ARTIFACTS=true`（默认）时，`lanhu_design(mode=analyze)` 与 REST 相同，调用 `persistAnalyzeArtifacts` 写入 `{LANHU_DATA_DIR}/lanhu_designs/{pid}/{designId}_{slug}/`。
 
-| 文件 | 条件 |
-|------|------|
-| `{slug}.warnings.json` | 有 warnings |
-| `{slug}.slices.json` | `with_slices: true` 且拉取到 B 套元数据 |
-| `{slug}.css` / `{slug}.body.html` | Schema 转换路径 |
-| `{slug}.sketch-fallback.html` | Schema 主 HTML + Sketch fallback 并存且内容不同 |
-
-`{slug}.analyze-meta.json` 含 `projectName`、`include`、`versionId`、`documentInfo`、`warnings` 全文及 `files` 索引。`structuredContent.designs[].artifacts` 含各文件路径。B 套切图 **PNG** 仍走 `mode=slices`，见 [`MCP_SLICES.md`](./MCP_SLICES.md)。
+每个文件是什么、何时出现、A/B 套切图如何区分，见 [`DATA_LAYOUT.md`](./DATA_LAYOUT.md) §1.1–§1.6。`{slug}.analyze-meta.json` 是目录索引（`files` 绝对路径）；`structuredContent.designs[].artifacts` 同样带路径。B 套切图 **PNG** 仍走 `mode=slices`，见 [`MCP_SLICES.md`](./MCP_SLICES.md)。
 
 ### 10.2 `lanhu_page`
 
