@@ -14,7 +14,7 @@ TypeScript 实现的蓝湖 MCP 服务器：`lanhu_design` 分析 UI 设计稿并
 
 - **列表与选稿**：按项目 URL 列出全部画板，支持画板名 / 序号 / id 选取
 - **深度分析**：Schema（DDS）或 Sketch fallback → **HTML+CSS**、预览图、Design Tokens、图层树、布局摘要
-- **切图**：A 套（HTML 用到的 mapping）与 B 套（完整切图元数据）分开展示
+- **切图**：`mode=slices` 下载设计师登记的 **B 套**切图（默认 png@2x）到本地；analyze 里的 `include: slices` 只是 A 套 URL mapping，不会下 PNG
 - **还原工作流**：analyze 默认附带 STEP 1~5 前端还原指引（可关闭省 token）
 
 ### 📋 原型 / PRD（Axure）
@@ -106,13 +106,34 @@ https://lanhuapp.com/web/#/item/project/stage?tid=xxx&pid=xxx
 
 Agent 应调用 `lanhu_design`，`mode: "analyze"`，`design_names: "首页"`。
 
-### 下载切图元数据
+### 下载切图（B 套 PNG）
+
+设计师在蓝湖登记的切图走 `mode=slices`，**默认就会下载文件**，不是只返回 URL。
+
+下到本仓库 `data/`（调试用）：
 
 ```
-拉取「首页」的 B 套切图信息。
+把「首页」的切图下载下来。
+https://lanhuapp.com/web/#/item/project/detailDetach?pid=xxx&tid=xxx&image_id=xxx
 ```
 
-Agent 应调用 `lanhu_design`，`mode: "slices"`，`design_names: "首页"`。
+Agent 应调用 `lanhu_design`，`mode: "slices"`。不传 `output_dir` 时文件在：
+
+```text
+data/lanhu_designs/{pid}/{designId}_{画板名}/assets/slices/
+```
+
+下到前端项目（必须带路径，MCP 进程 cwd 不是你打开的业务仓库）：
+
+```
+把「首页」切图下载到 /绝对路径/vite-vue/src/views/home
+```
+
+Agent 应传 `output_dir`，文件落在 `{output_dir}/assets/slices/`。
+
+常用可选参数：`slice_format`（png / webp / svg，默认 png）、`slice_scale`（默认 `2x`）、`slice_names`（不传则全部）。
+
+`analyze` 的 `include: ["slices"]` **不会**下载切图，只给 HTML 用的 A 套 mapping。完整约定见 [`docs/MCP_SLICES.md`](./docs/MCP_SLICES.md)。
 
 ### 分析 Axure 原型
 
@@ -144,6 +165,7 @@ lanhu-node/
 |------|------|
 | [**docs/README.md**](./docs/README.md) | 文档索引与分工 |
 | [**docs/CURSOR_MCP.md**](./docs/CURSOR_MCP.md) | MCP 参数、工作流、Prompt |
+| [**docs/MCP_SLICES.md**](./docs/MCP_SLICES.md) | B 套切图下载：参数、落盘路径、清单表 |
 | [**docs/DEVELOPMENT.md**](./docs/DEVELOPMENT.md) | 本地开发、调试、包说明 |
 | [**docs/TROUBLESHOOTING.md**](./docs/TROUBLESHOOTING.md) | Cookie / Playwright / 常见错误 |
 | [**docs/CONTEXT.md**](./docs/CONTEXT.md) | 架构与能力边界（新对话先读） |

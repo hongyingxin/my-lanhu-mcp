@@ -80,7 +80,7 @@ Cursor 里 Agent 可通过 Tool / Resource / Prompt 访问蓝湖资源：
 |------|------|---------------------|------|
 | `list` | 列出项目内所有设计稿 | 否 | |
 | `analyze` | 深度分析（HTML/CSS、tokens、图层等） | 有条件（见下） | **是** |
-| `slices` | 仅 B 套切图元数据（`getSlices`） | 有条件（见下） | |
+| `slices` | 下载 B 套切图到 `{root}/assets/slices/`（默认 png@2x） | 有条件（见下） | |
 | `tokens` | 仅 Design Tokens | 有条件（见下） | |
 
 **`design_names` 何时可省略**
@@ -146,8 +146,8 @@ Cursor 里 Agent 可通过 Tool / Resource / Prompt 访问蓝湖资源：
 
 | | `analyze` + `include` 含 `slices` | `mode=slices` |
 |--|-----------------------------------|---------------|
-| 内容 | A 套 mapping（HTML 用到的图） | B 套完整切图元数据 |
-| 其它 | 可同时要 html、tokens、预览图 | 只有切图信息 |
+| 内容 | A 套 mapping（HTML 用到的图 URL） | **下载** B 套切图文件（默认 png@2x） |
+| 其它 | 可同时要 html、tokens、预览图 | 只下切图；进业务项目须传 `output_dir` |
 
 另：**`with_slices: true`**（仅 analyze）会在结果里再挂一份 B 套 `getSlices` 元数据。
 
