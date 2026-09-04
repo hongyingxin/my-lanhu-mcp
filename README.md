@@ -110,30 +110,15 @@ Agent 应调用 `lanhu_design`，`mode: "analyze"`，`design_names: "首页"`。
 
 设计师在蓝湖登记的切图走 `mode=slices`，**默认就会下载文件**，不是只返回 URL。
 
-下到本仓库 `data/`（调试用）：
+下到本仓库 `data/`：
 
 ```
 把「首页」的切图下载下来。
 https://lanhuapp.com/web/#/item/project/detailDetach?pid=xxx&tid=xxx&image_id=xxx
 ```
 
-Agent 应调用 `lanhu_design`，`mode: "slices"`。不传 `output_dir` 时文件在：
+常用可选参数：slice_format（png / webp / svg，默认 png）、slice_scale（默认 2x）、slice_names（不传则全部）。
 
-```text
-data/lanhu_designs/{pid}/{designId}_{画板名}/assets/slices/
-```
-
-下到前端项目（必须带路径，MCP 进程 cwd 不是你打开的业务仓库）：
-
-```
-把「首页」切图下载到 /绝对路径/vite-vue/src/views/home
-```
-
-Agent 应传 `output_dir`，文件落在 `{output_dir}/assets/slices/`。
-
-常用可选参数：`slice_format`（png / webp / svg，默认 png）、`slice_scale`（默认 `2x`）、`slice_names`（不传则全部）。
-
-`analyze` 的 `include: ["slices"]` **不会**下载切图，只给 HTML 用的 A 套 mapping。完整约定见 [`docs/MCP_SLICES.md`](./docs/MCP_SLICES.md)。
 
 ### 分析 Axure 原型
 
